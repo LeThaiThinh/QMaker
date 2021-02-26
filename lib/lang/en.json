@@ -1,6 +1,9 @@
 {
-  "homePage":"Home Page",
-  "personalInfo":"Personal Information",
-  "name": "Name",
-  "NavigatorToSettingPage":"Navigator to setting page"
+  "Home Page":"Home Page",
+  "Personal Information":"Personal Information",
+  "Name": "Name",
+  "Navigator to setting page":"Navigator to setting page",
+  "Questionnaires": "Questionnaires",
+  "Creations":"Creations",
+  "Something": "Something"
 }

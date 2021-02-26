@@ -14,46 +14,67 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+
+
   _changeLanguage(Language language) async {
     Locale _temp=await setLocale(language.languageCode);
     MyApp.setLocale(context,_temp);
+
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: _drawerList(),
-      appBar: AppBar(
-        title: Text(getTranslated(context, "homePage")),
-        actions: [
-          Padding(
-            padding: EdgeInsets.all(8),
-            child:DropdownButton(
-              underline: SizedBox(),
-              icon: Icon(
-                Icons.language,
-                color: Colors.white,
-              ),
-              items:
-                Language.languageList().map<DropdownMenuItem<Language>>(
-                        (lang)=>DropdownMenuItem(
-                    value: lang,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(lang.flag),
-                        Text(lang.name,style: TextStyle(fontSize: 30),),
-                      ],
-                    )
-                  )
-                ).toList(),
-              onChanged: (Language language) {
-                _changeLanguage(language);
-              },
-            ),
-          )
-        ],
-      ),
-      body:Container(
+    final tabs = [
+      getTranslated(context, "Questionnaires"),
+      getTranslated(context, "Creations"),
+      getTranslated(context, "Something"),
+    ];
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          drawer: _drawerList(),
+          appBar: AppBar(
+            bottom: TabBar(tabs: [for (final tab in tabs)Tab(text: tab,)],),
+            title: Text(getTranslated(context, "Home Page")),
+            actions: [
+              Padding(
+                padding: EdgeInsets.all(8),
+                child:DropdownButton(
+                  underline: SizedBox(),
+                  icon: Icon(
+                    Icons.language,
+                    color: Colors.white,
+                  ),
+                  items:
+                    Language.languageList().map<DropdownMenuItem<Language>>(
+                            (lang)=>DropdownMenuItem(
+                        value: lang,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(lang.flag),
+                            Text(lang.name,style: TextStyle(fontSize: 30),),
+                          ],
+                        )
+                      )
+                    ).toList(),
+                  onChanged: (Language language) {
+                    _changeLanguage(language);
+                    print(language);
+                  },
+                ),
+              )
+            ],
+          ),
+          body:TabBarView(
+            children: [
+              Text("s"),
+              Text("s"),
+              Text("s"),
+
+            ],
+          ),
+        ),
       ),
     );
   }

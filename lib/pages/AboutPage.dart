@@ -19,7 +19,7 @@ class _AboutPageState extends State<AboutPage> {
       body: Container(
         child: MaterialButton(
           color: Colors.blue,
-          child: Text(getTranslated(context, "NavigatorToSettingPage")),
+          child: Text(getTranslated(context, "Navigator to setting page")),
           onPressed: (){
             Navigator.pushNamed(context, settingRoute);
           },

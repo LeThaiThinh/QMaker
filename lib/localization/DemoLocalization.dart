@@ -32,7 +32,7 @@ class _DemoLocalizationsDelegate extends LocalizationsDelegate<DemoLocalizations
   const _DemoLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => ['en', 'vi'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => ['en', 'vi','zh'].contains(locale.languageCode);
 
   @override
   Future<DemoLocalizations> load(Locale locale) async{

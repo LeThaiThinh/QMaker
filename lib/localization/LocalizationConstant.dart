@@ -7,7 +7,7 @@ String getTranslated(BuildContext context,String key){
 }
 //
 const String ENGLISH='en';
-const String VIETNAM='vn';
+const String VIETNAM='vi';
 const String CHINA='zh';
 
 const String LANGUAGE_CODE='languageCode';
@@ -19,17 +19,17 @@ Future<Locale> setLocale(String languageCode) async{
 Locale _locale(String languageCode) {
   Locale _temp;
   switch (languageCode) {
-    case 'ENGLISH':
-      _temp = Locale(languageCode, '🇺🇸');
+    case ENGLISH:
+      _temp = Locale(languageCode, 'US');
       break;
-    case 'VIETNAM':
+    case VIETNAM:
       _temp = Locale(languageCode, 'VN');
       break;
-    case 'CHINA':
+    case CHINA:
       _temp = Locale(languageCode, 'CN');
       break;
     default:
-      _temp = Locale(languageCode, '🇺🇸');
+      _temp = Locale(languageCode, 'US');
   }
   return _temp;
 }

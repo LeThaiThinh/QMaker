@@ -29,4 +29,6 @@ flutter:
     - assets/Cursed bargain.jpg
     - lib/lang/en.json
     - lib/lang/vi.json
+    - lib/lang/zh.json
+
   uses-material-design: true

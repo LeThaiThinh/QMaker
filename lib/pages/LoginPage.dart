@@ -29,13 +29,10 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: [
           Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 4,
+            height: MediaQuery.of(context).size.height / 4,
             child: Center(
               child: Text(
-                getTranslated(context, "personalInfo"),
+                getTranslated(context, "Personal Information"),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 30,
