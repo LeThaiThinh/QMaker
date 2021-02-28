@@ -53,7 +53,7 @@ class _SettingPageState extends State<SettingPage> {
               },
             ),
             MaterialButton(
-              color: Colors.blue,
+              color: Colors.lightGreen,
               child: Text(getTranslated(context, "Navigator to setting page")),
               onPressed: (){
                 Navigator.pushNamed(context, homeRoute);

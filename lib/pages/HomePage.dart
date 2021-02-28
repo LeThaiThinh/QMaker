@@ -14,8 +14,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-
-
   _changeLanguage(Language language) async {
     Locale _temp=await setLocale(language.languageCode);
     MyApp.setLocale(context,_temp);
@@ -29,6 +27,7 @@ class _HomePageState extends State<HomePage> {
       getTranslated(context, "Something"),
     ];
     return MaterialApp(
+      theme: ThemeData(primaryColor: Colors.green[500]),
       home: DefaultTabController(
         length: 3,
         child: Scaffold(
@@ -68,10 +67,9 @@ class _HomePageState extends State<HomePage> {
           ),
           body:TabBarView(
             children: [
+              _questionnairesList(),
               Text("s"),
               Text("s"),
-              Text("s"),
-
             ],
           ),
         ),
@@ -88,79 +86,120 @@ class _HomePageState extends State<HomePage> {
       width: MediaQuery.of(context).size.width/1.5,
       color: Theme.of(context).primaryColor,
       child: ListView(
-      children:[
-        DrawerHeader(
-          child: Container(
-              height: 100,
-              child: CircleAvatar(),
+        children:[
+          DrawerHeader(
+            child: Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 130, 0),
+                child: Column(
+                  children: [
+                    Flexible(flex:5,child:CircleAvatar(backgroundColor: Colors.grey,radius: 100,)),
+                    Flexible(
+                        flex:1,
+                        child: Row(
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed:  (){
+                                // Navigator.pop(context);
+                                Navigator.pushNamed(context, loginRoute);
+                              },
+                              iconSize: 10,
+                            ),
+                            Text("data",style: TextStyle(backgroundColor: Colors.red),),
+                          ],
+                        )),
+                  ],
+                ),
+            ),
           ),
-        ),
-        ListTile(
-          leading:Icon(
-            Icons.info,
-            color: Colors.white,
-            size: 30,
-        ),
-          title: Text(
-            'About Us',
-            style: _textStyle,
-          ),
-          onTap: (){
-            Navigator.pop(context);
-            Navigator.pushNamed(context, aboutRoute);
-          },
-        ),
-        ListTile(
-          leading: Icon(
-            Icons.settings,
-            color: Colors.white,
-            size: 30,
-          ),
-          title: Text(
-            'Setting',
-            style: _textStyle,
-          ),
-          onTap: (){
-            Navigator.pop(context);
-            Navigator.pushNamed(context, settingRoute);
-          },
+          Title(
+              color: Colors.red,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15,0,0,0),
+                child: Text(getTranslated(context, "Questionnaires"),style: TextStyle(color: Color.fromRGBO(100, 8, 8, 0.6),),),
+              )),
 
-        ),
-        ListTile(
-          leading: Icon(
-            Icons.menu,
-            color: Colors.white,
-            size: 30,
+          ListTile(
+            leading:Icon(
+              Icons.info,
+              color: Colors.white,
+              size: 30,
           ),
-          title: Text(
-            'Menu',
-            style: _textStyle,
+            title: Text(
+              'About Us',
+              style: _textStyle,
+            ),
+            onTap: (){
+              Navigator.pop(context);
+              Navigator.pushNamed(context, aboutRoute);
+            },
           ),
-          onTap: (){
-            Navigator.pop(context);
-            Navigator.pushNamed(context, menuRoute);
-          },
+          Title(
+              color: Colors.red,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15,0,0,0),
+                child: Text(getTranslated(context, "Something"),style: TextStyle(color: Color.fromRGBO(100, 8, 8, 0.6),),),
+              )),
+          ListTile(
+            leading: Icon(
+              Icons.settings,
+              color: Colors.white,
+              size: 30,
+            ),
+            title: Text(
+              'Setting',
+              style: _textStyle,
+            ),
+            onTap: (){
+              Navigator.pop(context);
+              Navigator.pushNamed(context, settingRoute);
+            },
 
-        ),
-        ListTile(
-          leading: Icon(
-            Icons.login,
-            color: Colors.white,
-            size: 30,
           ),
-          title: Text(
-            'login',
-            style: _textStyle,
-          ),
-          onTap: (){
-            Navigator.pop(context);
-            Navigator.pushNamed(context, loginRoute);
-          },
+          ListTile(
+            leading: Icon(
+              Icons.menu,
+              color: Colors.white,
+              size: 30,
+            ),
+            title: Text(
+              'Menu',
+              style: _textStyle,
+            ),
+            onTap: (){
+              Navigator.pop(context);
+              Navigator.pushNamed(context, menuRoute);
+            },
 
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.login,
+              color: Colors.white,
+              size: 30,
+            ),
+            title: Text(
+              'login',
+              style: _textStyle,
+            ),
+            onTap: (){
+              Navigator.pushNamed(context, loginRoute);
+            },
+
+          ),
+        ],
         ),
+
+      );
+  }
+  GridView _questionnairesList(){
+    return GridView.count(
+      crossAxisSpacing: 10,
+      crossAxisCount: 3,
+      mainAxisSpacing: 10,
+      children: [
+        for (var questionnaires in listQuestionnaires) }
       ],
-      ),
     );
   }
-
 }

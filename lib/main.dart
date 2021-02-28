@@ -1,3 +1,4 @@
+import 'package:baitaplon/classes/Questionnaires.dart';
 import 'package:baitaplon/routes/CustomRouter.dart';
 import 'package:baitaplon/routes/RouteName.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,7 +15,6 @@ main() async {
 }
 
 class MyApp extends StatefulWidget {
-
   static void setLocale(BuildContext context,Locale locale){
     _MyAppState state=context.findAncestorStateOfType<_MyAppState>();
     state.setLocale(locale);
@@ -25,6 +25,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  List<Questionnaires> _listQuestionnaires;
   Locale _locale;
   void setLocale(Locale locale){
     setState(() {
@@ -51,8 +52,8 @@ class _MyAppState extends State<MyApp> {
     }else
     {
       return MaterialApp(
+        theme: ThemeData(primaryColor: Colors.green[500],),
         title: "hello",
-        theme: ThemeData.fallback(),
         debugShowCheckedModeBanner: false,
         localizationsDelegates: [
           DemoLocalizations.delegate,
