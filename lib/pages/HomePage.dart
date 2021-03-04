@@ -1,8 +1,16 @@
+import 'dart:math';
+import 'dart:ui';
+
+import 'package:baitaplon/classes/Question.dart';
+import 'package:baitaplon/classes/Questionnaire.dart';
+import 'package:baitaplon/classes/QuestionnaireTemplate.dart';
 import 'package:baitaplon/classes/language.dart';
 import 'package:baitaplon/localization/LocalizationConstant.dart';
+import 'package:baitaplon/models/User.dart';
 import 'package:baitaplon/routes/RouteName.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../main.dart';
 
@@ -13,22 +21,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   _changeLanguage(Language language) async {
     Locale _temp=await setLocale(language.languageCode);
     MyApp.setLocale(context,_temp);
-
   }
   @override
   Widget build(BuildContext context) {
+    final UserModel userModel=Provider.of<UserModel>(context);
     final tabs = [
       getTranslated(context, "Questionnaires"),
       getTranslated(context, "Creations"),
       getTranslated(context, "Something"),
     ];
-    return MaterialApp(
-      theme: ThemeData(primaryColor: Colors.green[500]),
-      home: DefaultTabController(
+    return Scaffold(
+      body: DefaultTabController(
         length: 3,
         child: Scaffold(
           drawer: _drawerList(),
@@ -67,8 +73,8 @@ class _HomePageState extends State<HomePage> {
           ),
           body:TabBarView(
             children: [
-              _questionnairesList(),
               Text("s"),
+              _questionnairesList(userModel),
               Text("s"),
             ],
           ),
@@ -84,7 +90,7 @@ class _HomePageState extends State<HomePage> {
     );
     return Container(
       width: MediaQuery.of(context).size.width/1.5,
-      color: Theme.of(context).primaryColor,
+      // color: Theme.of(context).primaryColor,
       child: ListView(
         children:[
           DrawerHeader(
@@ -118,7 +124,6 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.fromLTRB(15,0,0,0),
                 child: Text(getTranslated(context, "Questionnaires"),style: TextStyle(color: Color.fromRGBO(100, 8, 8, 0.6),),),
               )),
-
           ListTile(
             leading:Icon(
               Icons.info,
@@ -192,14 +197,41 @@ class _HomePageState extends State<HomePage> {
 
       );
   }
-  GridView _questionnairesList(){
-    return GridView.count(
-      crossAxisSpacing: 10,
-      crossAxisCount: 3,
-      mainAxisSpacing: 10,
-      children: [
-        for (var questionnaires in listQuestionnaires) }
-      ],
+
+  Scaffold _questionnairesList(UserModel userModel){
+    String defaultName="Template";
+    int defaultTotalTime=300;
+    int defaultTotalQuestion=0;
+    return Scaffold(
+      body: GridView.builder(
+        gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 4.0,
+            mainAxisSpacing: 4.0
+        ),
+        itemCount: userModel.listQuestionnaireTemplate.length,
+        itemBuilder: (BuildContext context,index){
+          return RaisedButton(
+            onPressed: (){
+              Navigator.pushNamed(context, configureRoute);
+            },
+            child: Column(
+              children:[
+                Icon(Icons.info),
+                Text(userModel.listQuestionnaireTemplate[index].name),
+                Text(userModel.listQuestionnaireTemplate[index].totalQuestion.toString()),
+                Text(userModel.listQuestionnaireTemplate[index].totalTime.toString()),
+              ],
+            ),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: (){
+          Provider.of<UserModel>(context,listen: false).addListQuestionnaireTemplate(new QuestionnaireTemplate(defaultTotalQuestion,defaultTotalTime,defaultName,[]));
+        },
+      ),
     );
   }
 }

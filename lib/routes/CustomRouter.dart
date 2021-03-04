@@ -1,4 +1,5 @@
 import 'package:baitaplon/pages/AboutPage.dart';
+import 'package:baitaplon/pages/ConfigurePage.dart';
 import 'package:baitaplon/pages/HomePage.dart';
 import 'package:baitaplon/pages/LoginPage.dart';
 import 'package:baitaplon/pages/MenuPage.dart';
@@ -20,6 +21,8 @@ class CustomRouter{
         return MaterialPageRoute(builder: (_)=>SettingPage());
       case menuRoute:
         return MaterialPageRoute(builder: (_)=>MenuPage());
+      case configureRoute:
+        return MaterialPageRoute(builder: (_)=>ConfigurePage());
       case loginRoute:
         return MaterialPageRoute(builder: (_)=>LoginPage());
     }
