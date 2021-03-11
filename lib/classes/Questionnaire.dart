@@ -1,9 +1,17 @@
-import 'package:baitaplon/classes/Question.dart';
 import 'package:baitaplon/classes/QuestionnaireTemplate.dart';
-import 'package:flutter/cupertino.dart';
 
-class Questionnaire extends QuestionnaireTemplate {
+class Questionnaire {
   QuestionnaireTemplate questionnaireTemplate;
+  String name;
+  int totalQuestionInSession;
+  int totalTime;
 
-  Questionnaire(int totalQuestion, int totalTime, String name, List<Question> listQuestion) : super(totalQuestion, totalTime, name, listQuestion);
+  Questionnaire(this.questionnaireTemplate, this.name,
+      this.totalQuestionInSession, this.totalTime);
+  Questionnaire.cop(Questionnaire questionnaire) {
+    this.totalQuestionInSession = questionnaire.totalQuestionInSession;
+    this.questionnaireTemplate = questionnaire.questionnaireTemplate;
+    this.name = questionnaire.name;
+    this.questionnaireTemplate = questionnaire.questionnaireTemplate;
+  }
 }

@@ -15,13 +15,19 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.0
   intl: ^0.16.1
+  http: ^0.12.0
   provider: ^4.3.3
+  scroll_snap_list: any
   firebase_core: ^0.7.0
   firebase_analytics: ^7.0.1
   firebase_auth: ^0.20.0+1
   firebase_database: ^6.0.0
   cloud_firestore: ^0.16.0
   shared_preferences: ^0.5.12+4
+  carousel_slider: ^3.0.0
+  flutter_riverpod: any
+  auto_size_text: any
+  state_notifier: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

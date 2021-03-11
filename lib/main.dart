@@ -1,6 +1,4 @@
-import 'package:baitaplon/classes/Questionnaire.dart';
 import 'package:baitaplon/models/User.dart';
-import 'package:baitaplon/pages/HomePage.dart';
 import 'package:baitaplon/routes/CustomRouter.dart';
 import 'package:baitaplon/routes/RouteName.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,7 +26,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<Questionnaire> _listQuestionnaires;
 
   Locale _locale;
   void setLocale(Locale locale){
@@ -63,7 +60,7 @@ class _MyAppState extends State<MyApp> {
         ],
         child: MaterialApp(
           //theme: ThemeData(primaryColor: Colors.green[500],),
-          theme: ThemeData(primaryColor: Colors.green[500]),
+          theme: ThemeData(primaryColor: Colors.red[300]),
           title: "hello",
           debugShowCheckedModeBanner: false,
           localizationsDelegates: [
@@ -87,6 +84,7 @@ class _MyAppState extends State<MyApp> {
             Locale('vi', 'VN'),
             Locale('zh','CN'),
           ],
+
           onGenerateRoute: CustomRouter.allRoutes,
           initialRoute: homeRoute,
         ),

@@ -2,10 +2,13 @@ import 'Question.dart';
 
 class QuestionnaireTemplate{
   int totalQuestion;
-  int totalTime;
-  String name;
   List<Question> listQuestion=[];
+  bool isEditing;
+  QuestionnaireTemplate(this.totalQuestion, this.listQuestion, this.isEditing);
 
-  QuestionnaireTemplate(
-      this.totalQuestion, this.totalTime, this.name, this.listQuestion);
+  QuestionnaireTemplate.cop(QuestionnaireTemplate template){
+    this.totalQuestion=template.totalQuestion;
+    this.listQuestion=template.listQuestion;
+    this.isEditing=template.isEditing;
+  }
 }

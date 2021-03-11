@@ -2,7 +2,6 @@ import 'package:baitaplon/classes/Account.dart';
 import 'package:baitaplon/classes/Questionnaire.dart';
 import 'package:baitaplon/classes/QuestionnaireTemplate.dart';
 import 'package:flutter/cupertino.dart';
-
 class UserModel extends ChangeNotifier{
   Account account;
   List<Questionnaire> listQuestionnaire=[];
@@ -23,6 +22,14 @@ class UserModel extends ChangeNotifier{
     notifyListeners();
 
   }
+  changeTemplateInList(QuestionnaireTemplate template){
+    listQuestionnaireTemplate.length>=0
+        ? listQuestionnaireTemplate[listQuestionnaireTemplate.indexWhere((element)=>element.isEditing==true)]=template
+        // ignore: unnecessary_statements
+        :{};
+    notifyListeners();
+
+  }
   addListQuestionnaire(Questionnaire questionnaire){
     listQuestionnaire.add(questionnaire);
     notifyListeners();
@@ -31,9 +38,13 @@ class UserModel extends ChangeNotifier{
     listQuestionnaireTemplate.add(questionnaireTemplate);
     notifyListeners();
   }
-}
-class Lo{
-  final int x;
-  int y;
-  Lo(this.x, this.y);
+  editTemplate(int index){
+    listQuestionnaireTemplate[index].isEditing=!listQuestionnaireTemplate[index].isEditing;
+  }
+  int indexTemplateEditing(){
+    return listQuestionnaireTemplate.length>=0
+        ? listQuestionnaireTemplate.indexWhere((element)=>element.isEditing==true)
+    // ignore: unnecessary_statements
+        :{};
+  }
 }

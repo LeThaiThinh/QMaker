@@ -1,7 +1,8 @@
+import 'package:baitaplon/classes/Answer.dart';
+
 class Question{
   String question;
-  List<String> correctAnswer=[];
-  List<String> incorrectAnswer=[];
+  List<Answer> answer;
 
-  Question(this.question, this.correctAnswer, this.incorrectAnswer);
+  Question(this.question, this.answer);
 }
