@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatefulWidget {
-  AboutPage({Key key}):super(key:key);
   @override
   _AboutPageState createState() => _AboutPageState();
 }

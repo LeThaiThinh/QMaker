@@ -27,12 +27,13 @@ class _SettingPageState extends State<SettingPage> {
         child: Column(
           children:[
               DropdownButton<Language>(
+              hint: Text("Language"),
+              // style: TextStyle(fontSize: 5),
               iconSize: 30,
-              hint: Text("Trans"),
               underline: SizedBox(),
               icon: Icon(
                 Icons.language,
-                color: Colors.white,
+                color: Colors.green,
               ),
               items: Language.languageList()
                   .map<DropdownMenuItem<Language>>(
@@ -41,8 +42,8 @@ class _SettingPageState extends State<SettingPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text(lang.flag,style: TextStyle(fontSize: 30),),
-                          Text(lang.name,style: TextStyle(fontSize: 30),),
+                          Text(lang.flag,style: TextStyle(fontSize: 20),),
+                          Text(lang.name,style: TextStyle(fontSize: 20),),
                         ],
                       )
                   )
