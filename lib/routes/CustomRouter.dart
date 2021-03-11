@@ -1,5 +1,5 @@
 import 'package:baitaplon/pages/AboutPage.dart';
-import 'package:baitaplon/pages/HomePage.dart';
+import 'package:baitaplon/page/HomePage.dart';
 import 'package:baitaplon/pages/LoginPage.dart';
 import 'package:baitaplon/pages/MenuPage.dart';
 import 'package:baitaplon/pages/NotFoundPage.dart';

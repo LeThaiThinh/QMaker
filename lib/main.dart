@@ -1,9 +1,10 @@
-import 'package:baitaplon/classes/Questionnaires.dart';
+import 'package:baitaplon/models/User.dart';
 import 'package:baitaplon/routes/CustomRouter.dart';
 import 'package:baitaplon/routes/RouteName.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 
 import 'localization/DemoLocalization.dart';
 import 'localization/LocalizationConstant.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<Questionnaires> _listQuestionnaires;
+
   Locale _locale;
   void setLocale(Locale locale){
     setState(() {
@@ -51,34 +52,42 @@ class _MyAppState extends State<MyApp> {
       );
     }else
     {
-      return MaterialApp(
-        theme: ThemeData(primaryColor: Colors.green[500],),
-        title: "hello",
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: [
-          DemoLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<UserModel>.value(
+              value: UserModel(null),
+          )
         ],
-        locale: _locale,
-        localeResolutionCallback: (deviceLocale, supportedLocales) {
-          for (var locale in supportedLocales) {
-            if (locale.languageCode == deviceLocale.languageCode
-                && locale.countryCode == deviceLocale.countryCode) {
-              return deviceLocale;
+        child: MaterialApp(
+          //theme: ThemeData(primaryColor: Colors.green[500],),
+          theme: ThemeData(primaryColor: Colors.red[300]),
+          title: "hello",
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: [
+            DemoLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          locale: _locale,
+          localeResolutionCallback: (deviceLocale, supportedLocales) {
+            for (var locale in supportedLocales) {
+              if (locale.languageCode == deviceLocale.languageCode
+                  && locale.countryCode == deviceLocale.countryCode) {
+                return deviceLocale;
+              }
             }
-          }
-          return supportedLocales.first;
-        },
+            return supportedLocales.first;
+          },
+          supportedLocales: [
+            Locale('en', 'US'),
+            Locale('vi', 'VN'),
+            Locale('zh','CN'),
+          ],
 
-        supportedLocales: [
-          Locale('en', 'US'),
-          Locale('vi', 'VN'),
-          Locale('zh','CN'),
-        ],
-        onGenerateRoute: CustomRouter.allRoutes,
-        initialRoute: homeRoute,
+          onGenerateRoute: CustomRouter.allRoutes,
+          initialRoute: homeRoute,
+        ),
       );
     }
   }
