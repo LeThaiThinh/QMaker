@@ -5,7 +5,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-
 import 'localization/DemoLocalization.dart';
 import 'localization/LocalizationConstant.dart';
 
@@ -16,50 +15,48 @@ main() async {
 }
 
 class MyApp extends StatefulWidget {
-  static void setLocale(BuildContext context,Locale locale){
-    _MyAppState state=context.findAncestorStateOfType<_MyAppState>();
+  static void setLocale(BuildContext context, Locale locale) {
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
     state.setLocale(locale);
   }
+
   // This widget is the root of your application.
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-
   Locale _locale;
-  void setLocale(Locale locale){
+  void setLocale(Locale locale) {
     setState(() {
-      _locale=locale;
+      _locale = locale;
     });
   }
+
   @override
   void didChangeDependencies() {
     getLocale().then((locale) {
       setState(() {
-        this._locale=locale;
+        this._locale = locale;
       });
     });
     super.didChangeDependencies();
   }
+
   @override
   Widget build(BuildContext context) {
-    if(_locale==null) {
+    if (_locale == null) {
       return Container(
-        child: Center(
-            child: CircularProgressIndicator()
-        ),
+        child: Center(child: CircularProgressIndicator()),
       );
-    }else
-    {
+    } else {
       return MultiProvider(
         providers: [
           ChangeNotifierProvider<UserModel>.value(
-              value: UserModel(null),
+            value: UserModel(null),
           )
         ],
         child: MaterialApp(
-          //theme: ThemeData(primaryColor: Colors.green[500],),
           theme: ThemeData(primaryColor: Colors.red[300]),
           title: "hello",
           debugShowCheckedModeBanner: false,
@@ -72,8 +69,8 @@ class _MyAppState extends State<MyApp> {
           locale: _locale,
           localeResolutionCallback: (deviceLocale, supportedLocales) {
             for (var locale in supportedLocales) {
-              if (locale.languageCode == deviceLocale.languageCode
-                  && locale.countryCode == deviceLocale.countryCode) {
+              if (locale.languageCode == deviceLocale.languageCode &&
+                  locale.countryCode == deviceLocale.countryCode) {
                 return deviceLocale;
               }
             }
@@ -82,14 +79,12 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: [
             Locale('en', 'US'),
             Locale('vi', 'VN'),
-            Locale('zh','CN'),
+            Locale('zh', 'CN'),
           ],
-
           onGenerateRoute: CustomRouter.allRoutes,
-          initialRoute: homeRoute,
+          initialRoute: loginRoute,
         ),
       );
     }
   }
 }
-

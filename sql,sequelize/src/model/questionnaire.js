@@ -1,27 +1,30 @@
 var sequelize=require('../database')
 const Sequelize = require('sequelize');
 
-let User = sequelize.define('users', {
+let Questionnaire = sequelize.define('questionnaire', {
     id:{
         primaryKey:true,
         type:Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false
     },
-    name: {
+    topic: {
         type:Sequelize.STRING,
         allowNull: false
     },
-    username:{
-        type:Sequelize.STRING,
-        allowNull: false,
-        unique:true,
+    public:{
+        type:Sequelize.BOOLEAN,
+        allowNull: false
     },
-    password:{
+    description:{
         type:Sequelize.STRING,
+        allowNull: false
+    },
+    time_limit:{
+        type:Sequelize.INTEGER,
         allowNull: false
     },
 });
 
 
-module.exports=User 
+module.exports=Questionnaire 

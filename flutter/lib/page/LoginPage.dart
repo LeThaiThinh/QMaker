@@ -1,71 +1,67 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:baitaplon/models/Users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'HomePage.dart';
 
-
 class LoginPage extends StatefulWidget {
-
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-
-  bool _isLoading = false;
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  String _username;
+  String _password;
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.transparent));
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light
+        .copyWith(statusBarColor: Colors.transparent));
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              colors: [Colors.blue, Colors.teal],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter),
-        ),
-        child: _isLoading ? Center(child: CircularProgressIndicator()) : ListView(
-          children: <Widget>[
-            headerSection(),
-            textSection(),
-            buttonSection(),
-          ],
-        ),
-      ),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: [Colors.redAccent, Colors.black],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter),
+          ),
+          child: Form(
+            key: _key,
+            child: ListView(
+              children: <Widget>[
+                headerSection(),
+                textSection(),
+                buttonSection(),
+              ],
+            ),
+          )),
     );
   }
 
-  signIn(String email, pass) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    Map data = {
-      'email': email,
-      'password': pass
-    };
-    var jsonResponse = null;
-    var response = await http.post("http://127.0.0.1/login", body: data);
-    if(response.statusCode == 200) {
-      jsonResponse = json.decode(response.body);
-      if(jsonResponse != null) {
-        setState(() {
-          _isLoading = false;
-        });
-        sharedPreferences.setString("token", jsonResponse['token']);
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => HomePage()), (Route<dynamic> route) => false);
-      }
-    }
-    else {
-      setState(() {
-        _isLoading = false;
-      });
-      print(response.body);
-    }
+  signIn() async {
+    Map<dynamic, String> data = {'username': _username, 'password': _password};
+    var jsonResponse;
+    var response = await http
+        .post('http://10.0.2.2:4000/signin', body: json.encode(data), headers: {
+      HttpHeaders.contentTypeHeader: 'application/json',
+    });
+    debugPrint(response.body);
+    jsonResponse = json.decode(response.body);
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => HomePage(
+              user: User(
+                  id: jsonResponse['id'],
+                  username: jsonResponse['username'],
+                  name: jsonResponse['username'],
+                  password: jsonResponse['password']))));
+    } else {}
   }
 
   Container buttonSection() {
@@ -75,21 +71,23 @@ class _LoginPageState extends State<LoginPage> {
       padding: EdgeInsets.symmetric(horizontal: 15.0),
       margin: EdgeInsets.only(top: 15.0),
       child: RaisedButton(
-        onPressed: emailController.text == "" || passwordController.text == "" ? null : () {
-          setState(() {
-            _isLoading = true;
-          });
-          signIn(emailController.text, passwordController.text);
+        onPressed: () {
+          if (!_key.currentState.validate()) {
+            return;
+          }
+
+          _key.currentState.save();
+          signIn();
         },
         elevation: 0.0,
-        color: Colors.purple,
+        color: Colors.red[300],
         child: Text("Sign In", style: TextStyle(color: Colors.white70)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
       ),
     );
   }
 
-  final TextEditingController emailController = new TextEditingController();
+  final TextEditingController usernameController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
 
   Container textSection() {
@@ -98,16 +96,26 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: <Widget>[
           TextFormField(
-            controller: emailController,
+            controller: usernameController,
             cursorColor: Colors.white,
-
             style: TextStyle(color: Colors.white70),
             decoration: InputDecoration(
               icon: Icon(Icons.email, color: Colors.white70),
-              hintText: "Email",
-              border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
+              hintText: "Username",
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white70)),
               hintStyle: TextStyle(color: Colors.white70),
             ),
+            // ignore: missing_return
+            validator: (String value) {
+              // ignore: missing_return
+              if (value.isEmpty) return "username is required";
+            },
+            onSaved: (String value) {
+              setState(() {
+                _username = value;
+              });
+            },
           ),
           SizedBox(height: 30.0),
           TextFormField(
@@ -118,9 +126,19 @@ class _LoginPageState extends State<LoginPage> {
             decoration: InputDecoration(
               icon: Icon(Icons.lock, color: Colors.white70),
               hintText: "Password",
-              border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white70)),
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white70)),
               hintStyle: TextStyle(color: Colors.white70),
             ),
+            validator: (String value) {
+              // ignore: missing_return
+              if (value.isEmpty) return "password is required";
+            },
+            onSaved: (String value) {
+              setState(() {
+                _password = value;
+              });
+            },
           ),
         ],
       ),
@@ -131,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       margin: EdgeInsets.only(top: 50.0),
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
-      child: Text("Code Land",
+      child: Text("Sign in",
           style: TextStyle(
               color: Colors.white70,
               fontSize: 40.0,
