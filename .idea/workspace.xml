@@ -20,18 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3acd68d1-dde7-457f-a261-814b22a43392" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/baitaplon.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/baitaplon.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter/lib/constants/Strings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter/lib/constants/Strings.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter/lib/models/Users.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter/lib/models/Users.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter/lib/page/HomePage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter/lib/page/HomePage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter/lib/routes/CustomRouter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter/lib/routes/CustomRouter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter/lib/routes/RouteName.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter/lib/routes/RouteName.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/routes/RouteName.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/routes/RouteName.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql,sequelize/src/model/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/sql,sequelize/src/model/users.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql,sequelize/src/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/sql,sequelize/src/routes/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql,sequelize/src/model/questionnaire.js" beforeDir="false" afterPath="$PROJECT_DIR$/sql,sequelize/src/model/questionnaire.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql,sequelize/src/model/relation.js" beforeDir="false" afterPath="$PROJECT_DIR$/sql,sequelize/src/model/relation.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sql,sequelize/src/routes/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/sql,sequelize/src/routes/users.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,10 +77,10 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="100" y="100" width="774" height="840" key="AVDManager" timestamp="1615639842572">
+    <state x="100" y="100" width="774" height="840" key="AVDManager" timestamp="1615906981102">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="100" y="100" width="774" height="840" key="AVDManager/0.0.1920.1040@0.0.1920.1040" timestamp="1615639842572" />
+    <state x="100" y="100" width="774" height="840" key="AVDManager/0.0.1920.1040@0.0.1920.1040" timestamp="1615906981102" />
     <state x="296" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1615639622811">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

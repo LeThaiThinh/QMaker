@@ -1,5 +1,5 @@
-import 'package:baitaplon/classes/Questionnaire.dart';
-import 'package:baitaplon/models/User.dart';
+import 'package:baitaplon/models/Questionnaire.dart';
+import 'package:baitaplon/models/Users.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +31,7 @@ class _ConfigurePageState extends State<ConfigurePage> {
       },
       decoration: InputDecoration(labelText: 'Name'),
       // ignore: missing_return
-      initialValue: questionnaire.name,
+      initialValue: questionnaire.toppic,
       // ignore: missing_return
       validator: (String value) {
         // ignore: missing_return
@@ -39,7 +39,7 @@ class _ConfigurePageState extends State<ConfigurePage> {
       },
       onSaved: (String value) {
         setState(() {
-          questionnaire.name = value;
+          questionnaire.toppic = value;
         });
       },
     );
@@ -61,7 +61,7 @@ class _ConfigurePageState extends State<ConfigurePage> {
         },
         onSaved: (String value) {
           setState(() {
-            questionnaire.totalQuestionInSession = int.tryParse(value);
+            // questionnaire.totalQuestionInSession = int.tryParse(value);
           });
         });
   }
@@ -82,7 +82,7 @@ class _ConfigurePageState extends State<ConfigurePage> {
       },
       onSaved: (String value) {
         setState(() {
-          questionnaire.totalTime = int.tryParse(value);
+          // questionnaire.totalTime = int.tryParse(value);
         });
       },
     );
@@ -116,14 +116,14 @@ class _ConfigurePageState extends State<ConfigurePage> {
                   ],
                 );
               }).then((value) {
-            questionnaire.name = value;
-            Provider.of<UserModel>(context, listen: false)
-                .addListQuestionnaire(questionnaire);
-            Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PlayExamPage(
-                      questionnaire: questionnaire,
-                    )));
+            // questionnaire.name = value;
+            // Provider.of<UserModel>(context, listen: false)
+            //     .addListQuestionnaire(questionnaire);
+            // Navigator.pop(context);
+            // Navigator.of(context).push(MaterialPageRoute(
+            //     builder: (context) => PlayExamPage(
+            //           questionnaire: questionnaire,
+            //         )));
           });
           //Tạo bộ câu hỏi mới và đổi màn hình
         });
@@ -196,7 +196,8 @@ class _ConfigurePageState extends State<ConfigurePage> {
                     Container(
                       width: MediaQuery.of(context).size.width * 2 / 3,
                       child: Text(
-                        "13 câu hỏi " + questionnaire.name.toLowerCase(),
+                        "13 câu hỏi ",
+                        // + questionnaire.name.toLowerCase(),
                         style: TextStyle(
                             fontWeight: FontWeight.w700, fontSize: 25),
                       ),
@@ -258,9 +259,7 @@ class _ConfigurePageState extends State<ConfigurePage> {
                   margin: EdgeInsets.fromLTRB(0, 12, 0, 22),
                 ),
                 Container(
-                  child: Text(
-                      "Tổng số câu hỏi :" +
-                          questionnaire.totalQuestionInSession.toString(),
+                  child: Text("Tổng số câu hỏi :",
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
                   color: colorDebug ? Colors.green : null,

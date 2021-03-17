@@ -43,15 +43,15 @@ Future<List<Questionnaire>> fetchQuestionnaireByTopic(
   }
 }
 
-Future<List<Questionnaire>> fetchQuestionnaireTopic(
-    http.Client client, int id) async {
-  final response = await client.get("http://10.0.2.2:4000/users/questionnaire");
+Future<List<Map>> fetchQuestionnaireTopic(http.Client client, int id) async {
+  final response =
+      await client.get("http://10.0.2.2:4000/users/questionnaireTopic");
   if (response.statusCode == 200) {
-    final map = jsonDecode(response.body).cast<Map<String, dynamic>>();
-    final listUsers = map.map<Questionnaire>((json) {
-      return Questionnaire.fromJson(json);
-    }).toList();
-    return listUsers;
+    final map = jsonDecode(response.body).cast<List<Map<String, dynamic>>>();
+    // final listTopic = map.map<Questionnaire>((json) {
+    //   return Questionnaire.fromJson(json);
+    // }).toList();
+    return map;
   } else {
     throw Exception('Fail');
   }

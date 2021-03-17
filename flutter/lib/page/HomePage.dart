@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:ui';
-
-import 'package:baitaplon/classes/Questionnaire.dart';
-import 'package:baitaplon/classes/QuestionnaireTemplate.dart';
+import 'package:baitaplon/models/Questionnaire.dart';
 import 'package:baitaplon/models/Users.dart';
 import 'package:baitaplon/page/LoginPage.dart';
 import 'package:baitaplon/page/ConfigurePage.dart';
@@ -216,56 +214,65 @@ class _HomePageState extends State<HomePage> {
 
   Widget questionnairesByTopic() {
     double fraction = 0.9;
-    return Container(
-      color: colorDebug ? Colors.red[100] : null,
-      alignment: Alignment.topLeft,
-      height: MediaQuery.of(context).size.height * 4 / 15,
-      width: MediaQuery.of(context).size.width,
-      child: DraggableScrollableSheet(
-        initialChildSize: fraction,
-        minChildSize: fraction,
-        maxChildSize: fraction,
-        expand: false,
-        builder: (BuildContext context, ScrollController controller) {
-          return SingleChildScrollView(
-            controller: controller,
-            scrollDirection: Axis.horizontal,
-            child: Row(children: [
-              for (var questionnaire in questionnairesByTopics)
-                RaisedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => ConfigurePage(
-                                questionnaire: Questionnaire(
-                                    QuestionnaireTemplate(10, [], true),
-                                    questionnaire,
-                                    0,
-                                    150))));
-                  },
-                  child: Card(
-                    color: colorDebug ? Colors.green : null,
-                    elevation: 10,
-                    margin: EdgeInsets.all(15),
-                    child: Container(
-                        height: MediaQuery.of(context).size.height * fraction,
-                        width: MediaQuery.of(context).size.width * 0.25,
-                        child: Center(
-                            child: Text(
-                          questionnaire,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.red[600]),
-                        ))),
+    return FutureBuilder<List<Map>>(
+      initialData: [{}],
+      future: fetchQuestionnaireTopic(http.Client(), user.id),
+      builder: (context, snapshot) => snapshot.hasError
+          ? Center(
+              child: Text(
+              snapshot.error.toString(),
+              style: TextStyle(
+                fontSize: 6.5,
+              ),
+            ))
+          : snapshot.hasData != null
+              ? Container(
+                  color: colorDebug ? Colors.red[100] : null,
+                  alignment: Alignment.topLeft,
+                  height: MediaQuery.of(context).size.height * 4 / 15,
+                  width: MediaQuery.of(context).size.width,
+                  child: DraggableScrollableSheet(
+                    initialChildSize: fraction,
+                    minChildSize: fraction,
+                    maxChildSize: fraction,
+                    expand: false,
+                    builder:
+                        (BuildContext context, ScrollController controller) {
+                      return SingleChildScrollView(
+                        controller: controller,
+                        scrollDirection: Axis.horizontal,
+                        child: Row(children: [
+                          for (var questionnaire in questionnairesByTopics)
+                            RaisedButton(
+                              onPressed: () {},
+                              child: Card(
+                                color: colorDebug ? Colors.green : null,
+                                elevation: 10,
+                                margin: EdgeInsets.all(15),
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        fraction,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.25,
+                                    child: Center(
+                                        child: Text(
+                                      questionnaire,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.red[600]),
+                                    ))),
+                              ),
+                            ),
+                        ]),
+                      );
+                    },
                   ),
+                )
+              : Center(
+                  child: CircularProgressIndicator(),
                 ),
-            ]),
-          );
-        },
-      ),
     );
   }
 }
