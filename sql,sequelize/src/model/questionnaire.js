@@ -8,6 +8,10 @@ let Questionnaire = sequelize.define('questionnaire', {
         autoIncrement: true,
         allowNull: false
     },
+    name:{
+        type:Sequelize.STRING,
+        allowNull: false
+    },
     topic: {
         type:Sequelize.STRING,
         allowNull: false

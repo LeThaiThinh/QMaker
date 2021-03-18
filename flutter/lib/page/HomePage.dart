@@ -10,18 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserWidget extends StatelessWidget {
-  final User user;
-  UserWidget({Key key, this.user}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.green,
-      child: Text("Hi " + user.name),
-    );
-  }
-}
-
 class HomePage extends StatefulWidget {
   final User user;
   HomePage({this.user});
@@ -30,36 +18,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> questionnairesByTopics = [
-    "Toán",
-    "Âm nhạc",
-    "Khoa học",
-    "Ứng dụng điện toán đám mây",
-    "Phim ảnh"
-  ];
-  List<String> questionnairesCurrentlyPlay = [
-    "Phân tích thiết kế",
-    "Tích Phân",
-    "Khoa học"
-  ];
-  bool colorDebug = true;
-  SharedPreferences sharedPreferences;
+  bool colorDebug = false;
   List<dynamic> data;
   User user;
   _HomePageState(User user0) {
     user = user0;
   }
-
   num rating = 4;
   @override
   void initState() {
     super.initState();
-    // checkLoginStatus();
-  }
-
-  checkLoginStatus() async {
-    // ignore: unnecessary_statements
-    user == null ? Navigator.of(context).pop() : () {};
   }
 
   @override
@@ -110,112 +78,138 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget questionnaireCurrentlyPlay() {
-    return Column(children: [
-      Container(
-          margin: EdgeInsets.fromLTRB(10, 15, 0, 20),
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Recent Quiz",
-            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 27),
-          )),
-      for (var questionnaire in questionnairesCurrentlyPlay)
-        Container(
-          margin: EdgeInsets.fromLTRB(22, 8, 20, 15),
-          width: MediaQuery.of(context).size.width - 42,
-          height: MediaQuery.of(context).size.height * 1 / 8,
-          color: colorDebug ? Colors.red : null,
-          child: Row(
-            children: [
-              // icon
+    return FutureBuilder<List<Questionnaire>>(
+        initialData: [
+          Questionnaire(
+              topic: "topic",
+              timeLimit: 100,
+              description: "description",
+              public: true,
+              createAt: "0000000000000")
+        ],
+        future: fetchQuestionnaire(http.Client(), user.id, "?updatedAt=DESC"),
+        builder: (context, snapshot) => Column(children: [
               Container(
-                child: Icon(
-                  Icons.lightbulb_outline_rounded,
-                  size: 25,
-                  color: colorDebug ? Colors.white : null,
-                ),
-                padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
-                color: colorDebug ? Colors.grey : Colors.grey,
-              ),
-              // //description
-              Container(
-                margin: EdgeInsets.fromLTRB(12, 11, 0, 0),
-                child: Column(children: [
-                  Container(
-                    child: Text(
-                      questionnaire,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
+                  margin: EdgeInsets.fromLTRB(10, 15, 0, 20),
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Recent Quiz",
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 27),
+                  )),
+              for (var questionnaire in snapshot.data)
+                Container(
+                    margin: EdgeInsets.fromLTRB(26, 8, 15, 5),
+                    width: MediaQuery.of(context).size.width - 42,
+                    height: MediaQuery.of(context).size.height * 1 / 8,
+                    color: colorDebug ? Colors.red : null,
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) =>
+                                ConfigurePage(questionnaire: questionnaire)));
+                      },
+                      child: Row(
+                        children: [
+                          // icon
+                          Container(
+                            child: Icon(
+                              Icons.lightbulb_outline_rounded,
+                              size: 25,
+                              color: colorDebug ? Colors.white : null,
+                            ),
+                            padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+                            color: colorDebug ? Colors.grey : Colors.grey,
+                          ),
+                          // //description
+                          Container(
+                            margin: EdgeInsets.fromLTRB(12, 12, 0, 0),
+                            child: Column(children: [
+                              Container(
+                                child: Text(
+                                  questionnaire.topic,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                                color: colorDebug ? Colors.white : null,
+                                width: 150,
+                              ),
+                              Container(
+                                child: Text(
+                                  "Đăng bởi " +
+                                      user.username +
+                                      ": " +
+                                      questionnaire.createAt.substring(0, 10),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 11),
+                                  textAlign: TextAlign.left,
+                                ),
+                                color: colorDebug ? Colors.white : null,
+                                width: 150,
+                              ),
+                              Container(
+                                child: Text(
+                                  questionnaire.description,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 11,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                                margin: EdgeInsets.fromLTRB(0, 10, 0, 2),
+                                color: colorDebug ? Colors.white : null,
+                                width: 150,
+                              ),
+                            ]),
+                          ),
+                          //rating
+                          Container(
+                            margin: EdgeInsets.fromLTRB(18, 12, 2, 5),
+                            color: colorDebug ? Colors.white : null,
+                            child: Column(children: [
+                              Row(children: [
+                                for (int i = 1; i <= rating; i++)
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 13,
+                                  ),
+                                for (int i = 1; i <= 5 - rating; i++)
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.grey,
+                                    size: 13,
+                                  )
+                              ]),
+                              Container(
+                                  margin: EdgeInsets.fromLTRB(5, 5, 2, 2),
+                                  color: colorDebug ? Colors.white : null,
+                                  width: 90,
+                                  child: Text(
+                                    "Điểm cao nhất của bạn là: 50",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 9,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ))
+                            ]),
+                          ),
+                        ],
                       ),
-                      textAlign: TextAlign.left,
-                    ),
-                    color: colorDebug ? Colors.white : null,
-                    width: 150,
-                  ),
-                  Container(
-                    child: Text(
-                      "Người dùng : dd/mm/yy",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 11),
-                      textAlign: TextAlign.left,
-                    ),
-                    color: colorDebug ? Colors.white : null,
-                    width: 150,
-                  ),
-                  Container(
-                    child: Text(
-                      "Đây là một đoạn mô tả dài !!!!",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 11,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                    margin: EdgeInsets.fromLTRB(0, 10, 0, 2),
-                    color: colorDebug ? Colors.white : null,
-                    width: 150,
-                  ),
-                ]),
-              ),
-              //rating
-              Container(
-                margin: EdgeInsets.fromLTRB(35, 12, 10, 12),
-                color: colorDebug ? Colors.white : null,
-                child: Column(children: [
-                  Row(children: [
-                    for (int i = 1; i <= rating; i++)
-                      Icon(
-                        Icons.star,
-                        color: Colors.yellow,
-                        size: 13,
-                      ),
-                    for (int i = 1; i <= 5 - rating; i++)
-                      Icon(
-                        Icons.star,
-                        color: Colors.grey,
-                        size: 13,
-                      )
-                  ]),
-                  Text(
-                    "số điểm của bạn là: 50",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 9,
-                    ),
-                    textAlign: TextAlign.center,
-                  )
-                ]),
-              ),
-            ],
-          ),
-        )
-    ]);
+                    ))
+            ]));
   }
 
   Widget questionnairesByTopic() {
     double fraction = 0.9;
     return FutureBuilder<List<Map>>(
-      initialData: [{}],
+      initialData: [
+        {"topic": ""}
+      ],
       future: fetchQuestionnaireTopic(http.Client(), user.id),
       builder: (context, snapshot) => snapshot.hasError
           ? Center(
@@ -242,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                         controller: controller,
                         scrollDirection: Axis.horizontal,
                         child: Row(children: [
-                          for (var questionnaire in questionnairesByTopics)
+                          for (var questionnaire in snapshot.data)
                             RaisedButton(
                               onPressed: () {},
                               child: Card(
@@ -256,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                                         0.25,
                                     child: Center(
                                         child: Text(
-                                      questionnaire,
+                                      questionnaire["topic"],
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 22,

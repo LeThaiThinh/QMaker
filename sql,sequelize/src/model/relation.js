@@ -1,19 +1,26 @@
 var Questionnaire=require('./questionnaire')
 var User=require('./users')
 var Question=require('./question')
-const { Op } = require("sequelize");
+var History=require('./history')
+var Rating=require('./rating')
 
 User.hasMany(Questionnaire)
-// Questionnaire.belongsToMany(User, {
-//     through:'History'
-//   })
 Questionnaire.belongsTo(User)
+Questionnaire.belongsToMany(User, {
+    through:History
+  })
+User.belongsToMany(Questionnaire, {
+    through:History
+  })
+Questionnaire.belongsToMany(User, {
+    through:Rating
+  })
+User.belongsToMany(Questionnaire, {
+    through:Rating
+  })
 Questionnaire.hasMany(Question)
 Question.belongsTo(Questionnaire)
-// Question.belongsTo(Questionnaire, {
-//     // foreignKey: 'questionnaireId',
-//     // allowNull: false
-//   })
+
 async function createTables(){
     await User.sync({force:false}).then(() => {
         console.log('New table created');
@@ -26,6 +33,16 @@ async function createTables(){
         // sequelize.close();
     })
     await Question.sync({force:false}).then(() => {
+        console.log('New table created');
+    }).finally(() => {
+        // sequelize.close();
+    })
+    await History.sync({force:false}).then(() => {
+        console.log('New table created');
+    }).finally(() => {
+        // sequelize.close();
+    })
+    await Rating.sync({force:true}).then(() => {
         console.log('New table created');
     }).finally(() => {
         // sequelize.close();

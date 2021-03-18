@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:provider/provider.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 // ignore: must_be_immutable

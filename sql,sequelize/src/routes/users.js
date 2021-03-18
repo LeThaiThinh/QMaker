@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var {User:User,Questionnaire:Questionnaire,Question:Question}=require('../model/relation')
 var faker=require('faker')
+const { Op } = require("sequelize");
 const Sequelize = require('sequelize');
 
 /* GET users listing. */
@@ -9,31 +10,25 @@ router.get('/users',async function (req, res, next)  {
   const users= await User.findAll();
   res.json(users);
 });
-router.get('/users/questionnaire',async function(req, res, next) {
-  questionnaires=await Questionnaire.findAll({
-
-  })
-  res.json(questionnaires);
-});
 router.get('/users/create',async function(req, res, next) {
   for(var i=1;i<5;i++)
-  await User.create({
+  var user=await User.create({
     name:faker.name.lastName(),
     username:faker.name.firstName(),
     password:faker.name.middleName(),
   })
-  res.json();
+  res.json(user);
 });
-router.get(`/users/:id`,async function(req, res, next) {
-  var id=req.params['id']
+router.get(`/users/:userId`,async function(req, res, next) {
+  var userId=req.params['userId']
   const user=await User.findOne({
-    where:{id:id}
+    where:{id:userId}
   })
   res.json(user);
 });
-router.get(`/users/:id/questionnaireTopic`,async function(req, res, next) {
+router.get(`/users/:userId/questionnaireTopic`,async function(req, res, next) {
 try{
-  var userId=parseInt( req.params['id'])
+  var userId=parseInt( req.params['userId'])
   const questionnaires=await Questionnaire.findAll({
     where:{
       userId:userId,
@@ -47,29 +42,17 @@ try{
   console.log(err);
 }
 });
-router.get(`/users/:id/questionnaireByTopic`,async function(req, res, next) {
-  var userId=req.params['id']
-  const questionnaires=await Questionnaire.findAll({
-    include:{
-      model:User,
-      where:{
-        userId:Id,
-      }
-    },
-
-  })
-  res.json(questionnaires);
-});
-router.get('/users/:id/questionnaire/create',async function(req, res, next) {
+router.get('/users/:userId/questionnaire/create',async function(req, res, next) {
   try{
-  var userId=parseInt(req.params['id'])
+  var userId=parseInt(req.params['userId'])
   const user=User.findOne({where:{
     id:userId
   }})
   var topic=Math.random()
   var questionnaire={
+    name:faker.name.title(),
     topic:topic<0.2?"Toán":topic<0.4?"Ứng dụng di động":topic<0.6?"Âm nhạc":topic<0.8?"phim ảnh":"Hóa học",
-    description:faker.name.jobDescriptor(),
+    description:faker.random.words(6),
     public:Math.random() < 0.5?true:false,
     time_limit:parseInt(Math.random()*600),
     userId:userId
@@ -81,13 +64,81 @@ router.get('/users/:id/questionnaire/create',async function(req, res, next) {
   console.log(err);
 }
 });
-router.get('/users/:id/questionnaire',async function(req, res, next) {
-  var userId=req.params['id']
-  questionnaires=await Questionnaire.findAll({
+router.get('/users/:userId/questionnaire',async function(req, res, next) {
+  var userId=req.params['userId']
+  var querydata_where_topic
+  var querydata_where_questionId
+  var querydata_order
+  var querydate_limit
+  if(req.query['topic']!=null){
+    querydata_where_topic={topic:req.query['topic'],}
+  }
+  if(req.query['questionId']!=null){
+    querydata_where_questionId={questionId:req.query['questionId'],}
+  }
+  if(req.query['updatedAt']!=null){
+    querydata_order=['updatedAt',req.query['updatedAt']];
+  querydate_limit=3
+  }
+  else {querydata_order=['id','ASC'];querydate_limit=1000}
+  var questionnaires=await Questionnaire.findAll({
     where:{
-      userId:userId
-    }
+      [Op.and]:[
+        {userId:userId,},
+        querydata_where_topic,
+      ]
+    },
+    order:[querydata_order],
+    limit:querydate_limit,
   })
   res.json(questionnaires);
+});
+router.get('/users/:userId/questionnaire/:questionnaireId',async function(req, res, next) {
+  var userId=req.params['userId']
+  var questionnaireId=req.params["questionnaireId"]
+  var questionnaires=await Questionnaire.findOne({
+    where:{
+      [Op.and]:[
+        {userId:userId,},
+        {id:questionnaireId},
+      ]
+    }});
+  res.json(questionnaires)
+});
+router.get('/users/:userId/questionnaire/:questionnaireId/count',async function(req, res, next) {
+  var userId=req.params['userId']
+  var questionnaireId=req.params["questionnaireId"]
+  var numberOfQuestion=await Question.count({
+    where:{
+      [Op.and]:[
+        {questionnaireId:questionnaireId},
+      ]
+    }});
+  res.json(numberOfQuestion)
+});
+router.get('/users/:userId/questionnaire/:questionnaireId/question/create',async function(req, res, next) {
+  var userId=req.params['userId']
+  console.log(req.query['questionnaireId'])
+  var questionnaireId=req.params["questionnaireId"]
+  var question=await Question.create({
+      question:faker.random.words(10),
+      correct_answer:faker.random.words(3),
+      incorrect_answer1:faker.random.words(3),
+      incorrect_answer2:faker.random.words(3),
+      incorrect_answer3:faker.random.words(3),
+      questionnaireId:questionnaireId
+    })
+  res.json(question);
+})
+router.get('/users/:userId/questionnaire/:questionnaireId/question',async function(req, res, next) {
+  var userId=req.params['userId']
+  var questionnaireId=req.params["questionnaireId"]
+  var question=await Question.findAll({
+    where:{
+      [Op.and]:[
+        {questionnaireId:questionnaireId},
+      ]
+    }});
+  res.json(question)
 });
 module.exports = router;

@@ -13,10 +13,10 @@ let Question = sequelize.define('question', {
         allowNull: false
     },
     correct_answer:{
-        type:Sequelize.BOOLEAN,
+        type:Sequelize.STRING,
         allowNull: false
     },
-    incorrect_answer:{
+    incorrect_answer1:{
         type:Sequelize.STRING,
         allowNull: false
     },

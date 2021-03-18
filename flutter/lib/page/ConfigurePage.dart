@@ -3,7 +3,7 @@ import 'package:baitaplon/models/Users.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:http/http.dart' as http;
 import '../pages/PlayExamPage.dart';
 
 // ignore: must_be_immutable
@@ -24,6 +24,7 @@ class _ConfigurePageState extends State<ConfigurePage> {
   _ConfigurePageState(this.questionnaire);
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   Widget _buildName() {
     return TextFormField(
       onChanged: (String string) {
@@ -31,7 +32,7 @@ class _ConfigurePageState extends State<ConfigurePage> {
       },
       decoration: InputDecoration(labelText: 'Name'),
       // ignore: missing_return
-      initialValue: questionnaire.toppic,
+      initialValue: questionnaire.topic,
       // ignore: missing_return
       validator: (String value) {
         // ignore: missing_return
@@ -39,7 +40,7 @@ class _ConfigurePageState extends State<ConfigurePage> {
       },
       onSaved: (String value) {
         setState(() {
-          questionnaire.toppic = value;
+          questionnaire.topic = value;
         });
       },
     );
@@ -196,8 +197,7 @@ class _ConfigurePageState extends State<ConfigurePage> {
                     Container(
                       width: MediaQuery.of(context).size.width * 2 / 3,
                       child: Text(
-                        "13 câu hỏi ",
-                        // + questionnaire.name.toLowerCase(),
+                        "13 câu hỏi " + questionnaire.topic.toLowerCase(),
                         style: TextStyle(
                             fontWeight: FontWeight.w700, fontSize: 25),
                       ),
@@ -222,17 +222,23 @@ class _ConfigurePageState extends State<ConfigurePage> {
                   width: MediaQuery.of(context).size.width,
                   alignment: Alignment.centerLeft,
                 ),
-                Container(
-                  child: Text("Đăng bởi user dd/mm/yy",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                      )),
-                  color: colorDebug ? Colors.green : null,
-                  width: MediaQuery.of(context).size.width,
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.fromLTRB(0, 3, 0, 13),
-                ),
+                FutureBuilder<User>(
+                    future: fetchUsersById(http.Client(), questionnaire.userId),
+                    initialData: User(username: ""),
+                    builder: (context, snapshot) {
+                      return Container(
+                        child: Text(
+                            "Đăng bởi " + snapshot.data.username + " dd/mm/yy",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                            )),
+                        color: colorDebug ? Colors.green : null,
+                        width: MediaQuery.of(context).size.width,
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.fromLTRB(0, 3, 0, 13),
+                      );
+                    }),
                 Row(children: [
                   for (int i = 1; i <= rating; i++)
                     Icon(
@@ -247,7 +253,7 @@ class _ConfigurePageState extends State<ConfigurePage> {
                 ]),
                 Container(
                   child: Text(
-                    "Đây là một đoạn mô tả dài !!!! Đây là một đoạn mô tả dài !!!! Đây là một đoạn mô tả dài !!!!",
+                    questionnaire.description,
                     style: TextStyle(
                       fontWeight: FontWeight.w300,
                       fontSize: 18,
@@ -258,14 +264,21 @@ class _ConfigurePageState extends State<ConfigurePage> {
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.fromLTRB(0, 12, 0, 22),
                 ),
-                Container(
-                  child: Text("Tổng số câu hỏi :",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
-                  color: colorDebug ? Colors.green : null,
-                  width: MediaQuery.of(context).size.width,
-                  alignment: Alignment.centerLeft,
-                )
+                FutureBuilder<int>(
+                    future: numberOfQuestion(
+                        http.Client(), questionnaire.id, questionnaire.userId),
+                    initialData: 0,
+                    builder: (context, snapshot) {
+                      return Container(
+                        child: Text(
+                            "Tổng số câu hỏi :" + snapshot.data.toString(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 14)),
+                        color: colorDebug ? Colors.green : null,
+                        width: MediaQuery.of(context).size.width,
+                        alignment: Alignment.centerLeft,
+                      );
+                    })
               ],
             ),
           ),

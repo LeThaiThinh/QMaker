@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:baitaplon/constants/Strings.dart';
 import 'package:baitaplon/models/Users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,11 +47,11 @@ class _LoginPageState extends State<LoginPage> {
   signIn() async {
     Map<dynamic, String> data = {'username': _username, 'password': _password};
     var jsonResponse;
-    var response = await http
-        .post('http://10.0.2.2:4000/signin', body: json.encode(data), headers: {
-      HttpHeaders.contentTypeHeader: 'application/json',
-    });
-    debugPrint(response.body);
+    var response = await http.post('http://10.0.2.2:${Strings.PORT}/signin',
+        body: json.encode(data),
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+        });
     jsonResponse = json.decode(response.body);
     if (response.statusCode == 200) {
       Navigator.pop(context);
@@ -130,6 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                   borderSide: BorderSide(color: Colors.white70)),
               hintStyle: TextStyle(color: Colors.white70),
             ),
+            // ignore: missing_return
             validator: (String value) {
               // ignore: missing_return
               if (value.isEmpty) return "password is required";
