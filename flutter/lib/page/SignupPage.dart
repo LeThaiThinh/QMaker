@@ -1,65 +1,107 @@
 import 'package:baitaplon/constants/myColors.dart';
 import 'package:baitaplon/models/Users.dart';
-import 'package:baitaplon/page/SignupPage.dart';
+import 'package:baitaplon/page/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({Key key}) : super(key: key);
+class SignupPage extends StatefulWidget {
+  SignupPage({Key key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignupPageState createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  String _username;
+class _SignupPageState extends State<SignupPage> {
   String _password;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _username;
+  String _name;
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light
+        .copyWith(statusBarColor: Colors.transparent));
     return Scaffold(
         backgroundColor: primaryColor,
-        body: Form(
+        body: Container(
+            child: Form(
           key: _formKey,
           child: ListView(
             padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height / 4,
+              top: MediaQuery.of(context).size.height / 5,
               left: 30,
               right: 30,
             ),
-            children: [
+            children: <Widget>[
               headerSection(),
-              usernameLabel(),
+              labelNameSection(),
+              nameSection(),
+              labelUsernameSection(),
               usernameSection(),
-              passwordLabel(),
+              labelPasswordSection(),
               passwordSection(),
-              buttonSection(),
-              goToCreateNewAccount(),
+              signupSection(),
+              goToLoginSection(),
             ],
           ),
-        ));
+        )));
   }
 
   Center headerSection() {
     return Center(
       child: Text(
-        "Quiz App",
+        "Create a new account",
         style: TextStyle(
           color: Colors.white,
-          fontSize: 50,
+          fontSize: 30,
           fontWeight: FontWeight.w700,
         ),
       ),
     );
   }
 
-  Padding usernameLabel() {
+  Padding labelNameSection() {
     return Padding(
-      padding: EdgeInsets.only(top: 60.0, bottom: 10.0),
+      padding: EdgeInsets.only(top: 40.0, bottom: 10.0),
+      child: Text(
+        "Your name",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Material nameSection() {
+    return Material(
+      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      child: TextFormField(
+        controller: nameController,
+        // ignore: missing_return
+        validator: (String value) {
+          if (value.isEmpty) return "Name is required";
+        },
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
+        ),
+        onSaved: (String value) {
+          setState(() {
+            _name = value;
+          });
+        },
+      ),
+    );
+  }
+
+  Padding labelUsernameSection() {
+    return Padding(
+      padding: EdgeInsets.only(top: 30.0, bottom: 10.0),
       child: Text(
         "Username",
         style: TextStyle(
@@ -80,10 +122,9 @@ class _LoginPageState extends State<LoginPage> {
         validator: (String value) {
           if (value.isEmpty) return "Username is required";
         },
-        onChanged: (val) {},
         decoration: InputDecoration(
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 15.0),
+          contentPadding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
         ),
         onSaved: (String value) {
           setState(() {
@@ -94,9 +135,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Padding passwordLabel() {
+  Padding labelPasswordSection() {
     return Padding(
-      padding: EdgeInsets.only(top: 60.0, bottom: 10.0),
+      padding: EdgeInsets.only(top: 30.0, bottom: 10.0),
       child: Text(
         "Password",
         style: TextStyle(
@@ -117,10 +158,10 @@ class _LoginPageState extends State<LoginPage> {
         validator: (String value) {
           if (value.isEmpty) return "Password is required";
         },
-        onChanged: (val) {},
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
+          hintStyle: TextStyle(textBaseline: TextBaseline.ideographic),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 15.0),
         ),
         onSaved: (String value) {
           setState(() {
@@ -132,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Padding buttonSection() {
+  Padding signupSection() {
     return Padding(
       padding: EdgeInsets.only(top: 40.0, bottom: 20.0),
       child: TextButton(
@@ -151,12 +192,12 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
-            // debugPrint(_name + _username);
-            signin(http.Client(), _username, _password, context);
+            debugPrint(_name + _username);
+            signup(http.Client(), _name, _username, _password, context);
           }
         },
         child: Text(
-          "Log In",
+          "Sign Up",
           style: TextStyle(
             color: Colors.white,
             fontSize: 18,
@@ -167,15 +208,15 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Center goToCreateNewAccount() {
+  Center goToLoginSection() {
     return Center(
       child: InkWell(
         onTap: () {
           Navigator.of(context)
-              .pushReplacement(MaterialPageRoute(builder: (_) => SignupPage()));
+              .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
         },
         child: Text(
-          "Create a new account",
+          "Already a member? Login now",
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,

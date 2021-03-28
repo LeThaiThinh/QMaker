@@ -1,331 +1,208 @@
+import 'dart:convert';
+import 'dart:io';
+import '../models/Questionnaire.dart';
+import 'package:baitaplon/constants/Strings.dart';
+import 'package:baitaplon/constants/sharedData.dart';
+import 'package:baitaplon/models/History.dart';
 import 'package:baitaplon/models/Questionnaire.dart';
 import 'package:baitaplon/models/Users.dart';
+import 'package:baitaplon/page/MainPage.dart';
+import 'package:baitaplon/page/questionnaire/CreateQuestionPage.dart';
+import 'package:baitaplon/routes/RouteName.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import '../pages/PlayExamPage.dart';
 
 // ignore: must_be_immutable
 class ConfigurePage extends StatefulWidget {
-  Questionnaire questionnaire;
+  // Questionnaire questionnaire;
 
-  ConfigurePage({Key key, @required this.questionnaire}) : super(key: key);
+  ConfigurePage({Key key}) : super(key: key);
   @override
-  _ConfigurePageState createState() => _ConfigurePageState(questionnaire);
+  _ConfigurePageState createState() => _ConfigurePageState();
 }
 
 class _ConfigurePageState extends State<ConfigurePage> {
-  Questionnaire questionnaire;
-  bool _changed = false;
   bool colorDebug = false;
-  num rating = 4;
-
-  _ConfigurePageState(this.questionnaire);
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  Widget _buildName() {
-    return TextFormField(
-      onChanged: (String string) {
-        _changed = true;
-      },
-      decoration: InputDecoration(labelText: 'Name'),
-      // ignore: missing_return
-      initialValue: questionnaire.topic,
-      // ignore: missing_return
-      validator: (String value) {
-        // ignore: missing_return
-        if (value.isEmpty) return "Name is required";
-      },
-      onSaved: (String value) {
-        setState(() {
-          questionnaire.topic = value;
-        });
-      },
-    );
-  }
-
-  Widget _buildTotalQuestion() {
-    return TextFormField(
-        decoration: InputDecoration(labelText: 'Total Question'),
-        keyboardType: TextInputType.number,
-        onChanged: (String string) {
-          _changed = true;
-        },
-        // ignore: missing_return
-        validator: (String value) {
-          // ignore: missing_return
-          if (value.isEmpty) return "Total Question is required";
-          // ignore: unrelated_type_equality_checks
-          if (int.tryParse(value) <= 0) return "Input must be greater than 0";
-        },
-        onSaved: (String value) {
-          setState(() {
-            // questionnaire.totalQuestionInSession = int.tryParse(value);
-          });
-        });
-  }
-
-  Widget _buildTotalTime() {
-    return TextFormField(
-      onChanged: (String string) {
-        _changed = true;
-      },
-      decoration: InputDecoration(labelText: 'Total Time'),
-      keyboardType: TextInputType.number,
-      // ignore: missing_return
-      validator: (String value) {
-        // ignore: missing_return
-        if (value.isEmpty) return "Total Time is required";
-        // ignore: unrelated_type_equality_checks
-        if (int.tryParse(value) <= 0) return "Input must be greater than 0";
-      },
-      onSaved: (String value) {
-        setState(() {
-          // questionnaire.totalTime = int.tryParse(value);
-        });
-      },
-    );
-  }
-
-  Widget _createQuestionnaire() {
-    return RaisedButton(
-        child: Text("Create"),
-        onPressed: () {
-          if (!_formKey.currentState.validate()) {
-            return;
-          }
-          _formKey.currentState.save();
-          //điền tên bộ câu hỏi
-          TextEditingController controller = TextEditingController();
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text("Name Your Questionnaire"),
-                  content: TextField(
-                    controller: controller,
-                  ),
-                  actions: [
-                    MaterialButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(controller.text.toString());
-                      },
-                      child: Text('Submit'),
-                    )
-                  ],
-                );
-              }).then((value) {
-            // questionnaire.name = value;
-            // Provider.of<UserModel>(context, listen: false)
-            //     .addListQuestionnaire(questionnaire);
-            // Navigator.pop(context);
-            // Navigator.of(context).push(MaterialPageRoute(
-            //     builder: (context) => PlayExamPage(
-            //           questionnaire: questionnaire,
-            //         )));
-          });
-          //Tạo bộ câu hỏi mới và đổi màn hình
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Bộ câu hỏi",
-          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
-        ),
-      ),
-      body: CustomScrollView(slivers: <Widget>[
-        // SliverAppBar(
-        //   expandedHeight: 200.0,
-        //   centerTitle: true,
-        //   floating: true,
-        //   pinned: true,
-        //   stretchTriggerOffset: 100,
-        //   onStretchTrigger: (){},
-        //   flexibleSpace: FlexibleSpaceBar(
-        //     centerTitle: true,
-        //     collapseMode: CollapseMode.parallax,
-        //     background: Image(
-        //       image: AssetImage("assets/camera.jpg"), fit: BoxFit.cover,),
-        //     ),
-        //   actions: [
-        //     IconButton(
-        //       onPressed: (){
-        //         Navigator.of(context).push(
-        //             MaterialPageRoute(builder: (context)=> PlayExamPage(questionnaire: questionnaire))
-        //         );
-        //       },
-        //       icon:Icon(Icons.play_arrow_sharp,size: 30,),
-        //     ),
-        //     SizedBox(width: 10,),
-        //   ],
-        //   actionsIconTheme: IconTheme.of(context),
-        //   iconTheme: IconTheme.of(context),
-        // ),
-
-        SliverList(
-            delegate: SliverChildListDelegate([
-          Container(
-            margin: EdgeInsets.fromLTRB(18, 36, 10, 0),
-            child: Column(
-              children: [
-                // Material(
-                //   elevation: 0,
-                //   type: MaterialType.canvas,
-                //   borderOnForeground: false,
-                //   child: Form(
-                //     key: _formKey,
-                //     child: Column(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         _buildName(),
-                //         _buildTotalQuestion(),
-                //         _buildTotalTime(),
-                //         SizedBox(height: 500,),
-                //         _createQuestionnaire(),
-                //      ],
-                //     ),
-                //   ),
-                // ),
-                Container(
-                  child: Row(children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 2 / 3,
-                      child: Text(
-                        "13 câu hỏi " + questionnaire.topic.toLowerCase(),
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 25),
-                      ),
-                    ),
-                    Container(
-                        margin: EdgeInsets.fromLTRB(
-                            MediaQuery.of(context).size.width * 1 / 10,
-                            0,
-                            0,
-                            0),
-                        child: IconButton(
-                          onPressed: () {
-                            print("qrewq");
-                          },
-                          icon: Icon(
-                            Icons.settings,
-                            size: 30,
+    return Consumer<SharedData>(
+        builder: (context, data, child) => Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).popAndPushNamed(mainRoute).then(
+                        (value) =>
+                            Provider.of<SharedData>(context, listen: false)
+                                .changeNumberOfQuestion(null));
+                  },
+                ),
+                title: Text(
+                  "Bộ câu hỏi",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+                ),
+              ),
+              body: CustomScrollView(slivers: <Widget>[
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  Container(
+                      margin: EdgeInsets.fromLTRB(18, 36, 10, 0),
+                      child: Column(
+                        children: [
+                          Container(
+                            child: Row(children: [
+                              Container(
+                                width:
+                                    MediaQuery.of(context).size.width * 2 / 3,
+                                child: Text(
+                                  data.questionnaireIsChoosing.topic
+                                          .toUpperCase() +
+                                      " : " +
+                                      data.questionnaireIsChoosing.name
+                                          .toLowerCase(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 23),
+                                ),
+                              ),
+                              Container(
+                                  margin: EdgeInsets.fromLTRB(
+                                      MediaQuery.of(context).size.width *
+                                          1 /
+                                          10,
+                                      0,
+                                      0,
+                                      0),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pushNamed(createQuestionnaireRoute);
+                                    },
+                                    icon: Icon(
+                                      Icons.settings,
+                                      size: 30,
+                                    ),
+                                  ))
+                            ]),
+                            color: colorDebug ? Colors.green : null,
+                            width: MediaQuery.of(context).size.width,
+                            alignment: Alignment.centerLeft,
                           ),
-                        ))
-                  ]),
-                  color: colorDebug ? Colors.green : null,
-                  width: MediaQuery.of(context).size.width,
-                  alignment: Alignment.centerLeft,
-                ),
-                FutureBuilder<User>(
-                    future: fetchUsersById(http.Client(), questionnaire.userId),
-                    initialData: User(username: ""),
-                    builder: (context, snapshot) {
-                      return Container(
-                        child: Text(
-                            "Đăng bởi " + snapshot.data.username + " dd/mm/yy",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                            )),
-                        color: colorDebug ? Colors.green : null,
-                        width: MediaQuery.of(context).size.width,
-                        alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.fromLTRB(0, 3, 0, 13),
-                      );
-                    }),
-                Row(children: [
-                  for (int i = 1; i <= rating; i++)
-                    Icon(
-                      Icons.star,
-                      color: Colors.yellow,
-                    ),
-                  for (int i = 1; i <= 5 - rating; i++)
-                    Icon(
-                      Icons.star,
-                      color: Colors.grey,
-                    )
-                ]),
+                          Container(
+                            child: Text(
+                                "Đăng bởi " +
+                                    data.user.name +
+                                    " " +
+                                    data.questionnaireIsChoosing.createdAt
+                                        .substring(0, 10),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                )),
+                            color: colorDebug ? Colors.green : null,
+                            width: MediaQuery.of(context).size.width,
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.fromLTRB(0, 3, 0, 13),
+                          ),
+                          Row(children: [
+                            for (int i = 1;
+                                i <=
+                                    data.questionnaireIsChoosing.history.rating;
+                                i++)
+                              Icon(
+                                Icons.star,
+                                color: Colors.yellow,
+                              ),
+                            for (int i = 1;
+                                i <=
+                                    5 -
+                                        data.questionnaireIsChoosing.history
+                                            .rating;
+                                i++)
+                              Icon(
+                                Icons.star,
+                                color: Colors.grey,
+                              )
+                          ]),
+                          Container(
+                            child: Text(
+                              data.questionnaireIsChoosing.description,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 18,
+                              ),
+                            ),
+                            color: colorDebug ? Colors.green : null,
+                            width: MediaQuery.of(context).size.width,
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.fromLTRB(0, 12, 0, 22),
+                          ),
+                          Container(
+                            child: Text(
+                                "Tổng số câu hỏi :" +
+                                    data.numberOfQuestion.toString(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 14)),
+                            color: colorDebug ? Colors.green : null,
+                            width: MediaQuery.of(context).size.width,
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ],
+                      )),
+                ]))
+              ]),
+              persistentFooterButtons: [
                 Container(
+                  margin: EdgeInsets.fromLTRB(
+                      0, 13, MediaQuery.of(context).size.width * 1 / 6, 22),
+                  color: colorDebug ? Colors.red[300] : null,
+                  width: MediaQuery.of(context).size.width * 2 / 3,
                   child: Text(
-                    questionnaire.description,
+                    "Điểm cao nhất của bạn :" +
+                        data.questionnaireIsChoosing.history.rating.toString(),
                     style: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                      color: Colors.black,
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                  color: colorDebug ? Colors.green : null,
-                  width: MediaQuery.of(context).size.width,
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.fromLTRB(0, 12, 0, 22),
                 ),
-                FutureBuilder<int>(
-                    future: numberOfQuestion(
-                        http.Client(), questionnaire.id, questionnaire.userId),
-                    initialData: 0,
-                    builder: (context, snapshot) {
-                      return Container(
-                        child: Text(
-                            "Tổng số câu hỏi :" + snapshot.data.toString(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 14)),
-                        color: colorDebug ? Colors.green : null,
-                        width: MediaQuery.of(context).size.width,
-                        alignment: Alignment.centerLeft,
-                      );
-                    })
+
+                //nút bắt đầu ngay
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    color: Colors.red[300],
+                  ),
+                  margin: EdgeInsets.fromLTRB(
+                      0, 13, MediaQuery.of(context).size.width * 1 / 8, 22),
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 3 / 4,
+                  height: 51,
+                  child: RaisedButton(
+                    elevation: 0,
+                    onPressed: () async {
+                      await setRecentlyUsed(
+                          http.Client(),
+                          context,
+                          data.questionnaireIsChoosing.id,
+                          data.questionnaireIsChoosing.user.id);
+                    },
+                    color: Colors.red[300],
+                    child: Text("Bắt đầu ngay",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                            color: colorDebug ? Colors.green : null)),
+                  ),
+                ),
               ],
-            ),
-          ),
-        ]))
-      ]),
-      persistentFooterButtons: [
-        //điểm cao nhất
-        Container(
-          margin: EdgeInsets.fromLTRB(
-              0, 13, MediaQuery.of(context).size.width * 1 / 6, 22),
-          color: colorDebug ? Colors.red[300] : null,
-          width: MediaQuery.of(context).size.width * 2 / 3,
-          child: Text(
-            "Điểm cao nhất của bạn :",
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 14,
-              color: Colors.black,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        //nút bắt đầu ngay
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            color: Colors.red[300],
-          ),
-          margin: EdgeInsets.fromLTRB(
-              0, 13, MediaQuery.of(context).size.width * 1 / 8, 22),
-          alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width * 3 / 4,
-          height: 51,
-          child: RaisedButton(
-            elevation: 0,
-            onPressed: () {
-              print("");
-            },
-            color: Colors.red[300],
-            child: Text("Bắt đầu ngay",
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                    color: colorDebug ? Colors.green : null)),
-          ),
-        ),
-      ],
-    );
+            ));
   }
 }

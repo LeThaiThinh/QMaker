@@ -1,3 +1,4 @@
+import 'package:baitaplon/constants/sharedData.dart';
 import 'package:baitaplon/routes/CustomRouter.dart';
 import 'package:baitaplon/routes/RouteName.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -49,34 +50,38 @@ class _MyAppState extends State<MyApp> {
         child: Center(child: CircularProgressIndicator()),
       );
     } else {
-      return MaterialApp(
-        theme: ThemeData(primaryColor: Colors.red[300]),
-        title: "hello",
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: [
-          DemoLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        locale: _locale,
-        localeResolutionCallback: (deviceLocale, supportedLocales) {
-          for (var locale in supportedLocales) {
-            if (locale.languageCode == deviceLocale.languageCode &&
-                locale.countryCode == deviceLocale.countryCode) {
-              return deviceLocale;
-            }
-          }
-          return supportedLocales.first;
-        },
-        supportedLocales: [
-          Locale('en', 'US'),
-          Locale('vi', 'VN'),
-          Locale('zh', 'CN'),
-        ],
-        onGenerateRoute: CustomRouter.allRoutes,
-        initialRoute: loginRoute,
-      );
+      return MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: SharedData()),
+          ],
+          child: MaterialApp(
+            theme: ThemeData(primaryColor: Colors.red[300]),
+            title: "hello",
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: [
+              DemoLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            locale: _locale,
+            localeResolutionCallback: (deviceLocale, supportedLocales) {
+              for (var locale in supportedLocales) {
+                if (locale.languageCode == deviceLocale.languageCode &&
+                    locale.countryCode == deviceLocale.countryCode) {
+                  return deviceLocale;
+                }
+              }
+              return supportedLocales.first;
+            },
+            supportedLocales: [
+              Locale('en', 'US'),
+              Locale('vi', 'VN'),
+              Locale('zh', 'CN'),
+            ],
+            onGenerateRoute: CustomRouter.allRoutes,
+            initialRoute: loginRoute,
+          ));
     }
   }
 }

@@ -1,13 +1,7 @@
 var sequelize=require('../database')
 const Sequelize = require('sequelize');
 
-let History = sequelize.define('history', {
-    questionnaireId:{
-        type: Sequelize.INTEGER,
-        references:{
-            model:'questionnaires', // <<< Note, its table's name, not object name
-            key: 'id' // <
-    },},
+let History = sequelize.define('histories', {
     totalTime:{
         type:Sequelize.INTEGER,
         allowNull: false
@@ -16,12 +10,13 @@ let History = sequelize.define('history', {
         type:Sequelize.INTEGER,
         allowNull: false
     },
-    userId: {
-            type: Sequelize.INTEGER,
-            references:{
-                model:'users', // <<< Note, its table's name, not object name
-                key: 'id' // <<< Note, its a column name
-            }}
+    recentlyUsed:{
+        type:Sequelize.INTEGER,    
+    },
+    rating:{
+        type:Sequelize.INTEGER,   
+    }
+
 });
 
 

@@ -2,52 +2,42 @@ var Questionnaire=require('./questionnaire')
 var User=require('./users')
 var Question=require('./question')
 var History=require('./history')
-var Rating=require('./rating')
+// var Rating=require('./rating')
+const sequelize = require('../database')
 
-User.hasMany(Questionnaire)
-Questionnaire.belongsTo(User)
-Questionnaire.belongsToMany(User, {
-    through:History
-  })
-User.belongsToMany(Questionnaire, {
-    through:History
-  })
-Questionnaire.belongsToMany(User, {
-    through:Rating
-  })
-User.belongsToMany(Questionnaire, {
-    through:Rating
-  })
-Questionnaire.hasMany(Question)
-Question.belongsTo(Questionnaire)
 
 async function createTables(){
-    await User.sync({force:false}).then(() => {
-        console.log('New table created');
-    }).finally(() => {
-        // sequelize.close();
+    // await User.drop()
+    // await Questionnaire.drop()
+    // await Question.drop()
+    // await History.drop()
+    // await Rating.drop()
+    Questionnaire.belongsToMany(User, {
+      through:History,
+      foreignKey: 'questionnaireId'
     })
-    await Questionnaire.sync({force:false}).then(() => {
-        console.log('New table created');
-    }).finally(() => {
-        // sequelize.close();
+    User.belongsToMany(Questionnaire, {
+      through:History,
+      foreignKey: 'userId',
     })
-    await Question.sync({force:false}).then(() => {
-        console.log('New table created');
-    }).finally(() => {
-        // sequelize.close();
-    })
-    await History.sync({force:false}).then(() => {
-        console.log('New table created');
-    }).finally(() => {
-        // sequelize.close();
-    })
-    await Rating.sync({force:true}).then(() => {
-        console.log('New table created');
-    }).finally(() => {
-        // sequelize.close();
-    })
+    User.hasMany(Questionnaire)
+    Questionnaire.belongsTo(User)
+    Questionnaire.hasMany(Question)
+    Question.belongsTo(Questionnaire)
+
+    await User.sync({
+        // force:true
+    }).then(() => {})
+    await Questionnaire.sync({
+        // force:true
+    }).then(() => {})
+    await Question.sync({
+        // force:true
+    }).then(() => {})
+    await History.sync({
+        // force:true
+    }).then(() => {})
 }
 createTables();
 
-module.exports={Questionnaire:Questionnaire,User:User,Question:Question}
+module.exports={Questionnaire:Questionnaire,User:User,Question:Question,History:History}

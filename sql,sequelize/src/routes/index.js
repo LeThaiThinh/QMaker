@@ -19,11 +19,9 @@ router.post('/signin',async function(req, res, next) {
 });
 router.post('/signup',async function(req, res, next) {
   var user=req.body
-  var userName=req.body['name']
-  var userUsername=req.body['username']
-  var password=req.body['password']
-  await User.create(user)
-  res.redirect(`users/${user.id}`)
+  console.log(user)
+  user= await User.create(user)
+  res.json(user)
 });
 
 module.exports = router;

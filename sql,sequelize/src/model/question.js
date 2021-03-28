@@ -12,19 +12,19 @@ let Question = sequelize.define('question', {
         type:Sequelize.STRING,
         allowNull: false
     },
-    correct_answer:{
+    correctAnswer:{
         type:Sequelize.STRING,
         allowNull: false
     },
-    incorrect_answer1:{
+    incorrectAnswer1:{
         type:Sequelize.STRING,
         allowNull: false
     },
-    incorrect_answer2:{
+    incorrectAnswer2:{
         type:Sequelize.STRING,
         allowNull: false
     },
-    incorrect_answer3:{
+    incorrectAnswer3:{
         type:Sequelize.STRING,
         allowNull: false
     },
