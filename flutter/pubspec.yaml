@@ -28,6 +28,7 @@ dependencies:
   flutter_riverpod: any
   auto_size_text: any
   state_notifier: any
+  flutter_svg: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -38,4 +39,5 @@ flutter:
     - lib/lang/vi.json
     - lib/lang/zh.json
     - assets/camera.jpg
+    - assets/logo.svg
   uses-material-design: true

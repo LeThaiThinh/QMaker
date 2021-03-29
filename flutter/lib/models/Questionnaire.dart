@@ -48,7 +48,7 @@ class Questionnaire {
         public: json["public"],
         description: json["description"],
         timeLimit: json["time_limit"],
-        history: json["users"][0]["histories"] != null
+        history: json["users"] != null
             ? History.fromJson(json["users"][0]["histories"])
             : null,
         listQuestion: json["questions"] != null ? setListQuestion(json) : null,

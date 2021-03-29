@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:baitaplon/constants/sharedData.dart';
 import 'package:baitaplon/models/Questionnaire.dart';
 import 'package:baitaplon/models/Users.dart';
-import 'package:baitaplon/page/LoginPage.dart';
+import 'package:baitaplon/page/auth/LoginPage.dart';
 import 'package:baitaplon/page/ConfigurePage.dart';
 import 'package:baitaplon/routes/RouteName.dart';
 import 'package:flutter/cupertino.dart';

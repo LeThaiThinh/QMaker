@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:baitaplon/page/questionnaire/EditQuestionnairePage.dart';
+
 import '../models/Questionnaire.dart';
 import 'package:baitaplon/constants/Strings.dart';
 import 'package:baitaplon/constants/sharedData.dart';
@@ -80,8 +82,10 @@ class _ConfigurePageState extends State<ConfigurePage> {
                                       0),
                                   child: IconButton(
                                     onPressed: () {
-                                      Navigator.of(context)
-                                          .pushNamed(createQuestionnaireRoute);
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (_) => EditQuestionnairePage(
+                                              questionnaire: data
+                                                  .questionnaireIsChoosing)));
                                     },
                                     icon: Icon(
                                       Icons.settings,

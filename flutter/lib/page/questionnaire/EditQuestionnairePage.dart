@@ -6,18 +6,18 @@ import 'package:baitaplon/page/questionnaire/CreateQuestionPage.dart';
 import 'package:baitaplon/page/questionnaire/EditQuestion.dart';
 import 'package:flutter/material.dart';
 
-class EditQuestionnaire extends StatefulWidget {
-  EditQuestionnaire({
+class EditQuestionnairePage extends StatefulWidget {
+  EditQuestionnairePage({
     Key key,
-    @required this.questionaire,
+    @required this.questionnaire,
   }) : super(key: key);
 
-  final Questionnaire questionaire;
+  final Questionnaire questionnaire;
   @override
-  _EditQuestionnaireState createState() => _EditQuestionnaireState();
+  _EditQuestionnairePageState createState() => _EditQuestionnairePageState();
 }
 
-class _EditQuestionnaireState extends State<EditQuestionnaire> {
+class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,7 +107,7 @@ class _EditQuestionnaireState extends State<EditQuestionnaire> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Name: " + this.widget.questionaire.name,
+          "Name: " + this.widget.questionnaire.name,
           style: TextStyle(
             color: primaryColor,
             fontSize: 24,
@@ -116,7 +116,7 @@ class _EditQuestionnaireState extends State<EditQuestionnaire> {
         ),
         SizedBox(height: 10.0),
         Text(
-          "Topic: " + this.widget.questionaire.topic,
+          "Topic: " + this.widget.questionnaire.topic,
           style: TextStyle(
             color: Colors.black87,
             fontSize: 20,
@@ -126,7 +126,7 @@ class _EditQuestionnaireState extends State<EditQuestionnaire> {
         SizedBox(height: 20.0),
         Text(
           "Time Limit: " +
-              this.widget.questionaire.timeLimit.toString() +
+              this.widget.questionnaire.timeLimit.toString() +
               " mins",
           style: TextStyle(
             color: Colors.black54,
@@ -159,6 +159,7 @@ class _EditQuestionnaireState extends State<EditQuestionnaire> {
               context,
               MaterialPageRoute(
                   builder: (context) => EditQuestion(
+                        question: question,
                       )));
         },
         shape: RoundedRectangleBorder(

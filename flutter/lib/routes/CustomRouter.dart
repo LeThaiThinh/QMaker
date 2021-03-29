@@ -3,8 +3,9 @@ import 'package:baitaplon/page/MainPage.dart';
 import 'package:baitaplon/page/questionnaire/CreateQuestionPage.dart';
 import 'package:baitaplon/page/questionnaire/CreateQuestionnairePage.dart';
 import 'package:baitaplon/page/bottom/HomePage.dart';
-import 'package:baitaplon/page/LoginPage.dart';
+import 'package:baitaplon/page/auth/LoginPage.dart';
 import 'package:baitaplon/page/SettingPage.dart';
+import 'package:baitaplon/page/questionnaire/EditQuestionnairePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

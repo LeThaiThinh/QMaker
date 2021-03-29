@@ -38,7 +38,8 @@ class User {
 }
 
 Future<List<User>> fetchUsers(http.Client client) async {
-  final response = await client.get("${Strings.BASE_URL}:${Strings.PORT}/users");
+  final response =
+      await client.get("${Strings.BASE_URL}:${Strings.PORT}/users");
   if (response.statusCode == 200) {
     final map = jsonDecode(response.body).cast<Map<String, dynamic>>();
     final listUsers = map.map<User>((json) {
@@ -79,8 +80,7 @@ Future signin(http.Client client, String _username, String _password,
         password: jsonResponse['password'],
         createdAt: jsonResponse['createdAt'],
         updatedAt: jsonResponse['updatedAt']));
-
-    Navigator.of(context).pushNamed(mainRoute);
+    Navigator.of(context).popAndPushNamed(mainRoute);
   } else {}
 }
 
@@ -93,23 +93,29 @@ Future signup(http.Client client, String _name, String _username,
   };
   // debugPrint(data.toString());
 
-  var jsonResponse;
-  var response = await client.post('${Strings.BASE_URL}:${Strings.PORT}/signup',
-      body: json.encode(data),
+  try {
+    var jsonResponse;
+    var response = await http.post(
+      '${Strings.BASE_URL}:${Strings.PORT}/signup',
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
-      });
-  jsonResponse = json.decode(response.body);
-  if (response.statusCode == 200) {
-    Provider.of<SharedData>(context, listen: false).changeUser(User(
-        id: jsonResponse['id'],
-        username: jsonResponse['username'],
-        name: jsonResponse['name'],
-        password: jsonResponse['password'],
-        createdAt: jsonResponse['createdAt'],
-        updatedAt: jsonResponse['updatedAt']));
-    // Navigator.pop(context);
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (BuildContext context) => MainPage()));
-  } else {}
+      },
+      body: json.encode(data),
+    );
+
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      Provider.of<SharedData>(context, listen: false).changeUser(User(
+          id: jsonResponse['id'],
+          username: jsonResponse['username'],
+          name: jsonResponse['name'],
+          password: jsonResponse['password'],
+          createdAt: jsonResponse['createdAt'],
+          updatedAt: jsonResponse['updatedAt']));
+      Navigator.of(context).popAndPushNamed(mainRoute);
+    } else {}
+  } catch (err) {
+    print(err);
+    return;
+  }
 }

@@ -82,7 +82,15 @@ router.post('/users/:userId/questionnaire/create', async function (req, res, nex
     questionnaire.userId = userId
     console.log(questionnaire)
     questionnaire = await Questionnaire.create(questionnaire)
-    questionnaire = await Questionnaire.findOne({
+    var history = await History.create({
+      userId: userId,
+      questionnaireId: questionnaire.id,
+      totalTime: 0,
+      score: 0,
+      rating: 0,
+      recentlyUsed: 0,
+    })
+    questionnaire0 = await Questionnaire.findOne({
       include: {
         model: User,
         through: {
@@ -96,7 +104,7 @@ router.post('/users/:userId/questionnaire/create', async function (req, res, nex
         ]
       }
     });
-    res.json(questionnaire);
+    res.json(questionnaire0);
   } catch (err) {
     console.log(err);
   }

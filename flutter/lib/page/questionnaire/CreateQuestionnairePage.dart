@@ -140,8 +140,8 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => EditQuestionnaire(
-                  questionaire: value,
+                builder: (context) => EditQuestionnairePage(
+                  questionnaire: value,
                 ),
               ),
             );
