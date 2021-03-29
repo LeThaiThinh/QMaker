@@ -47,7 +47,7 @@ class History {
 Future<History> fetchHistoryById(
     http.Client client, int userId, int questionnaireId) async {
   final response = await client.get(
-      "http://10.0.2.2:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/history");
+      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/history");
   if (response.statusCode == 200) {
     var history = jsonDecode(response.body);
     return History.fromJson(history);

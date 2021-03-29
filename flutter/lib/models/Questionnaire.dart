@@ -66,7 +66,7 @@ List<Question> setListQuestion(Map<String, dynamic> json) {
 Future<Questionnaire> fetchQuestionnaireById(
     http.Client client, int userId, int questionnaireId) async {
   final response = await client.get(
-      "http://10.0.2.2:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId");
+      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId");
   if (response.statusCode == 200) {
     var questionnaire = jsonDecode(response.body);
     return Questionnaire.fromJson(questionnaire);
@@ -78,7 +78,7 @@ Future<Questionnaire> fetchQuestionnaireById(
 Future<List<Map>> fetchQuestionnaireTopic(
     http.Client client, int userId) async {
   final response = await client
-      .get("http://10.0.2.2:${Strings.PORT}/users/$userId/questionnaireTopic");
+      .get("${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaireTopic");
   if (response.statusCode == 200) {
     final list = jsonDecode(response.body);
     List<Map> listTopic = new List<Map>();
@@ -92,7 +92,7 @@ Future<List<Map>> fetchQuestionnaireTopic(
 Future<List<Questionnaire>> fetchQuestionnaire(
     http.Client client, int userId, String query) async {
   final response = await client.get(
-      "http://10.0.2.2:${Strings.PORT}/users/$userId/questionnaire/$query");
+      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$query");
   if (response.statusCode == 200) {
     final map = jsonDecode(response.body).cast<Map<String, dynamic>>();
     final listUsers = map.map<Questionnaire>((json) {
@@ -108,7 +108,7 @@ Future<List<Questionnaire>> fetchQuestionnaire(
 Future<int> fetchNumberOfQuestion(
     http.Client client, int questionnaireId, int userId) async {
   final response = await client.get(
-      "http://10.0.2.2:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/count");
+      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/count");
   if (response.statusCode == 200) {
     final number = jsonDecode(response.body);
     return number;
@@ -121,7 +121,7 @@ Future setRecentlyUsed(http.Client client, BuildContext context,
     int questionnaireId, int userId) async {
   Map<dynamic, String> data = {'recentlyUsed': Timestamp.now().toString()};
   var response = await client.post(
-      'http://10.0.2.2:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/setRecentlyUsed',
+      '${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/setRecentlyUsed',
       body: json.encode(data),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -148,7 +148,7 @@ Future<Questionnaire> createQuestionnaire(
     'timeLimit': timeLimit
   };
   var response = await client.post(
-      "http://10.0.2.2:${Strings.PORT}/users/$userId/questionnaire/create",
+      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/create",
       body: json.encode(data),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',

@@ -38,7 +38,7 @@ class User {
 }
 
 Future<List<User>> fetchUsers(http.Client client) async {
-  final response = await client.get("http://10.0.2.2:${Strings.PORT}/users");
+  final response = await client.get("${Strings.BASE_URL}:${Strings.PORT}/users");
   if (response.statusCode == 200) {
     final map = jsonDecode(response.body).cast<Map<String, dynamic>>();
     final listUsers = map.map<User>((json) {
@@ -52,7 +52,7 @@ Future<List<User>> fetchUsers(http.Client client) async {
 
 Future<User> fetchUsersById(http.Client client, int id) async {
   final response =
-      await client.get("http://10.0.2.2:${Strings.PORT}/users/$id");
+      await client.get("${Strings.BASE_URL}:${Strings.PORT}/users/$id");
   if (response.statusCode == 200) {
     var user = jsonDecode(response.body);
     return User.fromJson(user);
@@ -65,7 +65,7 @@ Future signin(http.Client client, String _username, String _password,
     BuildContext context) async {
   Map<dynamic, String> data = {'username': _username, 'password': _password};
   var jsonResponse;
-  var response = await client.post('http://10.0.2.2:${Strings.PORT}/signin',
+  var response = await client.post('${Strings.BASE_URL}:${Strings.PORT}/signin',
       body: json.encode(data),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -94,7 +94,7 @@ Future signup(http.Client client, String _name, String _username,
   // debugPrint(data.toString());
 
   var jsonResponse;
-  var response = await client.post('http://10.0.2.2:${Strings.PORT}/signup',
+  var response = await client.post('${Strings.BASE_URL}:${Strings.PORT}/signup',
       body: json.encode(data),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',

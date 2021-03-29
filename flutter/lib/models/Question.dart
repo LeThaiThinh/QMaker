@@ -50,7 +50,7 @@ class Question {
 Future<List<Question>> fetchQuestionnaire(
     http.Client client, int userId, int questionnaireId, String query) async {
   final response = await client.get(
-      "http://10.0.2.2:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/question/$query");
+      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/question/$query");
   if (response.statusCode == 200) {
     final map = jsonDecode(response.body).cast<Map<String, dynamic>>();
     final listUsers = map.map<Question>((json) {
@@ -80,7 +80,7 @@ Future<Question> createQuestion(
     'incorrectAnswer3': incorrectAnswer3
   };
   var response = await client.post(
-      "http://10.0.2.2:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/question/create",
+      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/question/create",
       body: json.encode(data),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
