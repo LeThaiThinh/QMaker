@@ -1,27 +1,26 @@
-var sequelize=require('../database')
-const Sequelize = require('sequelize');
+var sequelize = require("../database")
+const Sequelize = require("sequelize")
 
-let User = sequelize.define('users', {
-    id:{
-        primaryKey:true,
-        type:Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false
-    },
-    name: {
-        type:Sequelize.STRING,
-        allowNull: false
-    },
-    username:{
-        type:Sequelize.STRING,
-        allowNull: false,
-        unique:true,
-    },
-    password:{
-        type:Sequelize.STRING,
-        allowNull: false
-    },
-});
+let User = sequelize.define("users", {
+  id: {
+    primaryKey: true,
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+  },
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  username: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  password: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+})
 
-
-module.exports=User 
+module.exports = User
