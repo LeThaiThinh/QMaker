@@ -1,29 +1,12 @@
-var express = require("express")
-var router = express.Router()
-var { User: User } = require("../model/relation")
-const { Op } = require("sequelize")
-/* GET home page. */
+const express = require("express")
+const userHandler = require("../handlers/user")
+const signupHandler = require("../handlers/signup")
+const signinHandler = require("../handlers/signin")
 
-router.post("/signin", async function (req, res, next) {
-  var user = req.body
-  console.log(user)
-  var user0 = await User.findOne({
-    where: {
-      [Op.and]: [
-        { username: user["username"] },
-        { password: user["password"] },
-      ],
-    },
-  })
-  if (user0 != null) {
-    ;(res.statusCode = 200), res.json(user0)
-  } else res.json(null)
-})
-router.post("/signup", async function (req, res, next) {
-  var user = req.body
-  console.log(user)
-  user = await User.create(user)
-  res.json(user)
-})
+const router = express.Router()
+
+router.post("/signup", signupHandler)
+router.post("/signin", signinHandler)
+router.all("/user", userHandler)
 
 module.exports = router

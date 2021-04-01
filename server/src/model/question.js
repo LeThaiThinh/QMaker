@@ -1,12 +1,21 @@
-var sequelize = require("../database")
+const sequelize = require("../database")
 const Sequelize = require("sequelize")
+const Questionnaire = require("./questionnaire")
 
 let Question = sequelize.define("question", {
-  id: {
+  question_id: {
     primaryKey: true,
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
+  },
+  questionnaire_id: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: {
+      modal: Questionnaire,
+      key: "questionnaire_id",
+    },
   },
   question: {
     type: Sequelize.STRING,

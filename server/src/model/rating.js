@@ -2,7 +2,7 @@ const sequelize = require("../database")
 const Sequelize = require("sequelize")
 const User = require("./user")
 
-let Questionnaire = sequelize.define("questionnaire", {
+let Rating = sequelize.define("rating", {
   questionnaire_id: {
     primaryKey: true,
     type: Sequelize.INTEGER,
@@ -17,26 +17,10 @@ let Questionnaire = sequelize.define("questionnaire", {
       key: "user_id",
     },
   },
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  topic: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  public: {
-    type: Sequelize.BOOLEAN,
-    allowNull: false,
-  },
-  description: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  timeLimit: {
+  rating: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
 })
 
-module.exports = Questionnaire
+module.exports = Rating

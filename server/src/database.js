@@ -5,4 +5,5 @@ const sequelize = new Sequelize(path, {
   operatorsAliases: 0,
   logging: false,
 })
+
 module.exports = sequelize

@@ -1,8 +1,8 @@
-var sequelize = require("../database")
+const sequelize = require("../database")
 const Sequelize = require("sequelize")
 
-let User = sequelize.define("users", {
-  id: {
+let User = sequelize.define("user", {
+  user_id: {
     primaryKey: true,
     type: Sequelize.INTEGER,
     autoIncrement: true,
