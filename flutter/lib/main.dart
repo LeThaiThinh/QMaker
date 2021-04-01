@@ -1,3 +1,4 @@
+import 'package:baitaplon/constants/myColors.dart';
 import 'package:baitaplon/constants/sharedData.dart';
 import 'package:baitaplon/routes/CustomRouter.dart';
 import 'package:baitaplon/routes/RouteName.dart';
@@ -55,7 +56,21 @@ class _MyAppState extends State<MyApp> {
             ChangeNotifierProvider.value(value: SharedData()),
           ],
           child: MaterialApp(
-            theme: ThemeData(primaryColor: Colors.red[300]),
+            theme: ThemeData(
+              iconTheme: IconThemeData(
+                color: primaryColor,
+              ),
+              primarySwatch: primarySwatchColor,
+              primaryColor: primaryColor,
+              appBarTheme: AppBarTheme(
+                textTheme: TextTheme(
+                  headline6: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
             title: "hello",
             debugShowCheckedModeBanner: false,
             localizationsDelegates: [

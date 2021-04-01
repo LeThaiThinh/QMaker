@@ -15,10 +15,10 @@ class Question {
   int id;
   int questionnaireId;
   String question;
-  String correctanswer;
-  String incorrectanswer1;
-  String incorrectanswer2;
-  String incorrectanswer3;
+  String correctAnswer;
+  String incorrectAnswer1;
+  String incorrectAnswer2;
+  String incorrectAnswer3;
   String updatedAt;
   String createdAt;
 
@@ -26,37 +26,53 @@ class Question {
       {this.id,
       this.questionnaireId,
       this.question,
-      this.correctanswer,
-      this.incorrectanswer1,
-      this.incorrectanswer2,
-      this.incorrectanswer3,
+      this.correctAnswer,
+      this.incorrectAnswer1,
+      this.incorrectAnswer2,
+      this.incorrectAnswer3,
       this.updatedAt,
       this.createdAt});
 
   factory Question.fromJson(Map<String, dynamic> json) {
     return Question(
         id: json["id"],
-        questionnaireId: int.parse(json["questionnaireId"]),
+        questionnaireId: json["questionnaireId"],
         question: json["question"],
-        correctanswer: json["correctanswer"],
-        incorrectanswer1: json["incorrectanswer1"],
-        incorrectanswer2: json["incorrectanswer2"],
-        incorrectanswer3: json["incorrectanswer3"],
+        correctAnswer: json["correctAnswer"],
+        incorrectAnswer1: json["incorrectAnswer1"],
+        incorrectAnswer2: json["incorrectAnswer2"],
+        incorrectAnswer3: json["incorrectAnswer3"],
         updatedAt: json["updatedAt"],
         createdAt: json["createdAt"]);
   }
 }
 
-Future<List<Question>> fetchQuestionnaire(
-    http.Client client, int userId, int questionnaireId, String query) async {
-  final response = await client.get(
-      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/question/$query");
+Future<Question> updateQuestion(
+    http.Client client,
+    int userId,
+    int questionnaireId,
+    int questionId,
+    String question,
+    String correctAnswer,
+    String incorrectAnswer1,
+    String incorrectAnswer2,
+    String incorrectAnswer3) async {
+  Map<String, dynamic> data = {
+    'question': question,
+    'correctAnswer': correctAnswer,
+    'incorrectAnswer1': incorrectAnswer1,
+    'incorrectAnswer2': incorrectAnswer2,
+    'incorrectAnswer3': incorrectAnswer3
+  };
+  var response = await client.post(
+      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/question/$questionId/update",
+      body: json.encode(data),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      });
   if (response.statusCode == 200) {
-    final map = jsonDecode(response.body).cast<Map<String, dynamic>>();
-    final listUsers = map.map<Question>((json) {
-      return Question.fromJson(json);
-    }).toList();
-    return listUsers;
+    var question = jsonDecode(response.body);
+    return Question.fromJson(question);
   } else {
     throw Exception('Fail');
   }
@@ -87,6 +103,7 @@ Future<Question> createQuestion(
       });
   if (response.statusCode == 200) {
     var question = jsonDecode(response.body);
+    debugPrint(question.toString());
     return Question.fromJson(question);
   } else {
     throw Exception('Fail');

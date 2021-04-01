@@ -91,8 +91,6 @@ Future signup(http.Client client, String _name, String _username,
     'username': _username,
     'password': _password,
   };
-  // debugPrint(data.toString());
-
   try {
     var jsonResponse;
     var response = await http.post(

@@ -2,29 +2,258 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:baitaplon/constants/sharedData.dart';
+import 'package:baitaplon/models/Question.dart';
 import 'package:baitaplon/models/Questionnaire.dart';
 import 'package:baitaplon/models/Users.dart';
 import 'package:baitaplon/page/auth/LoginPage.dart';
-import 'package:baitaplon/page/ConfigurePage.dart';
 import 'package:baitaplon/routes/RouteName.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
+// class HomePage extends StatefulWidget {
+//   @override
+//   _HomePageState createState() => _HomePageState();
+// }
+
+// class _HomePageState extends State<HomePage> {
+//   bool colorDebug = false;
+//   User user;
+//   num rating = 4;
+//   @override
+//   void initState() {
+//     super.initState();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     setState(() {
+//       user = Provider.of<SharedData>(context, listen: false).user;
+//     });
+//     fetchQuestionnaireTopic(http.Client(), user.id).then((value) async {
+//       await Provider.of<SharedData>(context, listen: false)
+//           .changeQuestionnaireTopic(value);
+//     });
+//     fetchQuestionnaire(http.Client(), user.id, "?recentlyUsed=DESC")
+//         .then((value) async {
+//       await Provider.of<SharedData>(context, listen: false)
+//           .changeQuestionnaireCurrentlyUsed(value);
+//     });
+//     return Scaffold(
+//       body: Column(
+//         children: [
+//           questionnairesByTopic(),
+//           questionnaireRecentlyPlay(),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget questionnaireRecentlyPlay() {
+//     return Consumer<SharedData>(
+//         builder: (context, data, child) => Column(children: [
+//               Container(
+//                   margin: EdgeInsets.fromLTRB(10, 15, 0, 20),
+//                   alignment: Alignment.topLeft,
+//                   child: Text(
+//                     "Recent Quiz",
+//                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 27),
+//                   )),
+//               for (var questionnaire in data.currentlyUsed)
+//                 Container(
+//                     margin: EdgeInsets.fromLTRB(26, 8, 15, 5),
+//                     width: MediaQuery.of(context).size.width - 42,
+//                     height: MediaQuery.of(context).size.height * 1 / 8,
+//                     color: colorDebug ? Colors.red : Colors.white,
+//                     child: RaisedButton(
+//                       color: Colors.white70,
+//                       onPressed: () async {
+//                         fetchQuestionnaireById(
+//                                 http.Client(), user.id, questionnaire.id)
+//                             .then((value) {
+//                           Provider.of<SharedData>(context, listen: false)
+//                               .changeQuestionnaireIsChoosing(value);
+//                         }).then((value) {
+//                           Navigator.of(context).pushNamed(configureRoute);
+//                           // MaterialPageRoute(
+//                           //   builder: (_) => ConfigurePage()));
+//                         });
+//                       },
+//                       child: Row(
+//                         children: [
+//                           // icon
+//                           Container(
+//                             child: Icon(
+//                               Icons.lightbulb_outline_rounded,
+//                               size: 25,
+//                               color: colorDebug ? Colors.white : null,
+//                             ),
+//                             padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+//                             color: colorDebug ? Colors.grey : Colors.grey,
+//                           ),
+//                           // //description
+//                           Container(
+//                             margin: EdgeInsets.fromLTRB(12, 12, 0, 0),
+//                             child: Column(children: [
+//                               Container(
+//                                 child: Text(
+//                                   questionnaire.topic,
+//                                   style: TextStyle(
+//                                     fontWeight: FontWeight.w700,
+//                                     fontSize: 16,
+//                                   ),
+//                                   textAlign: TextAlign.left,
+//                                 ),
+//                                 color: colorDebug ? Colors.white : null,
+//                                 width: 150,
+//                               ),
+//                               Container(
+//                                 child: Text(
+//                                   "Đăng bởi " +
+//                                       user.username +
+//                                       ": " +
+//                                       questionnaire.createdAt.substring(0, 10),
+//                                   style: TextStyle(
+//                                       fontWeight: FontWeight.w500,
+//                                       fontSize: 11),
+//                                   textAlign: TextAlign.left,
+//                                 ),
+//                                 color: colorDebug ? Colors.white : null,
+//                                 width: 150,
+//                               ),
+//                               Container(
+//                                 child: Text(
+//                                   questionnaire.description,
+//                                   style: TextStyle(
+//                                     fontWeight: FontWeight.w500,
+//                                     fontSize: 11,
+//                                   ),
+//                                   textAlign: TextAlign.left,
+//                                 ),
+//                                 margin: EdgeInsets.fromLTRB(0, 10, 0, 2),
+//                                 color: colorDebug ? Colors.white : null,
+//                                 width: 150,
+//                               ),
+//                             ]),
+//                           ),
+//                           //rating
+//                           Container(
+//                             margin: EdgeInsets.fromLTRB(18, 12, 2, 5),
+//                             color: colorDebug ? Colors.white : null,
+//                             child: Column(children: [
+//                               Row(children: [
+//                                 for (int i = 1;
+//                                     i <= questionnaire.history.rating;
+//                                     i++)
+//                                   Icon(
+//                                     Icons.star,
+//                                     color: Colors.yellow,
+//                                     size: 13,
+//                                   ),
+//                                 for (int i = 1;
+//                                     i <= 5 - questionnaire.history.rating;
+//                                     i++)
+//                                   Icon(
+//                                     Icons.star,
+//                                     color: Colors.grey,
+//                                     size: 13,
+//                                   )
+//                               ]),
+//                               Container(
+//                                   margin: EdgeInsets.fromLTRB(5, 5, 2, 2),
+//                                   color: colorDebug ? Colors.white : null,
+//                                   width: 90,
+//                                   child: Text(
+//                                     "Điểm cao nhất của bạn là: 50",
+//                                     style: TextStyle(
+//                                       fontWeight: FontWeight.w700,
+//                                       fontSize: 9,
+//                                     ),
+//                                     textAlign: TextAlign.center,
+//                                   ))
+//                             ]),
+//                           ),
+//                         ],
+//                       ),
+//                     ))
+//             ]));
+//   }
+
+//   Widget questionnairesByTopic() {
+//     double fraction = 0.9;
+//     return Consumer<SharedData>(
+//         builder: (context, data, child) => Container(
+//               color: colorDebug ? Colors.red[100] : null,
+//               alignment: Alignment.topLeft,
+//               height: MediaQuery.of(context).size.height * 4 / 15,
+//               width: MediaQuery.of(context).size.width,
+//               child: DraggableScrollableSheet(
+//                 initialChildSize: fraction,
+//                 minChildSize: fraction,
+//                 maxChildSize: fraction,
+//                 expand: false,
+//                 builder: (BuildContext context, ScrollController controller) {
+//                   return SingleChildScrollView(
+//                     controller: controller,
+//                     scrollDirection: Axis.horizontal,
+//                     child: Row(children: [
+//                       for (var questionnaire in data.topic)
+//                         RaisedButton(
+//                           color: Colors.white,
+//                           onPressed: () {
+//                             var topic = questionnaire["topic"];
+//                             fetchQuestionnaire(
+//                                     http.Client(), user.id, "?topic=$topic")
+//                                 .then((value) async {
+//                               await Provider.of<SharedData>(context,
+//                                       listen: false)
+//                                   .changeQuestionnaireByTopic(value);
+//                             });
+//                           },
+//                           child: Card(
+//                             shape: RoundedRectangleBorder(
+//                                 borderRadius:
+//                                     BorderRadius.all(Radius.circular(15))),
+//                             color: colorDebug ? Colors.green : null,
+//                             elevation: 20,
+//                             margin: EdgeInsets.all(15),
+//                             child: Container(
+//                                 height: MediaQuery.of(context).size.height *
+//                                     fraction,
+//                                 width: MediaQuery.of(context).size.width * 0.25,
+//                                 child: Center(
+//                                     child: Text(
+//                                   questionnaire['topic'],
+//                                   textAlign: TextAlign.center,
+//                                   style: TextStyle(
+//                                       fontSize: 22,
+//                                       fontWeight: FontWeight.w700,
+//                                       color: Colors.red[600]),
+//                                 ))),
+//                           ),
+//                         ),
+//                     ]),
+//                   );
+//                 },
+//               ),
+//             ));
+//   }
+// }
+
+// import 'package:quiz_app/utils/default.dart';
+
 class HomePage extends StatefulWidget {
+  const HomePage({Key key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  bool colorDebug = false;
+  SharedData sharedData;
   User user;
-  num rating = 4;
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,231 +261,245 @@ class _HomePageState extends State<HomePage> {
       user = Provider.of<SharedData>(context, listen: false).user;
     });
     fetchQuestionnaireTopic(http.Client(), user.id).then((value) async {
-      // print(value[0]['topic']);
       await Provider.of<SharedData>(context, listen: false)
           .changeQuestionnaireTopic(value);
     });
     fetchQuestionnaire(http.Client(), user.id, "?recentlyUsed=DESC")
         .then((value) async {
-      // print(value[0].topic);
       await Provider.of<SharedData>(context, listen: false)
           .changeQuestionnaireCurrentlyUsed(value);
     });
+
     return Scaffold(
-      body: Column(
+      body: ListView(
         children: [
-          questionnairesByTopic(),
-          questionnaireRecentlyPlay(),
+          topicOfQuestionnairesSection(),
+          recentlyPlayedQuestionnaireSection(),
         ],
       ),
     );
   }
 
-  Widget questionnaireRecentlyPlay() {
-    return Consumer<SharedData>(
-        builder: (context, data, child) => Column(children: [
-              Container(
-                  margin: EdgeInsets.fromLTRB(10, 15, 0, 20),
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Recent Quiz",
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 27),
-                  )),
-              for (var questionnaire in data.currentlyUsed)
-                Container(
-                    margin: EdgeInsets.fromLTRB(26, 8, 15, 5),
-                    width: MediaQuery.of(context).size.width - 42,
-                    height: MediaQuery.of(context).size.height * 1 / 8,
-                    color: colorDebug ? Colors.red : Colors.white,
-                    child: RaisedButton(
-                      color: Colors.white70,
-                      onPressed: () async {
-                        fetchNumberOfQuestion(
-                                http.Client(),
-                                questionnaire.id,
-                                Provider.of<SharedData>(context, listen: false)
-                                    .user
-                                    .id)
-                            .then((value) => setState(() {
-                                  Provider.of<SharedData>(context,
-                                          listen: false)
-                                      .changeNumberOfQuestion(value);
-                                }))
-                            .then((value) => (fetchQuestionnaireById(
-                                        http.Client(),
-                                        user.id,
-                                        questionnaire.id)
-                                    .then((value) {
-                                  // print(value[0].topic);
-                                  Provider.of<SharedData>(context,
-                                          listen: false)
-                                      .changeQuestionnaireIsChoosing(value);
-                                  debugPrint(value.id.toString());
-                                }).then((value) {
-                                  Navigator.of(context)
-                                      .pushNamed(configureRoute);
-                                  // MaterialPageRoute(
-                                  //   builder: (_) => ConfigurePage()));
-                                })));
-                      },
-                      child: Row(
-                        children: [
-                          // icon
-                          Container(
-                            child: Icon(
-                              Icons.lightbulb_outline_rounded,
-                              size: 25,
-                              color: colorDebug ? Colors.white : null,
-                            ),
-                            padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
-                            color: colorDebug ? Colors.grey : Colors.grey,
-                          ),
-                          // //description
-                          Container(
-                            margin: EdgeInsets.fromLTRB(12, 12, 0, 0),
-                            child: Column(children: [
-                              Container(
-                                child: Text(
-                                  questionnaire.topic,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 16,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
-                                color: colorDebug ? Colors.white : null,
-                                width: 150,
-                              ),
-                              Container(
-                                child: Text(
-                                  "Đăng bởi " +
-                                      user.username +
-                                      ": " +
-                                      questionnaire.createdAt.substring(0, 10),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 11),
-                                  textAlign: TextAlign.left,
-                                ),
-                                color: colorDebug ? Colors.white : null,
-                                width: 150,
-                              ),
-                              Container(
-                                child: Text(
-                                  questionnaire.description,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 11,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
-                                margin: EdgeInsets.fromLTRB(0, 10, 0, 2),
-                                color: colorDebug ? Colors.white : null,
-                                width: 150,
-                              ),
-                            ]),
-                          ),
-                          //rating
-                          Container(
-                            margin: EdgeInsets.fromLTRB(18, 12, 2, 5),
-                            color: colorDebug ? Colors.white : null,
-                            child: Column(children: [
-                              Row(children: [
-                                for (int i = 1;
-                                    i <= questionnaire.history.rating;
-                                    i++)
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.yellow,
-                                    size: 13,
-                                  ),
-                                for (int i = 1;
-                                    i <= 5 - questionnaire.history.rating;
-                                    i++)
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.grey,
-                                    size: 13,
-                                  )
-                              ]),
-                              Container(
-                                  margin: EdgeInsets.fromLTRB(5, 5, 2, 2),
-                                  color: colorDebug ? Colors.white : null,
-                                  width: 90,
-                                  child: Text(
-                                    "Điểm cao nhất của bạn là: 50",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 9,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ))
-                            ]),
-                          ),
-                        ],
-                      ),
-                    ))
-            ]));
+  Widget recentlyPlayedQuestionnaireSection() {
+    Widget title() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            // margin: EdgeInsets.only(top: 20, left: 20, bottom: 20),
+            child: Text(
+              "Recent Quiz",
+              style: TextStyle(
+                fontSize: 28,
+                color: Color(0xffeb5757),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+        ],
+      );
+    }
+
+    Widget questionnaireContent(Questionnaire questionnaire) {
+      TextSpan name() {
+        final double _fontsize = 20;
+        return TextSpan(
+          style: TextStyle(
+            color: Color(0xffEB5757),
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
+          ),
+          children: [
+            TextSpan(text: questionnaire.name),
+          ],
+        );
+      }
+
+      TextSpan belowName() {
+        final double _fontsize = 20;
+        return TextSpan(
+          style: TextStyle(
+            fontSize: 12,
+            color: Color(0xffC1C1C1),
+            fontWeight: FontWeight.w400,
+          ),
+          children: [
+            TextSpan(
+              text: "Create by " + questionnaire.user.username + " ",
+            ),
+            TextSpan(
+              text: questionnaire.createdAt.substring(0, 10),
+            ),
+            TextSpan(
+              text: "\n\n" + questionnaire.description,
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xffA1A1A1),
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        );
+      }
+
+      Widget topic() {
+        return Container(
+          width: 80,
+          margin: EdgeInsets.only(top: 0, bottom: 10),
+          height: 20,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.red,
+          ),
+          child: Text(
+            questionnaire.topic,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xffFFFFFF),
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
+            ),
+          ),
+        );
+      }
+
+      Widget rating() {
+        return RatingBar.builder(
+          initialRating: double.parse(questionnaire.history.rating.toString()),
+          minRating: 1,
+          direction: Axis.horizontal,
+          allowHalfRating: false,
+          ignoreGestures: true,
+          itemSize: 20,
+          itemCount: 5,
+          itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
+          itemBuilder: (context, _) => Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+          onRatingUpdate: (rating) {
+            print(rating);
+          },
+        );
+      }
+
+      return Column(
+        children: <Widget>[
+          ListTile(
+            contentPadding: EdgeInsets.all(10),
+            onTap: () {
+              fetchQuestionnaireById(http.Client(), user.id, questionnaire.id)
+                  .then((value) {
+                Provider.of<SharedData>(context, listen: false)
+                    .changeQuestionnaireIsChoosing(value);
+              }).then((value) {
+                Navigator.of(context).pushNamed(configureRoute);
+              });
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+            title: Text.rich(name()),
+            subtitle: Text.rich(belowName()),
+            trailing: Column(
+              children: [
+                topic(),
+                rating(),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget recentlyPlayedQuestionnaire({Questionnaire questionnaire}) {
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+                spreadRadius: -20,
+                blurRadius: 4,
+                offset: Offset(
+                  2,
+                  2,
+                ))
+          ],
+        ),
+        child: Card(
+            margin: EdgeInsets.fromLTRB(20, 5, 20, 15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
+            child: questionnaireContent(questionnaire)), //noi dung recent post
+      );
+    }
+
+    return Consumer<SharedData>(builder: (context, data, child) {
+      List<Questionnaire> list = data.recentlyUsed;
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            child: title(),
+            margin: EdgeInsets.only(top: 20, left: 20, bottom: 20),
+          ),
+          ...list.map((e) => recentlyPlayedQuestionnaire(questionnaire: e))
+        ],
+      );
+    });
   }
 
-  Widget questionnairesByTopic() {
-    double fraction = 0.9;
-    return Consumer<SharedData>(
-        builder: (context, data, child) => Container(
-              color: colorDebug ? Colors.red[100] : null,
-              alignment: Alignment.topLeft,
-              height: MediaQuery.of(context).size.height * 4 / 15,
-              width: MediaQuery.of(context).size.width,
-              child: DraggableScrollableSheet(
-                initialChildSize: fraction,
-                minChildSize: fraction,
-                maxChildSize: fraction,
-                expand: false,
-                builder: (BuildContext context, ScrollController controller) {
-                  return SingleChildScrollView(
-                    controller: controller,
-                    scrollDirection: Axis.horizontal,
-                    child: Row(children: [
-                      for (var questionnaire in data.topic)
-                        RaisedButton(
-                          color: Colors.white,
-                          onPressed: () {
-                            var topic = questionnaire["topic"];
-                            fetchQuestionnaire(
-                                    http.Client(), user.id, "?topic=$topic")
-                                .then((value) async {
-                              // print(value[0]['topic']);
-                              await Provider.of<SharedData>(context,
-                                      listen: false)
-                                  .changeQuestionnaireByTopic(value);
-                            });
-                          },
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                            color: colorDebug ? Colors.green : null,
-                            elevation: 20,
-                            margin: EdgeInsets.all(15),
-                            child: Container(
-                                height: MediaQuery.of(context).size.height *
-                                    fraction,
-                                width: MediaQuery.of(context).size.width * 0.25,
-                                child: Center(
-                                    child: Text(
-                                  questionnaire['topic'],
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.red[600]),
-                                ))),
-                          ),
-                        ),
-                    ]),
-                  );
-                },
-              ),
-            ));
+  Widget topicOfQuestionnairesSection() {
+    Widget topicOfQuestionnaires({String topic}) {
+      return Container(
+        margin: EdgeInsets.only(top: 20, left: 20, bottom: 20),
+        width: 100,
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            topic,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.25),
+                  // spreadRadius: 3,
+                  blurRadius: 4,
+                  // offset: Offset(0, 2),
+                  offset: Offset(
+                    2,
+                    2,
+                  ))
+            ],
+            color: Colors.white),
+      );
+    }
+
+    return Consumer<SharedData>(builder: (context, data, child) {
+      List<Map<dynamic, dynamic>> list = data.topic;
+      return Container(
+        height: 150,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: [
+            ...list.map((e) => topicOfQuestionnaires(topic: e['topic']))
+          ],
+        ),
+      );
+    });
   }
 }
+
+class MyPage1widget {}

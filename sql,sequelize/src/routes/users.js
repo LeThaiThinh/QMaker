@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var { User, Questionnaire, Question, History } = require('../model/relation')
 var faker = require('faker')
-const { Op, NOW } = require("sequelize");
+const { Op, NOW, json } = require("sequelize");
 const Sequelize = require('sequelize');
 
 /* GET users listing. */
@@ -91,12 +91,15 @@ router.post('/users/:userId/questionnaire/create', async function (req, res, nex
       recentlyUsed: 0,
     })
     questionnaire0 = await Questionnaire.findOne({
-      include: {
+      include: [{
         model: User,
         through: {
           attributes: ['recentlyUsed', 'rating', 'score', 'totalTime', 'userId', 'questionnaireId']
         }
-      },
+      }, {
+        model: Question,
+        attributes: ['id', 'question', 'correctAnswer', 'incorrectAnswer1', 'incorrectAnswer2', 'incorrectAnswer3']
+      },],
       where: {
         [Op.and]: [
           { userId: userId, },
@@ -156,13 +159,16 @@ router.get('/users/:userId/questionnaire', async function (req, res, next) {
 router.get('/users/:userId/questionnaire/:questionnaireId', async function (req, res, next) {
   var userId = req.params['userId']
   var questionnaireId = req.params["questionnaireId"]
-  var questionnaires = await Questionnaire.findOne({
-    include: {
+  var questionnaire = await Questionnaire.findOne({
+    include: [{
       model: User,
       through: {
         attributes: ['recentlyUsed', 'rating', 'score', 'totalTime', 'userId', 'questionnaireId']
-      }
-    },
+      },
+    }, {
+      model: Question,
+      attributes: ['id', 'question', 'correctAnswer', 'incorrectAnswer1', 'incorrectAnswer2', 'incorrectAnswer3']
+    },],
     where: {
       [Op.and]: [
         { userId: userId, },
@@ -170,7 +176,7 @@ router.get('/users/:userId/questionnaire/:questionnaireId', async function (req,
       ]
     }
   });
-  res.json(questionnaires)
+  res.json(questionnaire)
 });
 router.get('/users/:userId/questionnaire/:questionnaireId/count', async function (req, res, next) {
   var userId = req.params['userId']
@@ -187,14 +193,22 @@ router.get('/users/:userId/questionnaire/:questionnaireId/count', async function
 router.get('/users/:userId/questionnaire/:questionnaireId/history', async function (req, res, next) {
   var userId = req.params['userId']
   var questionnaireId = req.params["questionnaireId"]
-  var history = await History.findOne({
+  var rating = await History.findOne({
     where: {
-      [Op.and]: [
-        { questionnaireId: questionnaireId },
-        { userId: userId }
-      ]
+      questionnaireId: questionnaireId,
+    },
+    attributes: [[Sequelize.fn('MAX', Sequelize.col('rating')), 'avgRating'],],
+  });
+  var history = await History.findOne({
+    attributes: [[Sequelize.fn('MAX', Sequelize.col('score')), 'maxScore'], 'totalTime'],
+    where: {
+      questionnaireId: questionnaireId,
+      userId: userId
     }
   });
+  console.log(history)
+  console.log(rating)
+
   res.json(history)
 });
 router.get('/users/:userId/questionnaire/:questionnaireId/question/createRandom', async function (req, res, next) {
@@ -213,10 +227,8 @@ router.get('/users/:userId/questionnaire/:questionnaireId/question/createRandom'
 })
 router.post('/users/:userId/questionnaire/:questionnaireId/question/create', async function (req, res, next) {
   var question = req.body
-  console.log(req.body)
-
   var userId = req.params['userId']
-  question.questionnaireId = req.params["questionnaireId"]
+  question.questionnaireId = parseInt(req.params["questionnaireId"])
   var question = await Question.create(question)
 
   res.json(question);
@@ -231,6 +243,30 @@ router.get('/users/:userId/questionnaire/:questionnaireId/question', async funct
       ]
     }
   });
+  res.json(question)
+});
+router.post('/users/:userId/questionnaire/:questionnaireId/question/:questionId/update', async function (req, res, next) {
+  var userId = req.params['userId']
+  var questionnaireId = req.params["questionnaireId"]
+  var questionId = req.params["questionId"]
+  var questionUpdate = req.body
+  console.log(questionUpdate)
+  await Question.update(questionUpdate, {
+    where: {
+      [Op.and]: [
+        { id: questionId },
+        { questionnaireId: questionnaireId },
+      ]
+    }
+  });
+  var question = await Question.findOne({
+    where: {
+      [Op.and]: [
+        { id: questionId },
+      ]
+    }
+  })
+  // console.log(question)
   res.json(question)
 });
 router.post('/users/:userId/questionnaire/:questionnaireId/setRecentlyUsed', async function (req, res, next) {
