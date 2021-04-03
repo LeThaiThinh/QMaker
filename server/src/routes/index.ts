@@ -1,7 +1,7 @@
 const express = require("express")
-const userHandler = require("../handlers/user")
-const signupHandler = require("../handlers/signup")
-const signinHandler = require("../handlers/signin")
+import userHandler from "../handlers/user"
+import signupHandler from "../handlers/signup"
+import signinHandler from "../handlers/signin"
 
 const router = express.Router()
 

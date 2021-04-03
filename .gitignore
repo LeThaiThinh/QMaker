@@ -45,3 +45,4 @@ flutter/.vscode
 server/node_modules
 server/.vscode
 server/package-lock.json
+build
