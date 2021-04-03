@@ -1,13 +1,9 @@
-import createUserHandler from "./create"
 import deleteUserHandler from "./delete"
 import readUserHandler from "./read"
 import updateUserHandler from "./update"
 
 const userHandler = async (req, res) => {
   switch (req.method) {
-    case "POST":
-      createUserHandler(req, res)
-      return
     case "GET":
       readUserHandler(req, res)
       return

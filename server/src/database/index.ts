@@ -23,11 +23,11 @@ export const db = new Sequelize(
 )
 
 export const initDB = async () => {
-  await db.query(`DROP TABLE IF EXISTS history;`)
-  await db.query(`DROP TABLE IF EXISTS rating;`)
-  await db.query(`DROP TABLE IF EXISTS question;`)
-  await db.query(`DROP TABLE IF EXISTS questionnaire;`)
-  await db.query(`DROP TABLE IF EXISTS user;`)
+  // await db.query(`DROP TABLE IF EXISTS history;`)
+  // await db.query(`DROP TABLE IF EXISTS rating;`)
+  // await db.query(`DROP TABLE IF EXISTS question;`)
+  // await db.query(`DROP TABLE IF EXISTS questionnaire;`)
+  // await db.query(`DROP TABLE IF EXISTS user;`)
   await db.query(sqlQueries.CREATE_TABLE_USER)
   await db.query(sqlQueries.CREATE_TABLE_QUESTIONNAIRE)
   await db.query(sqlQueries.CREATE_TABLE_QUESTION)
