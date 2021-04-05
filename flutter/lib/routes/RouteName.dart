@@ -9,4 +9,3 @@ const String createQuestionnaireRoute = 'createQuestionnaire';
 const String editQuestionnaireRoute = 'editQuestionnaire';
 const String createQuestionRoute = 'createQuestion';
 const String editQuestionRoute = 'editQuestion';
-const String playModeRoute = 'playMode';

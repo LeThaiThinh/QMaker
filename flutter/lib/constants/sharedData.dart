@@ -1,18 +1,16 @@
-import 'package:baitaplon/constants/bottomType.dart';
-import 'package:baitaplon/models/Question.dart';
 import 'package:baitaplon/models/Questionnaire.dart';
 import 'package:baitaplon/models/Users.dart';
 import 'package:flutter/cupertino.dart';
 
 class SharedData extends ChangeNotifier {
-  List<Questionnaire> recentlyUsed = [];
+  List<Questionnaire> currentlyUsed = [];
   List<Questionnaire> byTopic = [];
   List<Map> topic = [];
   Questionnaire questionnaireIsChoosing;
+  int numberOfQuestion;
   User user = new User();
-  BottomType currentMainPage;
   changeQuestionnaireCurrentlyUsed(List<Questionnaire> currentlyUsed) {
-    this.recentlyUsed = currentlyUsed;
+    this.currentlyUsed = currentlyUsed;
     notifyListeners();
   }
 
@@ -31,17 +29,18 @@ class SharedData extends ChangeNotifier {
     notifyListeners();
   }
 
-  changeQuestionnaireIsChoosing(Questionnaire questionnaireIsChoosing) {
-    this.questionnaireIsChoosing = questionnaireIsChoosing;
+  changeQuestionnaireIsChoosing(Questionnaire questionnaireIsPlaying) {
+    this.questionnaireIsChoosing = questionnaireIsPlaying;
     notifyListeners();
   }
 
-  changeListQuestionInChosenQuestionnaire(List<Question> list) {
-    this.questionnaireIsChoosing.listQuestion = list;
+  changeNumberOfQuestion(int num) {
+    this.numberOfQuestion = num;
     notifyListeners();
   }
 
-  changeCurrentMainPage(BottomType bottomType) {
-    currentMainPage = bottomType;
+  increaseNumberOfQuestion() {
+    this.numberOfQuestion++;
+    notifyListeners();
   }
 }

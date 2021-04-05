@@ -47,7 +47,7 @@ class Questionnaire {
         topic: json["topic"],
         public: json["public"],
         description: json["description"],
-        timeLimit: json["timeLimit"],
+        timeLimit: json["time_limit"],
         history: json["users"] != null
             ? History.fromJson(json["users"][0]["histories"])
             : null,
@@ -58,10 +58,8 @@ class Questionnaire {
 }
 
 List<Question> setListQuestion(Map<String, dynamic> json) {
-  List<Question> list = new List<Question>();
-  for (var question in json["questions"]) {
-    list.add(Question.fromJson(question));
-  }
+  List<Question> list;
+  for (var question in json["questions"]) list.add(Question.fromJson(question));
   return list;
 }
 
@@ -69,8 +67,6 @@ Future<Questionnaire> fetchQuestionnaireById(
     http.Client client, int userId, int questionnaireId) async {
   final response = await client.get(
       "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId");
-  fetchHistoryById(client, userId, questionnaireId);
-  
   if (response.statusCode == 200) {
     var questionnaire = jsonDecode(response.body);
     return Questionnaire.fromJson(questionnaire);
@@ -81,8 +77,8 @@ Future<Questionnaire> fetchQuestionnaireById(
 
 Future<List<Map>> fetchQuestionnaireTopic(
     http.Client client, int userId) async {
-  final response = await client.get(
-      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaireTopic");
+  final response = await client
+      .get("${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaireTopic");
   if (response.statusCode == 200) {
     final list = jsonDecode(response.body);
     List<Map> listTopic = new List<Map>();
@@ -108,6 +104,19 @@ Future<List<Questionnaire>> fetchQuestionnaire(
   }
 }
 
+//
+Future<int> fetchNumberOfQuestion(
+    http.Client client, int questionnaireId, int userId) async {
+  final response = await client.get(
+      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/count");
+  if (response.statusCode == 200) {
+    final number = jsonDecode(response.body);
+    return number;
+  } else {
+    throw Exception('Fail');
+  }
+}
+
 Future setRecentlyUsed(http.Client client, BuildContext context,
     int questionnaireId, int userId) async {
   Map<dynamic, String> data = {'recentlyUsed': Timestamp.now().toString()};
@@ -117,7 +126,9 @@ Future setRecentlyUsed(http.Client client, BuildContext context,
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
       });
+  var jsonResponse = json.decode(response.body);
   if (response.statusCode == 200) {
+    print(jsonResponse);
   } else {}
 }
 
@@ -149,5 +160,3 @@ Future<Questionnaire> createQuestionnaire(
     throw Exception('Fail');
   }
 }
-
-Future<double> getAvgRating() {}

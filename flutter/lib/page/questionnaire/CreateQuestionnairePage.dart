@@ -1,6 +1,5 @@
 import 'package:baitaplon/constants/myColors.dart';
 import 'package:baitaplon/constants/sharedData.dart';
-import 'package:baitaplon/models/Question.dart';
 import 'package:baitaplon/models/Questionnaire.dart';
 import 'package:baitaplon/page/questionnaire/EditQuestionnairePage.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +10,7 @@ class CreateQuestionnairePage extends StatefulWidget {
   CreateQuestionnairePage({Key key}) : super(key: key);
 
   @override
-  _CreateQuestionnairePageState createState() =>
-      _CreateQuestionnairePageState();
+  _CreateQuestionnairePageState createState() => _CreateQuestionnairePageState();
 }
 
 class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
@@ -22,7 +20,7 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
   final timeLimitController = TextEditingController();
   final descController = TextEditingController();
   bool private;
-  Questionnaire questionnaire;
+
   @override
   void initState() {
     super.initState();
@@ -139,17 +137,11 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
               int.parse(
                 timeLimitController.text,
               )).then((value) {
-            Provider.of<SharedData>(context, listen: false)
-                .changeQuestionnaireIsChoosing(value);
-            setState(() {
-              questionnaire = value;
-            });
-          }).then((value) {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => EditQuestionnairePage(
-                  questionnaire: questionnaire,
+                  questionnaire: value,
                 ),
               ),
             );
