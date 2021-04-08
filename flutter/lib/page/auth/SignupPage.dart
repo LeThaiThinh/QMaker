@@ -1,10 +1,11 @@
-import 'package:baitaplon/constants/myColors.dart';
-import 'package:baitaplon/models/Users.dart';
-import 'package:baitaplon/page/auth/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_svg/svg.dart';
+
+import '../../constants/myColors.dart';
+import '../../models/Users.dart';
+import 'LoginPage.dart';
 
 class SignupPage extends StatefulWidget {
   SignupPage({Key key}) : super(key: key);

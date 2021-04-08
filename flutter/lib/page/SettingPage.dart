@@ -1,9 +1,10 @@
-import 'package:baitaplon/classes/language.dart';
-import 'package:baitaplon/localization/LocalizationConstant.dart';
-import 'package:baitaplon/routes/RouteName.dart';
+
 import 'package:flutter/material.dart';
 
+import '../classes/language.dart';
+import '../localization/LocalizationConstant.dart';
 import '../main.dart';
+import '../routes/RouteName.dart';
 
 class SettingPage extends StatefulWidget {
   @override

@@ -29,6 +29,8 @@ dependencies:
   auto_size_text: any
   state_notifier: any
   flutter_svg: any
+  flutter_rating_bar: any
+  material_floating_search_bar: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

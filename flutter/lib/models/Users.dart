@@ -1,15 +1,12 @@
 import 'dart:io';
-
-import 'package:baitaplon/constants/Strings.dart';
-import 'package:baitaplon/constants/sharedData.dart';
-import 'package:baitaplon/models/Questionnaire.dart';
-import 'package:baitaplon/page/bottom/HomePage.dart';
-import 'package:baitaplon/page/MainPage.dart';
-import 'package:baitaplon/routes/RouteName.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+
+import '../constants/Strings.dart';
+import '../constants/sharedData.dart';
+import '../routes/RouteName.dart';
 
 class User {
   int id;
@@ -91,8 +88,6 @@ Future signup(http.Client client, String _name, String _username,
     'username': _username,
     'password': _password,
   };
-  // debugPrint(data.toString());
-
   try {
     var jsonResponse;
     var response = await http.post(

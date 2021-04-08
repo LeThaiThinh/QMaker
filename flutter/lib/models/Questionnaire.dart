@@ -1,16 +1,14 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:baitaplon/constants/Strings.dart';
-import 'package:baitaplon/models/History.dart';
-import 'package:baitaplon/models/Question.dart';
-import 'package:baitaplon/page/bottom/HomePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../constants/Strings.dart';
+import 'History.dart';
+import 'Question.dart';
 import 'Users.dart';
 
 class Questionnaire {
@@ -43,11 +41,11 @@ class Questionnaire {
     return Questionnaire(
         id: json["id"],
         name: json['name'],
-        user: json["users"][0] != null ? User.fromJson(json["users"][0]) : null,
+        user: json["users"] != null ? User.fromJson(json["users"][0]) : null,
         topic: json["topic"],
         public: json["public"],
         description: json["description"],
-        timeLimit: json["time_limit"],
+        timeLimit: json["timeLimit"],
         history: json["users"] != null
             ? History.fromJson(json["users"][0]["histories"])
             : null,
@@ -58,8 +56,10 @@ class Questionnaire {
 }
 
 List<Question> setListQuestion(Map<String, dynamic> json) {
-  List<Question> list;
-  for (var question in json["questions"]) list.add(Question.fromJson(question));
+  List<Question> list = new List<Question>();
+  for (var question in json["questions"]) {
+    list.add(Question.fromJson(question));
+  }
   return list;
 }
 
@@ -77,8 +77,8 @@ Future<Questionnaire> fetchQuestionnaireById(
 
 Future<List<Map>> fetchQuestionnaireTopic(
     http.Client client, int userId) async {
-  final response = await client
-      .get("${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaireTopic");
+  final response = await client.get(
+      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaireTopic");
   if (response.statusCode == 200) {
     final list = jsonDecode(response.body);
     List<Map> listTopic = new List<Map>();
@@ -104,31 +104,20 @@ Future<List<Questionnaire>> fetchQuestionnaire(
   }
 }
 
-//
-Future<int> fetchNumberOfQuestion(
-    http.Client client, int questionnaireId, int userId) async {
-  final response = await client.get(
-      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/count");
-  if (response.statusCode == 200) {
-    final number = jsonDecode(response.body);
-    return number;
-  } else {
-    throw Exception('Fail');
-  }
-}
-
-Future setRecentlyUsed(http.Client client, BuildContext context,
-    int questionnaireId, int userId) async {
-  Map<dynamic, String> data = {'recentlyUsed': Timestamp.now().toString()};
+Future updateHistory(http.Client client, BuildContext context, int score,
+    int totalTime, int rating, int questionnaireId, int userId) async {
+  Map<String, dynamic> data = {
+          'score': score,
+          'totalTime': totalTime,
+          'rating': rating,
+        };
   var response = await client.post(
-      '${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/setRecentlyUsed',
+      '${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/updateHistory',
       body: json.encode(data),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
       });
-  var jsonResponse = json.decode(response.body);
   if (response.statusCode == 200) {
-    print(jsonResponse);
   } else {}
 }
 
@@ -159,4 +148,17 @@ Future<Questionnaire> createQuestionnaire(
   } else {
     throw Exception('Fail');
   }
+}
+
+Future<double> getAvgRating() {}
+
+Future deleteQuestionnaire(http.Client client, BuildContext context, int questionnaireId,
+    int userId) async {
+  var response = await client.post(
+      '${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/delete',
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      });
+  if (response.statusCode == 200) {
+  } else {}
 }

@@ -1,12 +1,14 @@
-import 'package:baitaplon/constants/sharedData.dart';
-import 'package:baitaplon/routes/CustomRouter.dart';
-import 'package:baitaplon/routes/RouteName.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'constants/myColors.dart';
+import 'constants/sharedData.dart';
 import 'localization/DemoLocalization.dart';
 import 'localization/LocalizationConstant.dart';
+import 'routes/CustomRouter.dart';
+import 'routes/RouteName.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,7 +57,21 @@ class _MyAppState extends State<MyApp> {
             ChangeNotifierProvider.value(value: SharedData()),
           ],
           child: MaterialApp(
-            theme: ThemeData(primaryColor: Colors.red[300]),
+            theme: ThemeData(
+              iconTheme: IconThemeData(
+                color: primaryColor,
+              ),
+              primarySwatch: primarySwatchColor,
+              primaryColor: primaryColor,
+              appBarTheme: AppBarTheme(
+                textTheme: TextTheme(
+                  headline6: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
             title: "hello",
             debugShowCheckedModeBanner: false,
             localizationsDelegates: [

@@ -1,10 +1,15 @@
-import 'package:baitaplon/constants/myColors.dart';
-import 'package:baitaplon/models/Question.dart';
-import 'package:baitaplon/models/Questionnaire.dart';
-import 'package:baitaplon/page/MainPage.dart';
-import 'package:baitaplon/page/questionnaire/CreateQuestionPage.dart';
-import 'package:baitaplon/page/questionnaire/EditQuestion.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import '../../constants/bottomType.dart';
+import '../../constants/myColors.dart';
+import '../../constants/sharedData.dart';
+import '../../models/Question.dart';
+import '../../models/Questionnaire.dart';
+import '../MainPage.dart';
+import 'QuestionnairePage.dart';
+import 'question/CreateQuestionPage.dart';
+import 'question/EditQuestion.dart';
 
 class EditQuestionnairePage extends StatefulWidget {
   EditQuestionnairePage({
@@ -13,6 +18,7 @@ class EditQuestionnairePage extends StatefulWidget {
   }) : super(key: key);
 
   final Questionnaire questionnaire;
+
   @override
   _EditQuestionnairePageState createState() => _EditQuestionnairePageState();
 }
@@ -23,34 +29,8 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Questionnaire"),
-        leading: Container(
-          margin: EdgeInsets.only(left: 5.0),
-          child: IconButton(
-            icon: Icon(Icons.book_outlined, size: 30),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => MainPage()),
-                (route) => false,
-              );
-            },
-          ),
-        ),
-        actions: [
-          Container(
-            margin: EdgeInsets.only(right: 5.0),
-            child: IconButton(
-              icon: Icon(Icons.delete, size: 30),
-              onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => MainPage()),
-                  (route) => false,
-                );
-              },
-            ),
-          ),
-        ],
+        leading: backButton(),
+        actions: [deleteButton()],
       ),
       floatingActionButton: addButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -58,10 +38,54 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
     );
   }
 
+  Widget deleteButton() {
+    return Container(
+      margin: EdgeInsets.only(right: 5.0),
+      child: IconButton(
+        icon: Icon(Icons.delete, size: 30),
+        onPressed: () {
+          deleteQuestionnaire(
+                  http.Client(),
+                  context,
+                  this.widget.questionnaire.id,
+                  this.widget.questionnaire.user.id)
+              .then((value) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MainPage(
+                  initBody: Provider.of<SharedData>(context, listen: false)
+                      .currentMainPage,
+                ),
+              ),
+              (route) => false,
+            );
+          });
+        },
+      ),
+    );
+  }
+
+  Widget backButton() {
+    return Container(
+      margin: EdgeInsets.only(left: 5.0),
+      child: IconButton(
+        icon: Icon(Icons.arrow_back_ios_rounded, size: 25),
+        onPressed: () {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => QuestionnairePage()),
+            (route) => false,
+          );
+        },
+      ),
+    );
+  }
+
   Widget addButton() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.symmetric(horizontal: 20.0),
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
       child: FloatingActionButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -83,23 +107,17 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
   }
 
   Widget questionnaireBody() {
-    return ListView(
-      padding: EdgeInsets.all(20.0),
-      children: [
-        questionnaireInfo(),
-        SizedBox(height: 20.0),
-        questionTile(
-          question: Question(
-              id: 1,
-              questionnaireId: 1,
-              question: "1",
-              correctanswer: "1",
-              incorrectanswer1: "1",
-              incorrectanswer2: "1",
-              incorrectanswer3: "1"),
-        ),
-      ],
-    );
+    return Consumer<SharedData>(builder: (context, data, child) {
+      var listQuestion = data.questionnaireIsChoosing.listQuestion;
+      return ListView(
+        padding: EdgeInsets.all(20.0),
+        children: [
+          questionnaireInfo(),
+          SizedBox(height: 20.0),
+          ...listQuestion.map((e) => questionTile(question: e))
+        ],
+      );
+    });
   }
 
   Widget questionnaireInfo() {
@@ -136,7 +154,9 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
         ),
         SizedBox(height: 20.0),
         Text(
-          "Total: 3 questions",
+          "Total: " +
+              this.widget.questionnaire.listQuestion.length.toString() +
+              " questions",
           style: TextStyle(
             color: Colors.black45,
             fontSize: 16,
@@ -156,16 +176,17 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
       child: ListTile(
         onTap: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => EditQuestion(
-                        question: question,
-                      )));
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditQuestion(
+                question: question,
+              ),
+            ),
+          );
         },
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-          Radius.circular(10.0),
-        )),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
         title: Text(
           question.question,
           style: TextStyle(

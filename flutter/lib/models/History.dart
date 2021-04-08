@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:baitaplon/constants/Strings.dart';
-import 'package:baitaplon/page/bottom/HomePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../constants/Strings.dart';
 import 'Users.dart';
 
 class History {
@@ -32,6 +30,7 @@ class History {
       this.createdAt});
 
   factory History.fromJson(Map<String, dynamic> json) {
+    debugPrint(json["score"].toString() + " " + json["totalTime"].toString());
     return History(
         userId: json["userId"],
         questionnaireId: json['questionnaireId'],
