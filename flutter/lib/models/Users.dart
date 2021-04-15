@@ -114,3 +114,33 @@ Future signup(http.Client client, String _name, String _username,
     return;
   }
 }
+
+Future changePass(http.Client client, String newPassword,int userId,BuildContext context) async {
+  Map<dynamic, String> data = {
+    'password': newPassword,
+  };
+  try {
+    var jsonResponse;
+    var response = await http.post(
+      '${Strings.BASE_URL}:${Strings.PORT}/users/$userId/changePass',
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: json.encode(data),
+    );
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      Provider.of<SharedData>(context, listen: false).changeUser(User(
+          id: jsonResponse['id'],
+          username: jsonResponse['username'],
+          name: jsonResponse['name'],
+          password: jsonResponse['password'],
+          createdAt: jsonResponse['createdAt'],
+          updatedAt: jsonResponse['updatedAt']));
+      Navigator.of(context).pop();
+    } else {}
+  } catch (err) {
+    print(err);
+    return;
+  }
+}

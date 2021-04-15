@@ -1,12 +1,10 @@
-import 'dart:async';
-import 'dart:convert';
 import 'dart:ui';
+import 'package:baitaplon/page/bottom/QuestionnaireByTopicPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-
 import '../../constants/sharedData.dart';
 import '../../models/Questionnaire.dart';
 import '../../models/Users.dart';
@@ -20,7 +18,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  SharedData sharedData;
   User user;
 
   @override
@@ -70,7 +67,6 @@ class _HomePageState extends State<HomePage> {
 
     Widget questionnaireBody(Questionnaire questionnaire) {
       TextSpan name() {
-        final double _fontsize = 20;
         return TextSpan(
           style: TextStyle(
             color: Color(0xffEB5757),
@@ -84,7 +80,6 @@ class _HomePageState extends State<HomePage> {
       }
 
       TextSpan belowName() {
-        final double _fontsize = 20;
         return TextSpan(
           style: TextStyle(
             fontSize: 12,
@@ -132,10 +127,10 @@ class _HomePageState extends State<HomePage> {
 
       Widget rating() {
         return RatingBar.builder(
-          initialRating: double.parse(questionnaire.history.rating.toString()),
-          minRating: 1,
+          initialRating: questionnaire.avgRating,
+          minRating: 0,
           direction: Axis.horizontal,
-          allowHalfRating: false,
+          allowHalfRating: true,
           ignoreGestures: true,
           itemSize: 20,
           itemCount: 5,
@@ -144,9 +139,7 @@ class _HomePageState extends State<HomePage> {
             Icons.star,
             color: Colors.amber,
           ),
-          onRatingUpdate: (rating) {
-            print(rating);
-          },
+          onRatingUpdate: (rating) {},
         );
       }
 
@@ -155,7 +148,8 @@ class _HomePageState extends State<HomePage> {
           ListTile(
             contentPadding: EdgeInsets.all(10),
             onTap: () {
-              fetchQuestionnaireById(http.Client(), user.id, questionnaire.id)
+              fetchQuestionnaireById(
+                      http.Client(), questionnaire.userId, questionnaire.id)
                   .then((value) {
                 Provider.of<SharedData>(context, listen: false)
                     .changeQuestionnaireIsChoosing(value);
@@ -226,8 +220,21 @@ class _HomePageState extends State<HomePage> {
       return Container(
         margin: EdgeInsets.only(top: 20, left: 20, bottom: 20),
         width: 100,
-        child: Align(
-          alignment: Alignment.center,
+        child: RaisedButton(
+          color: Colors.white.withOpacity(0.9),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => QuestionnaireByTopicPage(
+                  topic: topic,
+                ),
+              ),
+            );
+          },
           child: Text(
             topic,
             textAlign: TextAlign.center,

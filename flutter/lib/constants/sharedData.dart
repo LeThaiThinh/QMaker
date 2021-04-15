@@ -5,12 +5,20 @@ import 'package:baitaplon/models/Users.dart';
 import 'package:flutter/cupertino.dart';
 
 class SharedData extends ChangeNotifier {
+  List<Questionnaire> collection = [];
   List<Questionnaire> recentlyUsed = [];
   List<Questionnaire> byTopic = [];
+  List<Questionnaire> search = [];
   List<Map> topic = [];
   Questionnaire questionnaireIsChoosing;
   User user = new User();
   BottomType currentMainPage;
+
+  changeCollectionQuestionnaire(List<Questionnaire> collection) {
+    this.collection = collection;
+    notifyListeners();
+  }
+
   changeQuestionnaireCurrentlyUsed(List<Questionnaire> currentlyUsed) {
     this.recentlyUsed = currentlyUsed;
     notifyListeners();
@@ -18,6 +26,11 @@ class SharedData extends ChangeNotifier {
 
   changeQuestionnaireByTopic(List<Questionnaire> byTopic) {
     this.byTopic = byTopic;
+    notifyListeners();
+  }
+
+  changeQuestionnaireSearch(List<Questionnaire> search) {
+    this.search = search;
     notifyListeners();
   }
 

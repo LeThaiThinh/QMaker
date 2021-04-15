@@ -135,7 +135,7 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
               nameController.text,
               topicController.text,
               descController.text,
-              private,
+              !private,
               int.parse(
                 timeLimitController.text,
               )).then((value) {

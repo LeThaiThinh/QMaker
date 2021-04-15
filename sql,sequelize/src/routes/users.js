@@ -26,6 +26,15 @@ router.get(`/users/:userId`, async function (req, res, next) {
   })
   res.json(user);
 });
+router.post(`/users/:userId/changePass`, async function (req, res, next) {
+  var userId = req.params['userId']
+  var password = req.body
+  console.log(password)
+  const user = await User.update(password, {
+    where: { id: userId }
+  })
+  res.json(user);
+});
 router.get(`/users/:userId/questionnaireTopic`, async function (req, res, next) {
   try {
     var userId = parseInt(req.params['userId'])
@@ -85,7 +94,10 @@ router.get('/users/:userId/questionnaire', async function (req, res, next) {
     var querydata_where_topic
     var querydata_where_questionId
     var querydata_order
-    var querydate_limit
+    var querydata_limit
+    var querydata_searchByName
+    var querydata_public
+    var query_userId
     if (req.query['topic'] != null) {
       querydata_where_topic = { topic: req.query['topic'], }
     }
@@ -94,30 +106,49 @@ router.get('/users/:userId/questionnaire', async function (req, res, next) {
     }
     if (req.query['recentlyUsed'] != null) {
       querydata_order = [[{ model: User }, { model: History }, 'recentlyUsed', req.query['recentlyUsed']]]
-      querydate_limit = 3
+      querydata_limit = 3
     }
-    else { querydata_order = [['id', 'ASC']]; querydate_limit = 1000 }
+    else {
+      querydata_order = [['id', 'ASC']]; querydata_limit = 1000
+    }
+    if (req.query['name'] != null) {
+      querydata_searchByName = {
+        name: {
+          [Op.substring]: req.query['name']
+        },
+      }
+      querydata_public = {
+        public: true
+      }
+    } else {
+      query_userId = {
+        userId: userId,
+      }
+    }
     var questionnaires = await Questionnaire.findAll({
-      include: {
+      include: [{
         model: User,
         // attributes:[],
         through: {
           model: History,
           attributes: ['recentlyUsed', 'rating', 'score', 'totalTime', 'userId', 'questionnaireId']
         },
-      },
+      }],
       where: {
         [Op.and]: [
-          { userId: userId, },
+          query_userId,
           querydata_where_topic,
+          querydata_searchByName,
+          querydata_public
         ]
       },
       attributes: [
         "id", "name", "description", "topic", "timeLimit", "public", "userId", "createdAt", "updatedAt",
       ],
       order: querydata_order,
-      limit: querydate_limit,
+      limit: querydata_limit,
     })
+    console.log(questionnaires)
     res.json(questionnaires);
   } catch (err) {
     console.log(err);
@@ -138,11 +169,11 @@ router.get('/users/:userId/questionnaire/:questionnaireId', async function (req,
     },],
     where: {
       [Op.and]: [
-        { userId: userId, },
         { id: questionnaireId },
       ]
     },
   });
+  console.log(questionnaire)
   res.json(questionnaire)
 
 });
@@ -164,12 +195,13 @@ router.get('/users/:userId/questionnaire/:questionnaireId/rating', async functio
   var rating = await History.findOne({
     where: {
       questionnaireId: questionnaireId,
+      rating: {
+        [Op.not]: 0
+      }
     },
     attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'avgRating'],],
   });
-  console.log(rating)
-
-  res.json(history)
+  res.json(rating)
 });
 router.post('/users/:userId/questionnaire/:questionnaireId/question/create', async function (req, res, next) {
   var question = req.body
@@ -217,7 +249,6 @@ router.post('/users/:userId/questionnaire/:questionnaireId/question/:questionId/
 });
 router.post('/users/:userId/questionnaire/:questionnaireId/updateHistory', async function (req, res, next) {
   history = req.body
-  console.log(history)
   history.recentlyUsed = Date.now() / 1000;
   history.userId = parseInt(req.params.userId);
   history.questionnaireId = parseInt(req.params.questionnaireId);
@@ -260,6 +291,21 @@ router.post('/users/:userId/questionnaire/:questionnaireId/updateHistory', async
       }
     })
   }
+  res.json(history)
+})
+router.post('/users/:userId/questionnaire/:questionnaireId/createHistory', async function (req, res, next) {
+  var history = await History.findOne({
+    where: {
+      userId: req.params['userId'],
+      questionnaireId: req.params['questionnaireId']
+    }
+  })
+
+  if (history == null) {
+    history = req.body
+    history = await History.create(history)
+  }
+
   res.json(history)
 })
 router.post('/users/:userId/questionnaire/:questionnaireId/delete', async function (req, res, next) {

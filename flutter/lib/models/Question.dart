@@ -1,13 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import '../constants/Strings.dart';
-import 'Users.dart';
 
 class Question {
   int id;

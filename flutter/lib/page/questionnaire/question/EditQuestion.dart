@@ -164,10 +164,6 @@ class _EditQuestionState extends State<EditQuestion> {
                 final FormState form = formKey.currentState;
                 if (form.validate()) {
                   form.save();
-                  debugPrint(
-                    this.widget.question.id.toString() +
-                        data.questionnaireIsChoosing.id.toString(),
-                  );
                   updateQuestion(
                           http.Client(),
                           data.user.id,

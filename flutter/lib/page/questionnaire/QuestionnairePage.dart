@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 import '../ingame/GameScreen.dart';
 import '../../constants/myColors.dart';
 import '../../constants/sharedData.dart';
-import '../../models/Questionnaire.dart';
-import '../../routes/RouteName.dart';
 import '../MainPage.dart';
 import 'EditQuestionnairePage.dart';
 
@@ -57,20 +54,22 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
   }
 
   Widget editQuestionnaire() {
-    return Container(
-      margin: EdgeInsets.only(right: 5.0),
-      child: IconButton(
-        icon: Icon(Icons.settings, size: 30),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => EditQuestionnairePage(
-                    questionnaire: data.questionnaireIsChoosing)),
-          );
-        },
-      ),
-    );
+    return data.user.id == data.questionnaireIsChoosing.userId
+        ? Container(
+            margin: EdgeInsets.only(right: 5.0),
+            child: IconButton(
+              icon: Icon(Icons.settings, size: 30),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditQuestionnairePage(
+                          questionnaire: data.questionnaireIsChoosing)),
+                );
+              },
+            ),
+          )
+        : Text("");
   }
 
   Widget body() {
@@ -94,14 +93,15 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         ),
         SizedBox(height: 20),
         RatingBar.builder(
-          initialRating: double.parse(
-              data.questionnaireIsChoosing.history.rating.toString()),
+          initialRating:
+              double.parse(data.questionnaireIsChoosing.avgRating.toString()),
           minRating: 0,
           itemCount: 5,
           itemBuilder: (context, _) => Icon(
             Icons.star,
             color: Colors.amber,
           ),
+          allowHalfRating: true,
           tapOnlyMode: false,
           onRatingUpdate: (value) {},
           itemSize: 20.0,
@@ -159,11 +159,14 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         onPressed: () async {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) =>
-                      GameScreen(questionnaire: data.questionnaireIsChoosing)));
+          data.questionnaireIsChoosing.listQuestion.isNotEmpty
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => GameScreen(
+                          questionnaire: data.questionnaireIsChoosing)))
+              // ignore: unnecessary_statements
+              : {};
         },
         child: Text(
           "Start",

@@ -1,18 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../constants/bottomType.dart';
 import '../page/MainPage.dart';
 import '../page/SettingPage.dart';
 import '../page/auth/LoginPage.dart';
 import '../page/bottom/HomePage.dart';
-import '../page/ingame/GameScreen.dart';
 import '../page/questionnaire/CreateQuestionnairePage.dart';
 import '../page/questionnaire/QuestionnairePage.dart';
 import '../page/questionnaire/question/CreateQuestionPage.dart';
 import 'RouteName.dart';
 
 class CustomRouter {
+  // ignore: missing_return
   static Route<dynamic> allRoutes(RouteSettings settings) {
     switch (settings.name) {
       case mainRoute:
@@ -32,8 +31,6 @@ class CustomRouter {
         return MaterialPageRoute(builder: (_) => CreateQuestionnairePage());
       case createQuestionRoute:
         return MaterialPageRoute(builder: (_) => CreateQuestionPage());
-        case playModeRoute:
-      return MaterialPageRoute(builder: (_) => GameScreen());
     }
   }
 }

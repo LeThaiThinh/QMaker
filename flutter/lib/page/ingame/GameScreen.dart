@@ -48,7 +48,9 @@ class _GameScreenState extends State<GameScreen> {
             MaterialPageRoute(
               builder: (context) => ResultPage(
                 questionnaire: this.widget.questionnaire,
-                score: totalCorrectAnswers,
+                score: totalCorrectAnswers *
+                    100 ~/
+                    this.widget.questionnaire.listQuestion.length,
                 timeFinish: this.widget.questionnaire.timeLimit * 60,
               ),
             ),
@@ -86,7 +88,9 @@ class _GameScreenState extends State<GameScreen> {
                 MaterialPageRoute(
                   builder: (context) => ResultPage(
                     questionnaire: this.widget.questionnaire,
-                    score: totalCorrectAnswers,
+                    score: totalCorrectAnswers *
+                        100 ~/
+                        this.widget.questionnaire.listQuestion.length,
                     timeFinish:
                         this.widget.questionnaire.timeLimit * 60 - start,
                   ),

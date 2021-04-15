@@ -1,4 +1,5 @@
 import 'package:baitaplon/constants/sharedData.dart';
+import 'package:baitaplon/models/History.dart';
 import 'package:baitaplon/models/Questionnaire.dart';
 import 'package:baitaplon/models/Users.dart';
 import 'package:baitaplon/routes/RouteName.dart';
@@ -17,7 +18,6 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   User user;
-
   @override
   Widget build(BuildContext context) {
     setState(() {
@@ -40,7 +40,6 @@ class _SearchPageState extends State<SearchPage> {
   Widget collectionOfQuestionnaireSection() {
     Widget questionnaireBody(Questionnaire questionnaire) {
       TextSpan name() {
-        final double _fontsize = 20;
         return TextSpan(
           style: TextStyle(
             color: Color(0xffEB5757),
@@ -54,7 +53,6 @@ class _SearchPageState extends State<SearchPage> {
       }
 
       TextSpan belowName() {
-        final double _fontsize = 20;
         return TextSpan(
           style: TextStyle(
             fontSize: 12,
@@ -102,10 +100,10 @@ class _SearchPageState extends State<SearchPage> {
 
       Widget rating() {
         return RatingBar.builder(
-          initialRating: double.parse(questionnaire.history.rating.toString()),
+          initialRating: questionnaire.avgRating,
           minRating: 1,
           direction: Axis.horizontal,
-          allowHalfRating: false,
+          allowHalfRating: true,
           ignoreGestures: true,
           itemSize: 20,
           itemCount: 5,
@@ -114,9 +112,7 @@ class _SearchPageState extends State<SearchPage> {
             Icons.star,
             color: Colors.amber,
           ),
-          onRatingUpdate: (rating) {
-            print(rating);
-          },
+          onRatingUpdate: (rating) {},
         );
       }
 
@@ -125,12 +121,16 @@ class _SearchPageState extends State<SearchPage> {
           ListTile(
             contentPadding: EdgeInsets.all(10),
             onTap: () {
-              fetchQuestionnaireById(http.Client(), user.id, questionnaire.id)
+              createHistory(http.Client(), user.id, questionnaire.id)
                   .then((value) {
-                Provider.of<SharedData>(context, listen: false)
-                    .changeQuestionnaireIsChoosing(value);
-              }).then((value) {
-                Navigator.of(context).pushNamed(configureRoute);
+                fetchQuestionnaireById(
+                        http.Client(), questionnaire.userId, questionnaire.id)
+                    .then((value) {
+                  Provider.of<SharedData>(context, listen: false)
+                      .changeQuestionnaireIsChoosing(value);
+                }).then((value) {
+                  Navigator.of(context).pushNamed(configureRoute);
+                });
               });
             },
             shape: RoundedRectangleBorder(
@@ -176,15 +176,15 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     return Consumer<SharedData>(builder: (context, data, child) {
-      List<Questionnaire> list = data.recentlyUsed;
-
+      List<Questionnaire> list = data.search;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             height: 70,
           ),
-          ...list.map((e) => questionnaireTile(questionnaire: e))
+          if (list.isNotEmpty)
+            ...list.map((e) => questionnaireTile(questionnaire: e))
         ],
       );
     });
@@ -196,20 +196,6 @@ class _SearchPageState extends State<SearchPage> {
 
     List<Widget> children = [];
 
-    // for (var i = 0; i < 10; i++) {
-    //   if (i % 2 == 0) {
-    //     children.add(Container(
-    //       height: 100,
-    //       color: Colors.white,
-    //     ));
-    //   } else {
-    //     children.add(Container(
-    //       height: 100,
-    //       color: Colors.red[400],
-    //     ));
-    //   }
-    // }
-
     return FloatingSearchBar(
       hint: 'Search...',
       scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
@@ -220,12 +206,21 @@ class _SearchPageState extends State<SearchPage> {
       openAxisAlignment: 0.0,
       maxWidth: isPortrait ? 600 : 500,
       debounceDelay: const Duration(milliseconds: 500),
-
+      clearQueryOnClose: false,
       onQueryChanged: (query) {
-        // Call your model, bloc, controller here.
+        if (query != "")
+          fetchQuestionnaire(
+                  http.Client(),
+                  Provider.of<SharedData>(context, listen: false).user.id,
+                  '?name=$query')
+              .then((value) {
+            Provider.of<SharedData>(context, listen: false)
+                .changeQuestionnaireSearch(value);
+          });
+        else
+          Provider.of<SharedData>(context, listen: false)
+              .changeQuestionnaireSearch([]);
       },
-      // Specify a custom transition to be used for
-      // animating between opened and closed stated.
       transition: CircularFloatingSearchBarTransition(),
       actions: [
         FloatingSearchBarAction(
@@ -258,197 +253,3 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 }
-
-// Widget article() {
-//   return Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: [
-//       Container(
-//         // child: articleName(),
-//         margin: EdgeInsets.only(top: 20, left: 20, bottom: 20),
-//       ),
-//       SizedBox(height: 10),
-//       articleCard(),
-//       SizedBox(height: 10),
-//       articleCard(),
-//       SizedBox(height: 10),
-//       articleCard(),
-//       SizedBox(height: 10),
-//     ],
-//   );
-// }
-
-// Widget articleCard() {
-//   return Container(
-//     decoration: BoxDecoration(
-//       borderRadius: BorderRadius.circular(10),
-//       boxShadow: [
-//         BoxShadow(
-//             color: Colors.black.withOpacity(0.25),
-//             spreadRadius: -20,
-//             blurRadius: 4,
-//             offset: Offset(
-//               2,
-//               2,
-//             ))
-//       ],
-//     ),
-//     child: Card(
-//         margin: EdgeInsets.all(20),
-//         shape: RoundedRectangleBorder(
-//           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-//         ),
-//         child: articleContent()), //noi dung recent post
-//   );
-// }
-
-// Widget articleContent() {
-//   return Column(
-//     children: <Widget>[
-//       ListTile(
-//         contentPadding: EdgeInsets.all(10),
-//         onTap: () {},
-//         shape: RoundedRectangleBorder(
-//           borderRadius: BorderRadius.all(
-//             Radius.circular(10.0),
-//           ),
-//         ),
-//         title: Text.rich(buildTextSpanBox()),
-//         subtitle: Text.rich(buildTextSubtitle()),
-//         trailing: Column(
-//           children: [
-//             Container(
-//               width: 50,
-//               margin: EdgeInsets.only(top: 5, bottom: 10),
-//               // height: 20,
-//               decoration: BoxDecoration(
-//                 borderRadius: BorderRadius.circular(10),
-//                 color: Colors.red,
-//               ),
-//               child: Text(
-//                 "Math",
-//                 textAlign: TextAlign.center,
-//                 style: TextStyle(
-//                   color: Color(0xffFFFFFF),
-//                   fontWeight: FontWeight.w500,
-//                   fontSize: 12,
-//                 ),
-//               ),
-//             ),
-//             RatingBar.builder(
-//               initialRating: 3,
-//               minRating: 1,
-//               direction: Axis.horizontal,
-//               allowHalfRating: false,
-//               itemSize: 20,
-//               itemCount: 5,
-//               itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
-//               itemBuilder: (context, _) => Icon(
-//                 Icons.star,
-//                 color: Colors.amber,
-//               ),
-//               onRatingUpdate: (rating) {
-//                 print(rating);
-//               },
-//             )
-//           ],
-//         ),
-//       ),
-//     ],
-//   );
-// }
-
-// // Widget articleName() {
-// //   return Column(
-// //     crossAxisAlignment: CrossAxisAlignment.start,
-// //     children: [
-// //       Container(
-// //         // margin: EdgeInsets.only(top: 20, left: 20, bottom: 20),
-// //         child: Text(
-// //           "Recent Quiz",
-// //           style: TextStyle(
-// //             fontSize: 28,
-// //             color: Color(0xffeb5757),
-// //             fontWeight: FontWeight.bold,
-// //           ),
-// //         ),
-// //       )
-// //     ],
-// //   );
-// // }
-
-// Widget card({Color color}) {
-//   return Container(
-//     margin: EdgeInsets.only(top: 20, left: 20, bottom: 20),
-//     width: 100,
-//     child: Align(
-//       alignment: Alignment.center,
-//       child: Text(
-//         "Ung dung di dong",
-//         textAlign: TextAlign.center,
-//         style: TextStyle(
-//           color: Colors.red,
-//           fontSize: 20,
-//         ),
-//       ),
-//     ),
-//     decoration: BoxDecoration(
-//       borderRadius: BorderRadius.circular(10),
-//       boxShadow: [
-//         BoxShadow(
-//             color: Colors.black.withOpacity(0.25),
-//             // spreadRadius: 3,
-//             blurRadius: 4,
-//             // offset: Offset(0, 2),
-//             offset: Offset(
-//               2,
-//               2,
-//             ))
-//       ],
-//       color: color,
-//     ),
-//   );
-// }
-
-// TextSpan buildTextSpanBox() {
-//   final double _fontsize = 20;
-//   return TextSpan(
-//     style: TextStyle(
-//       color: Color(0xffEB5757),
-//       fontWeight: FontWeight.w700,
-//       fontSize: 20,
-//     ),
-//     children: [
-//       TextSpan(text: "Ung dung di dong"),
-//     ],
-//   );
-// }
-
-// TextSpan buildTextSubtitle() {
-//   final double _fontsize = 20;
-//   return TextSpan(
-//     style: TextStyle(
-//       fontSize: 12,
-//       color: Color(0xffC1C1C1),
-//       fontWeight: FontWeight.w400,
-//     ),
-//     children: [
-//       TextSpan(
-//         text: "by unknown",
-//       ),
-//       TextSpan(
-//         text: "     " + "24/1/2000",
-//       ),
-//       TextSpan(
-//         text: "\nQuiz nay rat hay cac ban hay...",
-//         style: TextStyle(
-//           fontSize: 14,
-//           color: Color(0xffA1A1A1),
-//           fontWeight: FontWeight.w400,
-//         ),
-//       ),
-//     ],
-//   );
-// }
-
-class MyPage1widget {}

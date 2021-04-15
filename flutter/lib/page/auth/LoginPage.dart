@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
-
 import '../../constants/myColors.dart';
 import '../../models/Users.dart';
 import 'SignupPage.dart';

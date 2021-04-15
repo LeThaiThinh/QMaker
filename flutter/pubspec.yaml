@@ -36,10 +36,8 @@ dev_dependencies:
     sdk: flutter
 flutter:
   assets:
-    - assets/Cursed bargain.jpg
     - lib/lang/en.json
     - lib/lang/vi.json
     - lib/lang/zh.json
-    - assets/camera.jpg
     - assets/logo.svg
   uses-material-design: true

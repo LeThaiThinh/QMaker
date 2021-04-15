@@ -26,7 +26,7 @@ class _CollectionPageState extends State<CollectionPage> {
     });
     fetchQuestionnaire(http.Client(), user.id, "").then((value) async {
       await Provider.of<SharedData>(context, listen: false)
-          .changeQuestionnaireCurrentlyUsed(value);
+          .changeCollectionQuestionnaire(value);
     });
     return Scaffold(
       body: ListView(
@@ -40,7 +40,6 @@ class _CollectionPageState extends State<CollectionPage> {
   Widget collectionOfQuestionnaireSection() {
     Widget questionnaireBody(Questionnaire questionnaire) {
       TextSpan name() {
-        final double _fontsize = 20;
         return TextSpan(
           style: TextStyle(
             color: Color(0xffEB5757),
@@ -54,7 +53,6 @@ class _CollectionPageState extends State<CollectionPage> {
       }
 
       TextSpan belowName() {
-        final double _fontsize = 20;
         return TextSpan(
           style: TextStyle(
             fontSize: 12,
@@ -102,10 +100,10 @@ class _CollectionPageState extends State<CollectionPage> {
 
       Widget rating() {
         return RatingBar.builder(
-          initialRating: double.parse(questionnaire.history.rating.toString()),
+          initialRating: double.parse(questionnaire.avgRating.toString()),
           minRating: 1,
           direction: Axis.horizontal,
-          allowHalfRating: false,
+          allowHalfRating: true,
           ignoreGestures: true,
           itemSize: 20,
           itemCount: 5,
@@ -114,9 +112,7 @@ class _CollectionPageState extends State<CollectionPage> {
             Icons.star,
             color: Colors.amber,
           ),
-          onRatingUpdate: (rating) {
-            print(rating);
-          },
+          onRatingUpdate: (rating) {},
         );
       }
 
@@ -125,7 +121,8 @@ class _CollectionPageState extends State<CollectionPage> {
           ListTile(
             contentPadding: EdgeInsets.all(10),
             onTap: () {
-              fetchQuestionnaireById(http.Client(), user.id, questionnaire.id)
+              fetchQuestionnaireById(
+                      http.Client(), questionnaire.userId, questionnaire.id)
                   .then((value) {
                 Provider.of<SharedData>(context, listen: false)
                     .changeQuestionnaireIsChoosing(value);
@@ -176,7 +173,7 @@ class _CollectionPageState extends State<CollectionPage> {
     }
 
     return Consumer<SharedData>(builder: (context, data, child) {
-      List<Questionnaire> list = data.recentlyUsed;
+      List<Questionnaire> list = data.collection;
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,

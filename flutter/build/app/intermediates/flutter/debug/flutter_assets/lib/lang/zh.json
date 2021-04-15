@@ -1,9 +1,10 @@
 {
-  "Home Page":"qưeer",
-  "Personal Information":"Thông tin cá nhân",
-  "Name": "Tên",
-  "Navigator to setting page": "Chuyển sang trang cài đặt",
-  "Questionnaires": "Bộ câu hỏi",
-  "Creations": "Bản Mẫu",
-  "Something": "Gì Đó"
+  "Home":"Home",
+  "Username": "Username",
+  "Password": "Password",
+  "Remember Me": "Remember Me",
+  "Login": "Login",
+  "Sign up": "Sign up",
+  "Fullname": "Fullname"
+
 }

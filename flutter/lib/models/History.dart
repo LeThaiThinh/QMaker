@@ -1,18 +1,14 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import '../constants/Strings.dart';
-import 'Users.dart';
 
 class History {
   int userId;
   int questionnaireId;
-  int rating;
+  double rating;
   int score;
   int totalTime;
   int recentlyUsed;
@@ -30,11 +26,10 @@ class History {
       this.createdAt});
 
   factory History.fromJson(Map<String, dynamic> json) {
-    debugPrint(json["score"].toString() + " " + json["totalTime"].toString());
     return History(
         userId: json["userId"],
         questionnaireId: json['questionnaireId'],
-        rating: json["rating"],
+        rating: json["avgRating"],
         score: json["score"],
         recentlyUsed: json["recentlyUsed"],
         totalTime: json["totalTime"],
@@ -50,6 +45,43 @@ Future<History> fetchHistoryById(
   if (response.statusCode == 200) {
     var history = jsonDecode(response.body);
     return History.fromJson(history);
+  } else {
+    throw Exception('Fail');
+  }
+}
+
+Future<History> createHistory(
+    http.Client client, int userId, int questionnaireId) async {
+  Map<String, dynamic> data = {
+    'userId': userId,
+    'score': 0,
+    'totalTime': 0,
+    'rating': 0,
+    'recentlyUsed': 0,
+    'questionnaireId': questionnaireId
+  };
+  var response = await client.post(
+      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/createHistory",
+      body: json.encode(data),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      });
+  if (response.statusCode == 200) {
+    var history = jsonDecode(response.body);
+    return History.fromJson(history);
+  } else {
+    throw Exception('Fail');
+  }
+}
+
+Future<double> getAvgRating(
+    http.Client client, int userId, int questionnaireId) async {
+  final response = await client.get(
+      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/rating");
+  if (response.statusCode == 200) {
+    var rating = jsonDecode(response.body);
+    print(rating['avgRating']);
+    return double.parse(rating['avgRating']);
   } else {
     throw Exception('Fail');
   }

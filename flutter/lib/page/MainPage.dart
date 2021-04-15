@@ -1,8 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-
 import '../constants/bottomType.dart';
 import '../constants/myColors.dart';
 import '../constants/sharedData.dart';
@@ -134,6 +131,8 @@ class _MainPageState extends State<MainPage> {
           child: IconButton(
             icon: Icon(Icons.login_rounded, size: 30),
             onPressed: () {
+              Provider.of<SharedData>(context, listen: false)
+                  .changeQuestionnaireSearch([]);
               Navigator.pushReplacementNamed(context, loginRoute);
             },
           ),

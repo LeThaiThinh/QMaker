@@ -133,14 +133,15 @@ class _ResultPageState extends State<ResultPage> {
                   _rating,
                   data.questionnaireIsChoosing.id,
                   data.user.id);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MainPage(
-                      initBody: Provider.of<SharedData>(context, listen: false)
-                          .currentMainPage),
-                ),
-              );
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MainPage(
+                        initBody:
+                            Provider.of<SharedData>(context, listen: false)
+                                .currentMainPage),
+                  ),
+                  (route) => false);
             },
             child: Icon(
               Icons.home,
