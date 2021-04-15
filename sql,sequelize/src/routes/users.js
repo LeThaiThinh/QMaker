@@ -148,7 +148,6 @@ router.get('/users/:userId/questionnaire', async function (req, res, next) {
       order: querydata_order,
       limit: querydata_limit,
     })
-    console.log(questionnaires)
     res.json(questionnaires);
   } catch (err) {
     console.log(err);
@@ -173,7 +172,6 @@ router.get('/users/:userId/questionnaire/:questionnaireId', async function (req,
       ]
     },
   });
-  console.log(questionnaire)
   res.json(questionnaire)
 
 });
@@ -201,6 +199,9 @@ router.get('/users/:userId/questionnaire/:questionnaireId/rating', async functio
     },
     attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'avgRating'],],
   });
+  console.log(rating.dataValues.avgRating)
+  if (rating.dataValues.avgRating == null)
+    rating = { avgRating: '0' };
   res.json(rating)
 });
 router.post('/users/:userId/questionnaire/:questionnaireId/question/create', async function (req, res, next) {

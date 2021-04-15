@@ -81,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget usernameInput() {
     return TextFormField(
+      key: Key('usernameLogin'),
       controller: usernameController,
       decoration: InputDecoration(labelText: "Username"),
       keyboardType: TextInputType.text,

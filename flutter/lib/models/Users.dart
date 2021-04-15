@@ -115,7 +115,8 @@ Future signup(http.Client client, String _name, String _username,
   }
 }
 
-Future changePass(http.Client client, String newPassword,int userId,BuildContext context) async {
+Future changePass(http.Client client, String newPassword, int userId,
+    BuildContext context) async {
   Map<dynamic, String> data = {
     'password': newPassword,
   };

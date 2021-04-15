@@ -82,6 +82,7 @@ class _SignupPageState extends State<SignupPage> {
 
   Widget fullnameInput() {
     return TextFormField(
+      key: Key('nameSignup'),
       controller: fullnameController,
       decoration: InputDecoration(labelText: "Fullname"),
       keyboardType: TextInputType.text,
@@ -93,6 +94,7 @@ class _SignupPageState extends State<SignupPage> {
 
   Widget usernameInput() {
     return TextFormField(
+      key: Key('usernameSignup'),
       controller: usernameController,
       decoration: InputDecoration(labelText: "Username"),
       keyboardType: TextInputType.text,
@@ -104,6 +106,7 @@ class _SignupPageState extends State<SignupPage> {
 
   Widget passwordInput() {
     return TextFormField(
+      key: Key('passwordSignup'),
       controller: passwordController,
       decoration: InputDecoration(labelText: "Password"),
       keyboardType: TextInputType.text,
@@ -117,6 +120,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget signupButton() {
     // ignore: deprecated_member_use
     return FlatButton(
+      key: Key('signup'),
       onPressed: () {
         if (formKey.currentState.validate()) {
           formKey.currentState.save();
