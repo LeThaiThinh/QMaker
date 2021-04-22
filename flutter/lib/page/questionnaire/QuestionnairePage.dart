@@ -58,6 +58,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         ? Container(
             margin: EdgeInsets.only(right: 5.0),
             child: IconButton(
+              key: Key("goToEditQuestionnaire"),
               icon: Icon(Icons.settings, size: 30),
               onPressed: () {
                 Navigator.push(
@@ -152,6 +153,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
 
   Widget startButton() {
     return Container(
+      key:Key("startQuestionnaire"),
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
       child: FloatingActionButton(

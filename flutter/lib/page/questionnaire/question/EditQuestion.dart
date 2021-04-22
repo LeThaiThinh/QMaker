@@ -73,6 +73,7 @@ class _EditQuestionState extends State<EditQuestion> {
         builder: (context, data, child) => Container(
               margin: EdgeInsets.only(right: 5.0),
               child: IconButton(
+                key: Key("deleteQuestion"),
                 icon: Icon(Icons.delete, size: 30),
                 onPressed: () {
                   deleteQuestion(
@@ -103,6 +104,7 @@ class _EditQuestionState extends State<EditQuestion> {
 
   Widget questionInput() {
     return TextFormField(
+      key: Key("questionEditQuestion"),
       controller: questionController,
       decoration: InputDecoration(labelText: "Name"),
       keyboardType: TextInputType.text,
@@ -160,6 +162,7 @@ class _EditQuestionState extends State<EditQuestion> {
     // ignore: deprecated_member_use
     return Consumer<SharedData>(
         builder: (context, data, child) => FlatButton(
+              key: Key("updateQuestion"),
               onPressed: () {
                 final FormState form = formKey.currentState;
                 if (form.validate()) {

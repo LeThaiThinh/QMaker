@@ -178,6 +178,7 @@ class _SearchPageState extends State<SearchPage> {
     return Consumer<SharedData>(builder: (context, data, child) {
       List<Questionnaire> list = data.search;
       return Column(
+        key: Key("searchQuestionnaire"),
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
@@ -212,7 +213,7 @@ class _SearchPageState extends State<SearchPage> {
           fetchQuestionnaire(
                   http.Client(),
                   Provider.of<SharedData>(context, listen: false).user.id,
-                  '?name=$query')
+                  {'name':query})
               .then((value) {
             Provider.of<SharedData>(context, listen: false)
                 .changeQuestionnaireSearch(value);
@@ -224,6 +225,7 @@ class _SearchPageState extends State<SearchPage> {
       transition: CircularFloatingSearchBarTransition(),
       actions: [
         FloatingSearchBarAction(
+          key: Key('search'),
           showIfOpened: false,
           child: CircularButton(
             icon: const Icon(Icons.place),
@@ -236,6 +238,7 @@ class _SearchPageState extends State<SearchPage> {
       ],
       builder: (context, transition) {
         return ClipRRect(
+          key: Key("space"),
           borderRadius: BorderRadius.circular(8),
           child: Material(
             color: Colors.white,

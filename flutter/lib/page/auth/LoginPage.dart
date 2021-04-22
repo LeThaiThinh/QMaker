@@ -1,3 +1,4 @@
+import 'package:baitaplon/localization/LocalizationConstant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  String error = "";
   bool remember;
   Widget logo;
 
@@ -83,22 +85,33 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       key: Key('usernameLogin'),
       controller: usernameController,
-      decoration: InputDecoration(labelText: "Username"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "Username")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'Username cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Username cannot be blank')
+            : error != ""
+                ? error
+                : null;
       },
     );
   }
 
   Widget passwordInput() {
     return TextFormField(
+      key: Key('passwordLogin'),
       controller: passwordController,
-      decoration: InputDecoration(labelText: "Password"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "Password")),
       keyboardType: TextInputType.text,
       obscureText: true,
       validator: (value) {
-        return value.isEmpty ? 'Password cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Password cannot be blank')
+            : error != ""
+                ? error
+                : null;
       },
     );
   }
@@ -113,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
         FocusScope.of(context).requestFocus(new FocusNode());
       },
       title: Text(
-        "Remember Me",
+        getTranslated(context, "Remember Me"),
         style: TextStyle(color: Colors.black54),
       ),
       controlAffinity: ListTileControlAffinity.leading,
@@ -124,6 +137,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget loginButton() {
     // ignore: deprecated_member_use
     return FlatButton(
+      key: Key("login"),
       onPressed: () {
         final FormState form = formKey.currentState;
         if (form.validate()) {
@@ -131,12 +145,17 @@ class _LoginPageState extends State<LoginPage> {
             formKey.currentState.save();
             // debugPrint(_name + _username);
             signin(http.Client(), usernameController.text,
-                passwordController.text, context);
+                    passwordController.text, context)
+                .then((value) {
+              setState(() {
+                error = value;
+              });
+            });
           }
         }
       },
       child: Text(
-        "Log in",
+        getTranslated(context, "Login"),
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       color: primaryColor,
@@ -151,12 +170,13 @@ class _LoginPageState extends State<LoginPage> {
   Widget signupButton() {
     // ignore: deprecated_member_use
     return FlatButton(
+      key: Key("signupButtonLogin"),
       onPressed: () {
         Navigator.of(context)
             .pushReplacement(MaterialPageRoute(builder: (_) => SignupPage()));
       },
       child: Text(
-        "Sign up",
+        getTranslated(context, "Sign up"),
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       textColor: Colors.grey,
@@ -176,7 +196,8 @@ class _LoginPageState extends State<LoginPage> {
           width: MediaQuery.of(context).size.width * 2 / 5,
           color: Colors.grey,
         ),
-        Text("or", style: TextStyle(color: Colors.grey)),
+        Text(getTranslated(context, "Or"),
+            style: TextStyle(color: Colors.grey)),
         Container(
           height: 1,
           width: MediaQuery.of(context).size.width * 2 / 5,

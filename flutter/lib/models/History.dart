@@ -40,8 +40,10 @@ class History {
 
 Future<History> fetchHistoryById(
     http.Client client, int userId, int questionnaireId) async {
-  final response = await client.get(
-      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/history");
+  final response = await client.get(Uri.http(
+      "${Strings.BASE_URL}:${Strings.PORT}",
+      "/questionnaire/$questionnaireId/history",
+      {"userId": "$userId"}));
   if (response.statusCode == 200) {
     var history = jsonDecode(response.body);
     return History.fromJson(history);
@@ -53,15 +55,16 @@ Future<History> fetchHistoryById(
 Future<History> createHistory(
     http.Client client, int userId, int questionnaireId) async {
   Map<String, dynamic> data = {
-    'userId': userId,
+    'userId': "$userId",
     'score': 0,
     'totalTime': 0,
     'rating': 0,
     'recentlyUsed': 0,
-    'questionnaireId': questionnaireId
+    'questionnaireId': "$questionnaireId"
   };
   var response = await client.post(
-      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/createHistory",
+      Uri.http("${Strings.BASE_URL}:${Strings.PORT}",
+          "/questionnaire/$questionnaireId/createHistory", {"userId": "$userId"}),
       body: json.encode(data),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -76,11 +79,12 @@ Future<History> createHistory(
 
 Future<double> getAvgRating(
     http.Client client, int userId, int questionnaireId) async {
-  final response = await client.get(
-      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/rating");
+  final response = await client.get(Uri.http(
+      "${Strings.BASE_URL}:${Strings.PORT}",
+      "/questionnaire/$questionnaireId/rating",
+      {"userId": "$userId"}));
   if (response.statusCode == 200) {
     var rating = jsonDecode(response.body);
-    print(rating['avgRating']);
     return double.parse(rating['avgRating']);
   } else {
     throw Exception('Fail');

@@ -126,6 +126,11 @@ class _StageState extends State<Stage> {
 
     // ignore: deprecated_member_use
     return FlatButton(
+      key: this.widget.question.correctAnswer == answer
+          ? Key("correctAnswerTile")
+          : this.widget.question.incorrectAnswer1 == answer
+              ? Key("incorrectAnswerTile1")
+              : null,
       onPressed: () {
         this.widget.nextStage(answer);
       },

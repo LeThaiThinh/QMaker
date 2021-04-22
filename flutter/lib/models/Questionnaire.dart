@@ -87,11 +87,12 @@ List<Question> setListQuestion(Map<String, dynamic> json) {
 // ignore: missing_return
 Future<Questionnaire> fetchQuestionnaireById(
     http.Client client, int userId, int questionnaireId) async {
-  final response = await client.get(
-      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId");
+  final response = await client.get(Uri.http(
+      "${Strings.BASE_URL}:${Strings.PORT}",
+      "/questionnaire/$questionnaireId",
+      {"userId": "$userId"}));
   if (response.statusCode == 200) {
     var questionnaire = jsonDecode(response.body);
-    print(questionnaire);
     double avgRating = await getAvgRating(client, userId, questionnaire['id']);
     return Questionnaire.fromJson2(questionnaire, avgRating);
   } else {
@@ -101,11 +102,13 @@ Future<Questionnaire> fetchQuestionnaireById(
 
 Future<List<Map>> fetchQuestionnaireTopic(
     http.Client client, int userId) async {
-  final response = await client.get(
-      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaireTopic");
+  final response = await client.get(Uri.http(
+    "${Strings.BASE_URL}:${Strings.PORT}",
+    "/users/$userId/questionnaireTopic",
+  ));
   if (response.statusCode == 200) {
     final list = jsonDecode(response.body);
-    List<Map> listTopic = new List<Map>();
+    List<Map> listTopic = [];
     for (var map in list) listTopic.add(map);
     return listTopic;
   } else {
@@ -114,9 +117,14 @@ Future<List<Map>> fetchQuestionnaireTopic(
 }
 
 Future<List<Questionnaire>> fetchQuestionnaire(
-    http.Client client, int userId, String query) async {
-  final response = await client.get(
-      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$query");
+    http.Client client, int userId, Map<String, dynamic> query) async {
+  final response = await client
+      .get(Uri.http("${Strings.BASE_URL}:${Strings.PORT}", "/questionnaire", {
+    "userId": "$userId",
+    "name": query['name'],
+    "topic": query['topic'],
+    "recentlyUsed": query['recentlyUsed'],
+  }));
   if (response.statusCode == 200) {
     final map = jsonDecode(response.body).cast<Map<String, dynamic>>();
     List<Questionnaire> listQuestionnaire = [];
@@ -140,7 +148,10 @@ Future updateHistory(http.Client client, BuildContext context, int score,
     'rating': rating,
   };
   var response = await client.post(
-      '${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/updateHistory',
+      Uri.http(
+          "${Strings.BASE_URL}:${Strings.PORT}",
+          "/questionnaire/$questionnaireId/updateHistory",
+          {"userId": "$userId"}),
       body: json.encode(data),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -166,7 +177,8 @@ Future<Questionnaire> createQuestionnaire(
     'timeLimit': timeLimit
   };
   var response = await client.post(
-      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/create",
+      Uri.http("${Strings.BASE_URL}:${Strings.PORT}", "/questionnaire/create",
+          {"userId": "$userId"}),
       body: json.encode(data),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -183,7 +195,8 @@ Future<Questionnaire> createQuestionnaire(
 Future deleteQuestionnaire(http.Client client, BuildContext context,
     int questionnaireId, int userId) async {
   var response = await client.post(
-      '${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/delete',
+      Uri.http("${Strings.BASE_URL}:${Strings.PORT}",
+          "/questionnaire/$questionnaireId/delete", {"userId": "$userId"}),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
       });

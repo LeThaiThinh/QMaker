@@ -44,6 +44,7 @@ class _ChangePassPageState extends State<ChangePassPage> {
 
   Widget currentPassInput() {
     return TextFormField(
+      key: Key("currentPassInput"),
       controller: currentPassController,
       decoration: InputDecoration(labelText: "Current Password"),
       keyboardType: TextInputType.text,
@@ -63,6 +64,7 @@ class _ChangePassPageState extends State<ChangePassPage> {
 
   Widget newPassInput() {
     return TextFormField(
+      key: Key("newPassInput"),
       controller: newPassController,
       decoration: InputDecoration(labelText: "New Password"),
       keyboardType: TextInputType.text,
@@ -75,6 +77,7 @@ class _ChangePassPageState extends State<ChangePassPage> {
 
   Widget retypeNewPassInput() {
     return TextFormField(
+      key: Key("retypeNewPassInput"),
       controller: retypeNewPassController,
       decoration: InputDecoration(labelText: "Retype New Password"),
       keyboardType: TextInputType.text,
@@ -92,13 +95,13 @@ class _ChangePassPageState extends State<ChangePassPage> {
   Widget updateButton() {
     // ignore: deprecated_member_use
     return FlatButton(
+      key: Key("updatePass"),
       onPressed: () {
         final FormState form = formKey.currentState;
         if (form.validate()) {
           form.save();
           changePass(http.Client(), newPassController.text,
               Provider.of<SharedData>(context, listen: false).user.id, context);
-          Navigator.pop(context);
         }
       },
       child: Text(

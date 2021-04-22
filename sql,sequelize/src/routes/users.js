@@ -10,29 +10,25 @@ router.get('/users', async function (req, res, next) {
   const users = await User.findAll();
   res.json(users);
 });
-router.get('/users/create', async function (req, res, next) {
-  for (var i = 1; i < 5; i++)
-    var user = await User.create({
-      name: faker.name.lastName(),
-      username: faker.name.firstName(),
-      password: faker.name.middleName(),
-    })
-  res.json(user);
-});
 router.get(`/users/:userId`, async function (req, res, next) {
-  var userId = req.params['userId']
+  var userId = parseInt(req.params['userId'])
   const user = await User.findOne({
     where: { id: userId }
   })
   res.json(user);
 });
 router.post(`/users/:userId/changePass`, async function (req, res, next) {
-  var userId = req.params['userId']
+  var userId = parseInt(req.params['userId'])
   var password = req.body
   console.log(password)
-  const user = await User.update(password, {
+  await User.update(password, {
     where: { id: userId }
   })
+  var user = await User.findOne({
+    where: { id: userId }
+
+  })
+  console.log(user)
   res.json(user);
 });
 router.get(`/users/:userId/questionnaireTopic`, async function (req, res, next) {
@@ -51,10 +47,10 @@ router.get(`/users/:userId/questionnaireTopic`, async function (req, res, next) 
     console.log(err);
   }
 });
-router.post('/users/:userId/questionnaire/create', async function (req, res, next) {
+router.post('/questionnaire/create', async function (req, res, next) {
   try {
-    var userId = parseInt(req.params['userId'])
     var questionnaire = req.body
+    var userId = req.query.userId
     questionnaire.userId = userId
     console.log(questionnaire)
     questionnaire = await Questionnaire.create(questionnaire)
@@ -88,30 +84,29 @@ router.post('/users/:userId/questionnaire/create', async function (req, res, nex
     console.log(err);
   }
 });
-router.get('/users/:userId/questionnaire', async function (req, res, next) {
+router.get('/questionnaire', async function (req, res, next) {
   try {
-    var userId = req.params['userId']
+    var userId = req.query.userId
     var querydata_where_topic
-    var querydata_where_questionId
     var querydata_order
     var querydata_limit
     var querydata_searchByName
     var querydata_public
     var query_userId
-    if (req.query['topic'] != null) {
+    if (req.query['topic'] != "") {
       querydata_where_topic = { topic: req.query['topic'], }
     }
-    if (req.query['questionId'] != null) {
+    if (req.query['questionId'] != "") {
       querydata_where_questionId = { questionId: req.query['questionId'], }
     }
-    if (req.query['recentlyUsed'] != null) {
+    if (req.query['recentlyUsed'] != "") {
       querydata_order = [[{ model: User }, { model: History }, 'recentlyUsed', req.query['recentlyUsed']]]
       querydata_limit = 3
     }
     else {
       querydata_order = [['id', 'ASC']]; querydata_limit = 1000
     }
-    if (req.query['name'] != null) {
+    if (req.query['name'] != "") {
       querydata_searchByName = {
         name: {
           [Op.substring]: req.query['name']
@@ -153,8 +148,8 @@ router.get('/users/:userId/questionnaire', async function (req, res, next) {
     console.log(err);
   }
 });
-router.get('/users/:userId/questionnaire/:questionnaireId', async function (req, res, next) {
-  var userId = req.params['userId']
+router.get('/questionnaire/:questionnaireId', async function (req, res, next) {
+  var userId = req.query.userId
   var questionnaireId = req.params["questionnaireId"]
   var questionnaire = await Questionnaire.findOne({
     include: [{
@@ -175,20 +170,8 @@ router.get('/users/:userId/questionnaire/:questionnaireId', async function (req,
   res.json(questionnaire)
 
 });
-router.get('/users/:userId/questionnaire/:questionnaireId/count', async function (req, res, next) {
-  var userId = req.params['userId']
-  var questionnaireId = req.params["questionnaireId"]
-  var numberOfQuestion = await Question.count({
-    where: {
-      [Op.and]: [
-        { questionnaireId: questionnaireId },
-      ]
-    }
-  });
-  res.json(numberOfQuestion)
-});
-router.get('/users/:userId/questionnaire/:questionnaireId/rating', async function (req, res, next) {
-  var userId = req.params['userId']
+router.get('/questionnaire/:questionnaireId/rating', async function (req, res, next) {
+  var userId = req.query.userId
   var questionnaireId = req.params["questionnaireId"]
   var rating = await History.findOne({
     where: {
@@ -199,22 +182,21 @@ router.get('/users/:userId/questionnaire/:questionnaireId/rating', async functio
     },
     attributes: [[Sequelize.fn('AVG', Sequelize.col('rating')), 'avgRating'],],
   });
-  console.log(rating.dataValues.avgRating)
   if (rating.dataValues.avgRating == null)
     rating = { avgRating: '0' };
   res.json(rating)
 });
-router.post('/users/:userId/questionnaire/:questionnaireId/question/create', async function (req, res, next) {
+router.post('/question/create', async function (req, res, next) {
+  var userId = req.query.userId
+  var questionnaireId = req.query.questionnaireId
   var question = req.body
-  var userId = req.params['userId']
-  question.questionnaireId = parseInt(req.params["questionnaireId"])
+  question.questionnaireId = parseInt(questionnaireId)
   var question = await Question.create(question)
-
   res.json(question);
 })
-router.get('/users/:userId/questionnaire/:questionnaireId/question', async function (req, res, next) {
-  var userId = req.params['userId']
-  var questionnaireId = req.params["questionnaireId"]
+router.get('/question', async function (req, res, next) {
+  var userId = req.query.userId
+  var questionnaireId = req.query.questionnaireId
   var question = await Question.findAll({
     where: {
       [Op.and]: [
@@ -224,9 +206,9 @@ router.get('/users/:userId/questionnaire/:questionnaireId/question', async funct
   });
   res.json(question)
 });
-router.post('/users/:userId/questionnaire/:questionnaireId/question/:questionId/update', async function (req, res, next) {
-  var userId = req.params['userId']
-  var questionnaireId = req.params["questionnaireId"]
+router.post('/question/:questionId/update', async function (req, res, next) {
+  var userId = req.query.userId
+  var questionnaireId = req.query.questionnaireId
   var questionId = req.params["questionId"]
   var questionUpdate = req.body
   console.log(questionUpdate)
@@ -245,26 +227,28 @@ router.post('/users/:userId/questionnaire/:questionnaireId/question/:questionId/
       ]
     }
   })
-  // console.log(question)
   res.json(question)
 });
-router.post('/users/:userId/questionnaire/:questionnaireId/updateHistory', async function (req, res, next) {
+router.post('/questionnaire/:questionnaireId/updateHistory', async function (req, res, next) {
+  var userId = req.query.userId
+  var questionnaireId = req.params['questionnaireId']
+
   history = req.body
   history.recentlyUsed = Date.now() / 1000;
-  history.userId = parseInt(req.params.userId);
-  history.questionnaireId = parseInt(req.params.questionnaireId);
+  history.userId = parseInt(userId);
+  history.questionnaireId = parseInt(questionnaireId);
   history0 = await History.findOne({
     where: {
-      questionnaireId: parseInt(req.params.questionnaireId),
-      userId: parseInt(req.params.userId)
+      questionnaireId: parseInt(questionnaireId),
+      userId: parseInt(userId)
     }
   })
   if (history.rating == 0) history.rating = history0.rating
   if (history0 != null && history.score > history0.score) {
     await History.update(history, {
       where: {
-        questionnaireId: parseInt(req.params.questionnaireId),
-        userId: parseInt(req.params.userId)
+        questionnaireId: parseInt(questionnaireId),
+        userId: parseInt(userId)
       }
     })
   } else if (history0 != null && history.score == history0.score) {
@@ -272,32 +256,33 @@ router.post('/users/:userId/questionnaire/:questionnaireId/updateHistory', async
       history.totalTime = history0.totalTime : {};
     await History.update(history, {
       where: {
-        questionnaireId: parseInt(req.params.questionnaireId),
-        userId: parseInt(req.params.userId)
+        questionnaireId: parseInt(questionnaireId),
+        userId: parseInt(userId)
       }
     })
   } else if (history0 != null && history.score < history0.score) {
     history.score = history0.score
     await History.update(history, {
       where: {
-        questionnaireId: parseInt(req.params.questionnaireId),
-        userId: parseInt(req.params.userId)
+        questionnaireId: parseInt(questionnaireId),
+        userId: parseInt(userId)
       }
     })
   } else if (history0 == null) {
     await History.create(history, {
       where: {
-        questionnaireId: parseInt(req.params.questionnaireId),
-        userId: parseInt(req.params.userId)
+        questionnaireId: parseInt(questionnaireId),
+        userId: parseInt(userId)
       }
     })
   }
   res.json(history)
 })
-router.post('/users/:userId/questionnaire/:questionnaireId/createHistory', async function (req, res, next) {
+router.post('/questionnaire/:questionnaireId/createHistory', async function (req, res, next) {
+  var userId = req.query.userId
   var history = await History.findOne({
     where: {
-      userId: req.params['userId'],
+      userId: userId,
       questionnaireId: req.params['questionnaireId']
     }
   })
@@ -309,18 +294,22 @@ router.post('/users/:userId/questionnaire/:questionnaireId/createHistory', async
 
   res.json(history)
 })
-router.post('/users/:userId/questionnaire/:questionnaireId/delete', async function (req, res, next) {
+router.post('/questionnaire/:questionnaireId/delete', async function (req, res, next) {
+  var userId = req.query.userId
   console.log(req.params)
   await Questionnaire.destroy({
     where: {
       id: req.params["questionnaireId"],
-      userId: req.params["userId"]
+      userId: userId
     }
   })
   res.json()
 })
-router.post('/users/:userId/questionnaire/:questionnaireId/question/:questionId/delete', async function (req, res, next) {
+router.post('/question/:questionId/delete', async function (req, res, next) {
   console.log(req.params)
+  var userId = req.query.userId
+  var questionnaireId = req.query.questionnaireId
+
   await Question.destroy({
     where: {
       id: req.params["questionId"],

@@ -11,7 +11,7 @@ class Result {
 }
 
 void main() {
-  testWidgets('ResultPage ...', (tester) async {
+  testWidgets('score calculate ...', (tester) async {
     Result result = Result();
     result.addQuestion();
     result.addQuestion();

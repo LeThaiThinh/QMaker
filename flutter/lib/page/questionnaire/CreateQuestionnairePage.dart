@@ -33,7 +33,7 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("New Questionaire"),
+        title: Text("New Questionaire", key: Key("titleCreateQuestionnaire")),
       ),
       body: GestureDetector(
         onTap: () {
@@ -64,6 +64,7 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
 
   Widget nameInput() {
     return TextFormField(
+      key: Key("nameCreateQuestionnaire"),
       controller: nameController,
       decoration: InputDecoration(labelText: "Name"),
       keyboardType: TextInputType.text,
@@ -75,6 +76,7 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
 
   Widget topicInput() {
     return TextFormField(
+      key: Key("topicCreateQuestionnaire"),
       controller: topicController,
       decoration: InputDecoration(labelText: "Topic"),
       keyboardType: TextInputType.text,
@@ -86,6 +88,7 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
 
   Widget timeLimitInput() {
     return TextFormField(
+      key: Key("timeLimitCreateQuestionnaire"),
       controller: timeLimitController,
       decoration: InputDecoration(labelText: "Time Limit (mins)"),
       keyboardType: TextInputType.number,
@@ -97,6 +100,7 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
 
   Widget descInput() {
     return TextFormField(
+      key: Key("desCreateQuestionnaire"),
       controller: descController,
       decoration: InputDecoration(labelText: "Description"),
       keyboardType: TextInputType.multiline,
@@ -106,6 +110,7 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
 
   Widget privateCheckbox() {
     return CheckboxListTile(
+      key: Key("privateCreateQuestionnaire"),
       value: private,
       onChanged: (val) {
         setState(() {
@@ -125,6 +130,7 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
   Widget createButton() {
     // ignore: deprecated_member_use
     return FlatButton(
+      key: Key("createQuestionnaire"),
       onPressed: () {
         final FormState form = formKey.currentState;
         if (form.validate()) {

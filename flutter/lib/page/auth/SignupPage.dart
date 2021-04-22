@@ -1,3 +1,4 @@
+import 'package:baitaplon/localization/LocalizationConstant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,7 +10,8 @@ import 'LoginPage.dart';
 
 class SignupPage extends StatefulWidget {
   SignupPage({Key key}) : super(key: key);
-
+  @override
+  // TODO: implement key
   @override
   _SignupPageState createState() => _SignupPageState();
 }
@@ -84,10 +86,13 @@ class _SignupPageState extends State<SignupPage> {
     return TextFormField(
       key: Key('nameSignup'),
       controller: fullnameController,
-      decoration: InputDecoration(labelText: "Fullname"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "Fullname")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'Fullname cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Fullname cannot be blank')
+            : null;
       },
     );
   }
@@ -96,10 +101,13 @@ class _SignupPageState extends State<SignupPage> {
     return TextFormField(
       key: Key('usernameSignup'),
       controller: usernameController,
-      decoration: InputDecoration(labelText: "Username"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "Username")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'Username cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Username cannot be blank')
+            : null;
       },
     );
   }
@@ -108,11 +116,14 @@ class _SignupPageState extends State<SignupPage> {
     return TextFormField(
       key: Key('passwordSignup'),
       controller: passwordController,
-      decoration: InputDecoration(labelText: "Password"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "Password")),
       keyboardType: TextInputType.text,
       obscureText: true,
       validator: (value) {
-        return value.isEmpty ? 'Password cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Password cannot be blank')
+            : null;
       },
     );
   }
@@ -135,7 +146,7 @@ class _SignupPageState extends State<SignupPage> {
       ),
       padding: EdgeInsets.symmetric(vertical: 20.0),
       child: Text(
-        "Sign up",
+        getTranslated(context, "Sign up"),
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
     );
@@ -154,7 +165,7 @@ class _SignupPageState extends State<SignupPage> {
           side: BorderSide(color: Colors.grey)),
       padding: EdgeInsets.symmetric(vertical: 20.0),
       child: Text(
-        "Log in",
+        getTranslated(context, "Login"),
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
     );
@@ -169,7 +180,8 @@ class _SignupPageState extends State<SignupPage> {
           width: MediaQuery.of(context).size.width * 2 / 5,
           color: Colors.grey,
         ),
-        Text("or", style: TextStyle(color: Colors.grey)),
+        Text(getTranslated(context, "Or"),
+            style: TextStyle(color: Colors.grey)),
         Container(
           height: 1,
           width: MediaQuery.of(context).size.width * 2 / 5,

@@ -41,6 +41,7 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
     return Container(
       margin: EdgeInsets.only(right: 5.0),
       child: IconButton(
+        key: Key("deleteQuestionnaire"),
         icon: Icon(Icons.delete, size: 30),
         onPressed: () {
           deleteQuestionnaire(
@@ -69,6 +70,7 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
     return Container(
       margin: EdgeInsets.only(left: 5.0),
       child: IconButton(
+        key: Key("backToQuestionnaire"),
         icon: Icon(Icons.arrow_back_ios_rounded, size: 25),
         onPressed: () {
           Navigator.pushAndRemoveUntil(
@@ -83,6 +85,7 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
 
   Widget addButton() {
     return Container(
+      key: Key("goToAddQuestionnaire"),
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
       child: FloatingActionButton(
@@ -173,6 +176,7 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
       ),
       child: ListTile(
+        key: Key("questionTile"),
         onTap: () {
           Navigator.push(
             context,
@@ -188,6 +192,7 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
         ),
         title: Text(
           question.question,
+          key: Key("questionTileText"),
           style: TextStyle(
             color: Color(0xff4f4f4f),
             fontWeight: FontWeight.w600,

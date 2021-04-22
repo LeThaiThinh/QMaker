@@ -1,3 +1,4 @@
+import 'package:baitaplon/classes/language.dart';
 import 'package:baitaplon/constants/bottomType.dart';
 import 'package:baitaplon/models/Question.dart';
 import 'package:baitaplon/models/Questionnaire.dart';
@@ -13,6 +14,12 @@ class SharedData extends ChangeNotifier {
   Questionnaire questionnaireIsChoosing;
   User user = new User();
   BottomType currentMainPage;
+  Language language = Language(1, '🇺🇸', 'English', 'en');
+
+  changeLanguage(Language language) {
+    this.language = language;
+    notifyListeners();
+  }
 
   changeCollectionQuestionnaire(List<Questionnaire> collection) {
     this.collection = collection;

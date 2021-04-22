@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\letha\\AndroidStudioProjects\\baitaplon\\flutter\\build\\integration_test\\intermediates\\res\\merged\\release\\drawable\\notification_bg_low.xml",
+        "source": "C:\\Users\\letha\\.gradle\\caches\\transforms-2\\files-2.1\\f3e6fd695551eaa4f80160cee27ffba3\\core-1.1.0\\res\\drawable\\notification_bg_low.xml"
+    },
+    {
+        "merged": "C:\\Users\\letha\\AndroidStudioProjects\\baitaplon\\flutter\\build\\integration_test\\intermediates\\res\\merged\\release\\drawable\\notification_tile_bg.xml",
+        "source": "C:\\Users\\letha\\.gradle\\caches\\transforms-2\\files-2.1\\f3e6fd695551eaa4f80160cee27ffba3\\core-1.1.0\\res\\drawable\\notification_tile_bg.xml"
+    },
+    {
+        "merged": "C:\\Users\\letha\\AndroidStudioProjects\\baitaplon\\flutter\\build\\integration_test\\intermediates\\res\\merged\\release\\drawable\\notification_bg.xml",
+        "source": "C:\\Users\\letha\\.gradle\\caches\\transforms-2\\files-2.1\\f3e6fd695551eaa4f80160cee27ffba3\\core-1.1.0\\res\\drawable\\notification_bg.xml"
+    },
+    {
+        "merged": "C:\\Users\\letha\\AndroidStudioProjects\\baitaplon\\flutter\\build\\integration_test\\intermediates\\res\\merged\\release\\drawable\\notification_icon_background.xml",
+        "source": "C:\\Users\\letha\\.gradle\\caches\\transforms-2\\files-2.1\\f3e6fd695551eaa4f80160cee27ffba3\\core-1.1.0\\res\\drawable\\notification_icon_background.xml"
+    }
+]

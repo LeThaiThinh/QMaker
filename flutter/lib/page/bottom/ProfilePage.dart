@@ -16,6 +16,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  _changeLanguage(Language language) async {
+    Locale _temp = await setLocale(language.languageCode);
+    MyApp.setLocale(context, _temp);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -26,6 +31,8 @@ class _ProfilePageState extends State<ProfilePage> {
         userName(),
         SizedBox(height: 40),
         changePassBtn(),
+        SizedBox(height: 40),
+        changeLanguage(),
       ],
     );
   }
@@ -48,15 +55,17 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget userName() {
+    String nameOfUser =
+        Provider.of<SharedData>(context, listen: false).user.name;
     return Align(
       child: Text(
-        'Hello ' +
-            Provider.of<SharedData>(context, listen: false).user.username,
+        getTranslated(context, 'Hello') + " " + nameOfUser.toString(),
         style: TextStyle(
           fontSize: 30,
           color: primaryColor,
           fontWeight: FontWeight.bold,
         ),
+        key: Key("nameOfUserProfile"),
       ),
     );
   }
@@ -64,6 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget changePassBtn() {
     return Card(
       child: ListTile(
+        key: Key("goToChangePass"),
         onTap: () {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (_) => ChangePassPage()));
@@ -82,22 +92,23 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget changeLanguage() {
-    _changeLanguage(Language language) async {
-      Locale _temp = await setLocale(language.languageCode);
-      MyApp.setLocale(context, _temp);
-    }
+    return Consumer<SharedData>(
+      builder: (context, data, child) => DropdownButton<Language>(
+        key: Key("language"),
+        hint: Text(
+          data.language.flag,
+          style: TextStyle(fontSize: 20),
+        ),
 
-    return DropdownButton<Language>(
-      hint: Text("Language"),
-      // style: TextStyle(fontSize: 5),
-      iconSize: 30,
-      underline: SizedBox(),
-      icon: Icon(
-        Icons.language,
-        color: Colors.green,
-      ),
-      items: Language.languageList()
-          .map<DropdownMenuItem<Language>>((lang) => DropdownMenuItem(
+        // style: TextStyle(fontSize: 5),
+        iconSize: 30,
+        underline: SizedBox(),
+        icon: Icon(
+          Icons.language,
+          color: Colors.green,
+        ),
+        items: Language.languageList().map<DropdownMenuItem<Language>>((lang) {
+          return DropdownMenuItem(
               value: lang,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -111,12 +122,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: TextStyle(fontSize: 20),
                   ),
                 ],
-              )))
-          .toList(),
-      onChanged: (Language language) {
-        _changeLanguage(language);
-        print(language);
-      },
+              ));
+        }).toList(),
+        onChanged: (Language _language) {
+          Provider.of<SharedData>(context, listen: false)
+              .changeLanguage(_language);
+          _changeLanguage(_language);
+          print(Provider.of<SharedData>(context, listen: false).language.flag);
+        },
+      ),
     );
   }
 }

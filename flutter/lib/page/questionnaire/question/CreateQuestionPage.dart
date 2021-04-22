@@ -27,7 +27,10 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("New Question"),
+        title: Text(
+          "New Question",
+          key: Key("titleCreateQuestion"),
+        ),
       ),
       body: Form(
         key: formKey,
@@ -53,6 +56,7 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
 
   Widget questionInput() {
     return TextFormField(
+      key: Key("questionCreateQuestion"),
       controller: questionController,
       decoration: InputDecoration(labelText: "Question"),
       keyboardType: TextInputType.text,
@@ -64,6 +68,7 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
 
   Widget correctAnswerInput() {
     return TextFormField(
+      key: Key("correctAnswerCreateQuestion"),
       controller: correctAnswerController,
       decoration: InputDecoration(labelText: "True Answer"),
       keyboardType: TextInputType.text,
@@ -75,6 +80,7 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
 
   Widget incorrectAnswer1Input() {
     return TextFormField(
+      key: Key("incorrectAnswerCreateQuestion1"),
       controller: incorrectAnswer1Controller,
       decoration: InputDecoration(labelText: "False Answer 1"),
       keyboardType: TextInputType.text,
@@ -86,6 +92,7 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
 
   Widget incorrectAnswer2Input() {
     return TextFormField(
+      key: Key("incorrectAnswerCreateQuestion2"),
       controller: incorrectAnswer2Controller,
       decoration: InputDecoration(labelText: "False Answer 2"),
       keyboardType: TextInputType.text,
@@ -97,6 +104,7 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
 
   Widget incorrectAnswer3Input() {
     return TextFormField(
+      key: Key("incorrectAnswerCreateQuestion3"),
       controller: incorrectAnswer3Controller,
       decoration: InputDecoration(labelText: "False Answer 3"),
       keyboardType: TextInputType.text,
@@ -109,6 +117,7 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
   Widget createButton() {
     // ignore: deprecated_member_use
     return FlatButton(
+      key: Key("createQuestion"),
       onPressed: () async {
         final FormState form = formKey.currentState;
         if (form.validate()) {

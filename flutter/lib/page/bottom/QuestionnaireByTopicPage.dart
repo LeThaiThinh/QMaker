@@ -23,7 +23,7 @@ class _QuestionnaireByTopicPageState extends State<QuestionnaireByTopicPage> {
     fetchQuestionnaire(
             http.Client(),
             Provider.of<SharedData>(context, listen: false).user.id,
-            '?topic=$topic')
+            {'topic':topic})
         .then((value) {
       Provider.of<SharedData>(context, listen: false)
           .changeQuestionnaireByTopic(value);

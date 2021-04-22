@@ -33,12 +33,12 @@ class _MainPageState extends State<MainPage> {
   ];
 
   List<BottomNavigationBarItem> bottomOptions = [
-    BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Home"),
-    BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
+    BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Home",tooltip: "home"),
+    BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search",tooltip: "search"),
     BottomNavigationBarItem(
-        icon: Icon(Icons.book_outlined), label: "Collection"),
+        icon: Icon(Icons.book_outlined), label: "Collection",tooltip: "collection"),
     BottomNavigationBarItem(
-        icon: Icon(Icons.account_circle_outlined), label: "Profile"),
+        icon: Icon(Icons.account_circle_outlined), label: "Profile",tooltip: "profile"),
   ];
   @override
   void initState() {
@@ -84,6 +84,7 @@ class _MainPageState extends State<MainPage> {
         unselectedItemColor: Colors.grey,
       ),
       floatingActionButton: FloatingActionButton(
+        key: Key("addQuestionnaire"),
         onPressed: () {
           Navigator.pushNamed(context, createQuestionnaireRoute);
         },
@@ -124,11 +125,12 @@ class _MainPageState extends State<MainPage> {
     }
 
     return AppBar(
-      title: Text(title),
+      title: Text(title,key: Key("appBarHome"),),
       actions: [
         Container(
           margin: EdgeInsets.only(right: 5.0),
           child: IconButton(
+            key: Key("logout"),
             icon: Icon(Icons.login_rounded, size: 30),
             onPressed: () {
               Provider.of<SharedData>(context, listen: false)

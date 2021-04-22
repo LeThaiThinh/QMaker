@@ -71,6 +71,7 @@ class _ResultPageState extends State<ResultPage> {
     return Center(
       child: Text(
         this.widget.score.toString(),
+        key: Key("score"),
         style: TextStyle(
           color: Colors.white,
           fontSize: 80,
@@ -99,6 +100,7 @@ class _ResultPageState extends State<ResultPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           InkWell(
+            key: Key("playAgain"),
             onTap: () {
               updateHistory(
                   http.Client(),
@@ -124,6 +126,7 @@ class _ResultPageState extends State<ResultPage> {
           ),
           SizedBox(width: 50),
           InkWell(
+            key: Key("backToHomeFromResultPage"),
             onTap: () {
               updateHistory(
                   http.Client(),

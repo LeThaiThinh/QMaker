@@ -58,7 +58,10 @@ Future<Question> updateQuestion(
     'incorrectAnswer3': incorrectAnswer3
   };
   var response = await client.post(
-      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/question/$questionId/update",
+      Uri.http(
+          "${Strings.BASE_URL}:${Strings.PORT}",
+          "/question/$questionId/update",
+          {"userId": "$userId", "questionnaireId": "$questionnaireId"}),
       body: json.encode(data),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -81,7 +84,7 @@ Future<Question> createQuestion(
     String incorrectAnswer2,
     String incorrectAnswer3) async {
   Map<String, dynamic> data = {
-    'questionnaireId': questionnaireId,
+    'questionnaireId': "$questionnaireId",
     'question': question,
     'correctAnswer': correctAnswer,
     'incorrectAnswer1': incorrectAnswer1,
@@ -89,7 +92,8 @@ Future<Question> createQuestion(
     'incorrectAnswer3': incorrectAnswer3
   };
   var response = await client.post(
-      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/question/create",
+      Uri.http("${Strings.BASE_URL}:${Strings.PORT}", "/question/create",
+          {"userId": "$userId", "questionnaireId": "$questionnaireId"}),
       body: json.encode(data),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -105,7 +109,10 @@ Future<Question> createQuestion(
 Future deleteQuestion(
     http.Client client, int userId, int questionnaireId, int questionId) async {
   var response = await client.post(
-      "${Strings.BASE_URL}:${Strings.PORT}/users/$userId/questionnaire/$questionnaireId/question/$questionId/delete",
+      Uri.http(
+          "${Strings.BASE_URL}:${Strings.PORT}",
+          "/question/$questionId/delete",
+          {"userId": "$userId", "questionnaireId": "$questionnaireId"}),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
       });

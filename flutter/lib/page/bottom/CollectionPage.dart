@@ -24,7 +24,7 @@ class _CollectionPageState extends State<CollectionPage> {
     setState(() {
       user = Provider.of<SharedData>(context, listen: false).user;
     });
-    fetchQuestionnaire(http.Client(), user.id, "").then((value) async {
+    fetchQuestionnaire(http.Client(), user.id, {"": ""}).then((value) async {
       await Provider.of<SharedData>(context, listen: false)
           .changeCollectionQuestionnaire(value);
     });
@@ -119,6 +119,7 @@ class _CollectionPageState extends State<CollectionPage> {
       return Column(
         children: <Widget>[
           ListTile(
+            key: Key("questionnaireTileCollection"),
             contentPadding: EdgeInsets.all(10),
             onTap: () {
               fetchQuestionnaireById(

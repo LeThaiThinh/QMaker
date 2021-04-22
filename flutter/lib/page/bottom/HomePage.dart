@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
       await Provider.of<SharedData>(context, listen: false)
           .changeQuestionnaireTopic(value);
     });
-    fetchQuestionnaire(http.Client(), user.id, "?recentlyUsed=DESC")
+    fetchQuestionnaire(http.Client(), user.id, {"recentlyUsed":"DESC"})
         .then((value) async {
       await Provider.of<SharedData>(context, listen: false)
           .changeQuestionnaireCurrentlyUsed(value);
@@ -162,7 +162,9 @@ class _HomePageState extends State<HomePage> {
                 Radius.circular(10.0),
               ),
             ),
-            title: Text.rich(name()),
+            title: Text.rich(
+              name(),
+            ),
             subtitle: Text.rich(belowName()),
             trailing: Column(
               children: [
@@ -237,6 +239,7 @@ class _HomePageState extends State<HomePage> {
           },
           child: Text(
             topic,
+            key: Key("topicOfQuestionnaire"),
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.red,

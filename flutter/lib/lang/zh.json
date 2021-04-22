@@ -1,10 +1,14 @@
 {
-  "Home":"Home",
-  "Username": "Username",
-  "Password": "Password",
-  "Remember Me": "Remember Me",
-  "Login": "Login",
-  "Sign up": "Sign up",
-  "Fullname": "Fullname"
-
+  "Language": "Ngôn ngữ",
+  "Home": "Trang chủ",
+  "Username": "Tên đăng nhập",
+  "Username cannot be blank": "Tên đăng nhập không được bỏ trống",
+  "Password": "Mật khẩu",
+  "Password cannot be blank": "Mật khẩu không được bỏ trống",
+  "Remember Me": "Nhớ tôi",
+  "Or": "hoặc",
+  "Login": "Đăng nhập",
+  "Sign up": "Đăng ký",
+  "Fullname": "Tên của bạn",
+  "Hello": "Xin chào"
 }
