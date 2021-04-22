@@ -1,6 +1,6 @@
 # QuizMaker
 Kết quả unit testing
-  <image src="testResult/unitTest"></image>
+  <image src="testResult/unitTest.png"></image>
 Kết quả integration testing
- <image src="testResult/integrationTest"></image>
+ <image src="testResult/integrationTest.png"></image>
 
