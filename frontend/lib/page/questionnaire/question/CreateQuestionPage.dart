@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/localization/LocalizationConstant.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -28,7 +29,7 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "New Question",
+          getTranslated(context, "New Question"),
           key: Key("titleCreateQuestion"),
         ),
       ),
@@ -58,10 +59,16 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
     return TextFormField(
       key: Key("questionCreateQuestion"),
       controller: questionController,
-      decoration: InputDecoration(labelText: "Question"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "Question")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'Question cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Question cannot be blank')
+            : value.length >= 60
+                ? getTranslated(
+                    context, "Question input length must smaller than 80")
+                : null;
       },
     );
   }
@@ -70,10 +77,16 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
     return TextFormField(
       key: Key("correctAnswerCreateQuestion"),
       controller: correctAnswerController,
-      decoration: InputDecoration(labelText: "True Answer"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "True Answer")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'Correct Answer cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Correct Answer cannot be blank')
+            : value.length >= 60
+                ? getTranslated(
+                    context, "Correct answer input length must smaller than 60")
+                : null;
       },
     );
   }
@@ -82,10 +95,16 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
     return TextFormField(
       key: Key("incorrectAnswerCreateQuestion1"),
       controller: incorrectAnswer1Controller,
-      decoration: InputDecoration(labelText: "False Answer 1"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "False Answer 1")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'Incorrect Answer 1 cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Incorrect Answer 1 cannot be blank')
+            : value.length >= 60
+                ? getTranslated(context,
+                    "Incorrect answer 1 input length must smaller than 60")
+                : null;
       },
     );
   }
@@ -94,10 +113,16 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
     return TextFormField(
       key: Key("incorrectAnswerCreateQuestion2"),
       controller: incorrectAnswer2Controller,
-      decoration: InputDecoration(labelText: "False Answer 2"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "False Answer 2")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'Incorrect Answer 2 cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Incorrect Answer 2 cannot be blank')
+            : value.length >= 10
+                ? getTranslated(context,
+                    "Incorrect answer 2 input length must smaller than 60")
+                : null;
       },
     );
   }
@@ -106,10 +131,16 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
     return TextFormField(
       key: Key("incorrectAnswerCreateQuestion3"),
       controller: incorrectAnswer3Controller,
-      decoration: InputDecoration(labelText: "False Answer 3"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "False Answer 3")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'Incorrect Answer 3 cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Incorrect answer 3 cannot be blank')
+            : value.length >= 60
+                ? getTranslated(context,
+                    "Incorrect answer 3 input length must smaller than 60")
+                : null;
       },
     );
   }
@@ -155,7 +186,7 @@ class _CreateQuestionPageState extends State<CreateQuestionPage> {
         }
       },
       child: Text(
-        "Create",
+        getTranslated(context, "Create"),
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       color: primaryColor,

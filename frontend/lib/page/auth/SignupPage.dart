@@ -123,7 +123,9 @@ class _SignupPageState extends State<SignupPage> {
       validator: (value) {
         return value.isEmpty
             ? getTranslated(context, 'Password cannot be blank')
-            : null;
+            : value.length < 6
+                ? getTranslated(context, 'Password input length too short')
+                : null;
       },
     );
   }

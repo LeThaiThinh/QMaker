@@ -65,7 +65,9 @@ class _CollectionPageState extends State<CollectionPage> {
               text: questionnaire.createdAt.substring(0, 10) + " ",
             ),
             TextSpan(
-              text: getTranslated(context, "created by") +" " + questionnaire.user.username,
+              text: getTranslated(context, "created by") +
+                  " " +
+                  questionnaire.user.username,
             ),
             TextSpan(
               text: "\n\n" + questionnaire.description,
@@ -138,7 +140,10 @@ class _CollectionPageState extends State<CollectionPage> {
               ),
             ),
             title: Text.rich(name()),
-            subtitle: Text.rich(belowName()),
+            subtitle: Text.rich(
+              belowName(),
+              overflow: TextOverflow.ellipsis,
+            ),
             trailing: Column(
               children: [
                 topic(),

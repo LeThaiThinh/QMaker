@@ -17,7 +17,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   _changeLanguage(Language language) async {
-    Locale _temp = await setLocale(language.languageCode);
+    Locale _temp = await setLocale2(language.languageCode);
     MyApp.setLocale(context, _temp);
   }
 
@@ -78,9 +78,9 @@ class _ProfilePageState extends State<ProfilePage> {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (_) => ChangePassPage()));
         },
-        leading: Icon(Icons.lock, color: primaryColor),
+        trailing: Icon(Icons.lock, color: primaryColor),
         title: Text(
-          "Change Password",
+          getTranslated(context, "Change Password"),
           style: TextStyle(
             color: primaryColor,
             fontSize: 18,
@@ -93,42 +93,61 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget changeLanguage() {
     return Consumer<SharedData>(
-      builder: (context, data, child) => DropdownButton<Language>(
-        key: Key("language"),
-        hint: Text(
-          data.language.flag,
-          style: TextStyle(fontSize: 20),
+      builder: (context, data, child) => Card(
+        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: DropdownButton<Language>(
+          key: Key("language"),
+          hint: Text(
+            "  " +
+                getTranslated(context, data.language.flag) +
+                "                                                  ",
+            style: TextStyle(
+              fontSize: 18,
+              color: primaryColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          iconSize: 30,
+          underline: SizedBox(),
+          icon: Icon(
+            
+            Icons.language,
+            color: primaryColor,
+          ),
+          items:
+              Language.languageList().map<DropdownMenuItem<Language>>((lang) {
+            return DropdownMenuItem(
+                value: lang,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      getTranslated(context, lang.flag),
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      lang.name,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: primaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ));
+          }).toList(),
+          onChanged: (Language _language) {
+            Provider.of<SharedData>(context, listen: false)
+                .changeLanguage(_language);
+            _changeLanguage(_language);
+            print(
+                Provider.of<SharedData>(context, listen: false).language.flag);
+          },
         ),
-        // style: TextStyle(fontSize: 5),
-        iconSize: 30,
-        underline: SizedBox(),
-        icon: Icon(
-          Icons.language,
-          color: Colors.green,
-        ),
-        items: Language.languageList().map<DropdownMenuItem<Language>>((lang) {
-          return DropdownMenuItem(
-              value: lang,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    lang.flag,
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Text(
-                    lang.name,
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ],
-              ));
-        }).toList(),
-        onChanged: (Language _language) {
-          Provider.of<SharedData>(context, listen: false)
-              .changeLanguage(_language);
-          _changeLanguage(_language);
-          print(Provider.of<SharedData>(context, listen: false).language.flag);
-        },
       ),
     );
   }

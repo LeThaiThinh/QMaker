@@ -23,7 +23,7 @@ class _ChangePassPageState extends State<ChangePassPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Change Password"),
+        title: Text(getTranslated(context, "Change Password")),
       ),
       body: Form(
         key: formKey,
@@ -52,12 +52,12 @@ class _ChangePassPageState extends State<ChangePassPage> {
       obscureText: true,
       validator: (value) {
         return value.isEmpty
-            ? 'Current Password cannot be blank'
+            ? getTranslated(context, 'Current Password cannot be blank')
             : value !=
                     Provider.of<SharedData>(context, listen: false)
                         .user
                         .password
-                ? 'Wrong password'
+                ? getTranslated(context, 'Wrong password')
                 : null;
       },
     );
@@ -67,11 +67,11 @@ class _ChangePassPageState extends State<ChangePassPage> {
     return TextFormField(
       key: Key("newPassInput"),
       controller: newPassController,
-      decoration: InputDecoration(labelText: "New Password"),
+      decoration: InputDecoration(labelText: getTranslated(context, "New Password")),
       keyboardType: TextInputType.text,
       obscureText: true,
       validator: (value) {
-        return value.isEmpty ? 'New Password cannot be blank' : null;
+        return value.isEmpty ? getTranslated(context, 'New Password cannot be blank') : null;
       },
     );
   }
@@ -80,14 +80,14 @@ class _ChangePassPageState extends State<ChangePassPage> {
     return TextFormField(
       key: Key("retypeNewPassInput"),
       controller: retypeNewPassController,
-      decoration: InputDecoration(labelText: "Retype New Password"),
+      decoration: InputDecoration(labelText: getTranslated(context, "Retype New Password")),
       keyboardType: TextInputType.text,
       obscureText: true,
       validator: (value) {
         return value.isEmpty
-            ? 'Retype New Password cannot be blank'
+            ? getTranslated(context, 'Retype New Password cannot be blank')
             : value != newPassController.text
-                ? 'RetypePassword doesnt match'
+                ? getTranslated(context, 'RetypePassword doesnt match')
                 : null;
       },
     );
@@ -106,7 +106,7 @@ class _ChangePassPageState extends State<ChangePassPage> {
         }
       },
       child: Text(
-        "Update",
+        getTranslated(context, "Update"),
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       color: primaryColor,

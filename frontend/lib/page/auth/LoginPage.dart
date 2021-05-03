@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/classes/language.dart';
+import 'package:frontend/constants/sharedData.dart';
 import 'package:frontend/localization/LocalizationConstant.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import '../../constants/myColors.dart';
+import '../../main.dart';
 import '../../models/Users.dart';
 import 'SignupPage.dart';
 
@@ -15,6 +19,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -32,12 +37,14 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+
     remember = false;
     logo = SvgPicture.asset("assets/logo.svg", width: 200);
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: GestureDetector(
         onTap: () {
@@ -109,9 +116,7 @@ class _LoginPageState extends State<LoginPage> {
       validator: (value) {
         return value.isEmpty
             ? getTranslated(context, 'Password cannot be blank')
-            : error != ""
-                ? error
-                : null;
+            : null;
       },
     );
   }

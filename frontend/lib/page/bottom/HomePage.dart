@@ -1,7 +1,9 @@
 import 'dart:ui';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:frontend/constants/myColors.dart';
 import 'package:frontend/localization/LocalizationConstant.dart';
 import 'package:frontend/page/bottom/QuestionnaireByTopicPage.dart';
 import 'package:http/http.dart' as http;
@@ -168,7 +170,10 @@ class _HomePageState extends State<HomePage> {
             title: Text.rich(
               name(),
             ),
-            subtitle: Text.rich(belowName()),
+            subtitle: Text.rich(
+              belowName(),
+              overflow: TextOverflow.ellipsis,
+            ),
             trailing: Column(
               children: [
                 topic(),
@@ -224,7 +229,7 @@ class _HomePageState extends State<HomePage> {
     Widget topicOfQuestionnaires({String topic}) {
       return Container(
         margin: EdgeInsets.only(top: 20, left: 20, bottom: 20),
-        width: 100,
+        width: 110,
         child: RaisedButton(
           color: Colors.white.withOpacity(0.9),
           shape: RoundedRectangleBorder(
@@ -240,14 +245,13 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           },
-          child: Text(
+          child: AutoSizeText(
             topic,
             key: Key("topicOfQuestionnaire"),
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.red,
-              fontSize: 20,
-            ),
+            style: TextStyle(color: primaryColor, fontSize: 25),
+            maxLines: 2,
+            wrapWords: false,
           ),
         ),
         decoration: BoxDecoration(

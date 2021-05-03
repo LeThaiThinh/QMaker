@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:frontend/localization/LocalizationConstant.dart';
 import '../../models/Questionnaire.dart';
 import '../MainPage.dart';
 import 'GameScreen.dart';
@@ -57,7 +58,7 @@ class _ResultPageState extends State<ResultPage> {
   Widget title() {
     return Center(
       child: Text(
-        "Your Score:",
+        getTranslated(context, "Your Score:"),
         style: TextStyle(
           color: Colors.white,
           fontSize: 40,
@@ -84,7 +85,9 @@ class _ResultPageState extends State<ResultPage> {
   Widget totalTime() {
     return Center(
       child: Text(
-        "Time Finish: ${this.widget.timeFinish} seconds",
+        getTranslated(context, "Time Finish") +
+            ": ${this.widget.timeFinish} " +
+            getTranslated(context, "seconds"),
         style: TextStyle(
           color: Colors.white,
           fontSize: 22,
@@ -159,7 +162,7 @@ class _ResultPageState extends State<ResultPage> {
 
   Widget ratingTitle() {
     return Text(
-      "Rate now:",
+      getTranslated(context, "Rate now"),
       style: TextStyle(
         color: Colors.white,
         fontSize: 30,

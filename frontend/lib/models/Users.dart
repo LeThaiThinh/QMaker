@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:frontend/classes/language.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -79,14 +80,16 @@ Future<String> signin(http.Client client, String _username, String _password,
       });
   jsonResponse = json.decode(response.body);
   if (response.statusCode == 200) {
-    Provider.of<SharedData>(context, listen: false).changeUser(User(
+    await Provider.of<SharedData>(context, listen: false).changeUser(User(
         id: jsonResponse['id'],
         username: jsonResponse['username'],
         name: jsonResponse['name'],
         password: jsonResponse['password'],
         createdAt: jsonResponse['createdAt'],
         updatedAt: jsonResponse['updatedAt']));
+   
     Navigator.of(context).popAndPushNamed(mainRoute);
+
     return "";
   } else {
     return "Wrong password or username";
@@ -115,7 +118,7 @@ Future signup(http.Client client, String _name, String _username,
 
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
-      Provider.of<SharedData>(context, listen: false).changeUser(User(
+      await Provider.of<SharedData>(context, listen: false).changeUser(User(
           id: jsonResponse['id'],
           username: jsonResponse['username'],
           name: jsonResponse['name'],

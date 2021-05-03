@@ -12,7 +12,7 @@ const String VIETNAM='vi';
 const String CHINA='zh';
 
 const String LANGUAGE_CODE='languageCode';
-Future<Locale> setLocale(String languageCode) async{
+Future<Locale> setLocale2(String languageCode) async{
   SharedPreferences preferences=await SharedPreferences.getInstance();
   await preferences.setString(LANGUAGE_CODE, languageCode);
   return _locale(languageCode);

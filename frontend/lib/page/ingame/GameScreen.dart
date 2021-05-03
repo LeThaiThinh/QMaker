@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:frontend/localization/LocalizationConstant.dart';
 
 import '../../constants/myColors.dart';
 import '../../models/Question.dart';
@@ -130,7 +131,7 @@ class _GameScreenState extends State<GameScreen> {
 
   Widget exitDialog() {
     return AlertDialog(
-      title: Text("Are you sure?"),
+      title: Text(getTranslated(context, "Are you sure?")),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -145,7 +146,7 @@ class _GameScreenState extends State<GameScreen> {
                 (route) => false,
               );
             },
-            child: Text("YES"),
+            child: Text(getTranslated(context, "YES")),
             textColor: Colors.white,
             color: Colors.green,
           ),
@@ -154,7 +155,7 @@ class _GameScreenState extends State<GameScreen> {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text("NO"),
+            child: Text(getTranslated(context, "NO")),
             textColor: Colors.white,
             color: Colors.red,
           ),

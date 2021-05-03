@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/localization/LocalizationConstant.dart';
 import 'package:frontend/page/questionnaire/EditQuestionnairePage.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -43,7 +44,7 @@ class _EditQuestionState extends State<EditQuestion> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Question"),
+        title: Text(getTranslated(context, "Edit Question")),
         actions: [deleteButton()],
       ),
       body: Form(
@@ -106,10 +107,16 @@ class _EditQuestionState extends State<EditQuestion> {
     return TextFormField(
       key: Key("questionEditQuestion"),
       controller: questionController,
-      decoration: InputDecoration(labelText: "Name"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "Question")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'Name cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Question cannot be blank')
+            : value.length >= 60
+                ? getTranslated(
+                    context, "Question input length must smaller than 80")
+                : null;
       },
     );
   }
@@ -117,10 +124,16 @@ class _EditQuestionState extends State<EditQuestion> {
   Widget correctAnswerInput() {
     return TextFormField(
       controller: correctAnswerController,
-      decoration: InputDecoration(labelText: "True Answer"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "True Answer")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'True Answer cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'True Answer cannot be blank')
+            : value.length >= 60
+                ? getTranslated(
+                    context, "Correct answer input length must smaller than 60")
+                : null;
       },
     );
   }
@@ -128,10 +141,13 @@ class _EditQuestionState extends State<EditQuestion> {
   Widget incorrectAnswer1Input() {
     return TextFormField(
       controller: incorrectAnswer1Controller,
-      decoration: InputDecoration(labelText: "False Answer 1"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "False Answer 1")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'False Answer 1 cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'False Answer 1 cannot be blank')
+            : null;
       },
     );
   }
@@ -139,10 +155,13 @@ class _EditQuestionState extends State<EditQuestion> {
   Widget incorrectAnswer2Input() {
     return TextFormField(
       controller: incorrectAnswer2Controller,
-      decoration: InputDecoration(labelText: "False Answer 2"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "False Answer 2")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'False Answer 2 cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'False Answer 2 cannot be blank')
+            : null;
       },
     );
   }
@@ -150,10 +169,13 @@ class _EditQuestionState extends State<EditQuestion> {
   Widget incorrectAnswer3Input() {
     return TextFormField(
       controller: incorrectAnswer3Controller,
-      decoration: InputDecoration(labelText: "False Answer 3"),
+      decoration:
+          InputDecoration(labelText: getTranslated(context, "False Answer 3")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'False Answer 3 cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'False Answer 3 cannot be blank')
+            : null;
       },
     );
   }
@@ -190,7 +212,7 @@ class _EditQuestionState extends State<EditQuestion> {
                 }
               },
               child: Text(
-                "Update",
+                getTranslated(context, "Update"),
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               color: primaryColor,

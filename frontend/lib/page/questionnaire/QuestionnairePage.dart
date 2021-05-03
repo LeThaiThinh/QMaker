@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:frontend/localization/LocalizationConstant.dart';
 import 'package:provider/provider.dart';
 import '../ingame/GameScreen.dart';
 import '../../constants/myColors.dart';
@@ -26,7 +27,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
     });
     return Scaffold(
       appBar: AppBar(
-        title: Text("Questionnaire"),
+        title: Text(getTranslated(context, "Questionnaire")),
         leading: backButton(),
         actions: [editQuestionnaire()],
       ),
@@ -78,17 +79,21 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
       padding: EdgeInsets.all(20.0),
       children: [
         Text(
-          "Name: " + data.questionnaireIsChoosing.name,
+          getTranslated(context, "Name") +
+              ": " +
+              data.questionnaireIsChoosing.name,
           style: TextStyle(
             color: primaryColor,
-            fontSize: 24,
+            fontSize: 22,
             fontWeight: FontWeight.w600,
           ),
         ),
         SizedBox(height: 10),
         Text(
           data.questionnaireIsChoosing.createdAt.substring(0, 10) +
-              " by " +
+              " " +
+              getTranslated(context, "created by") +
+              " " +
               data.questionnaireIsChoosing.user.username,
           style: TextStyle(color: Colors.grey),
         ),
@@ -110,7 +115,9 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         ),
         SizedBox(height: 20),
         Text(
-          "Topic: " + data.questionnaireIsChoosing.topic,
+          getTranslated(context, "Topic") +
+              ": " +
+              data.questionnaireIsChoosing.topic,
           style: TextStyle(
             color: Colors.black,
             fontSize: 20,
@@ -119,9 +126,11 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         ),
         SizedBox(height: 20),
         Text(
-          "Total: " +
+          getTranslated(context, "Total") +
+              ": " +
               data.questionnaireIsChoosing.listQuestion.length.toString() +
-              " questions",
+              " " +
+              getTranslated(context, "questions"),
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -129,9 +138,11 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         ),
         SizedBox(height: 20),
         Text(
-          "Time Limit: " +
+          getTranslated(context, "Time Limit") +
+              ": " +
               data.questionnaireIsChoosing.timeLimit.toString() +
-              " mins",
+              " " +
+              getTranslated(context, "mins"),
           style: TextStyle(
             color: primaryColor,
             fontSize: 16,
@@ -140,7 +151,9 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         ),
         SizedBox(height: 20),
         Text(
-          "Description: " + data.questionnaireIsChoosing.description,
+          getTranslated(context, "Description") +
+              ": " +
+              data.questionnaireIsChoosing.description,
           style: TextStyle(
             color: Colors.grey,
             fontSize: 16,
@@ -153,7 +166,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
 
   Widget startButton() {
     return Container(
-      key:Key("startQuestionnaire"),
+      key: Key("startQuestionnaire"),
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
       child: FloatingActionButton(
@@ -171,7 +184,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
               : {};
         },
         child: Text(
-          "Start",
+          getTranslated(context, "Start"),
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),

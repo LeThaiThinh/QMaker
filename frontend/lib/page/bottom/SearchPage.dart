@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:frontend/constants/sharedData.dart';
+import 'package:frontend/localization/LocalizationConstant.dart';
 import 'package:frontend/models/History.dart';
 import 'package:frontend/models/Questionnaire.dart';
 import 'package:frontend/models/Users.dart';
@@ -61,7 +62,10 @@ class _SearchPageState extends State<SearchPage> {
           ),
           children: [
             TextSpan(
-              text: "Create by " + questionnaire.user.username + " ",
+              text: getTranslated(context, "created by") +
+                  " " +
+                  questionnaire.user.username +
+                  " ",
             ),
             TextSpan(
               text: questionnaire.createdAt.substring(0, 10),
@@ -139,7 +143,10 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             title: Text.rich(name()),
-            subtitle: Text.rich(belowName()),
+            subtitle: Text.rich(
+              belowName(),
+              overflow: TextOverflow.ellipsis,
+            ),
             trailing: Column(
               children: [
                 topic(),
@@ -211,10 +218,9 @@ class _SearchPageState extends State<SearchPage> {
       onQueryChanged: (query) {
         if (query != "")
           fetchQuestionnaire(
-                  http.Client(),
-                  Provider.of<SharedData>(context, listen: false).user.id,
-                  {'name':query})
-              .then((value) {
+              http.Client(),
+              Provider.of<SharedData>(context, listen: false).user.id,
+              {'name': query}).then((value) {
             Provider.of<SharedData>(context, listen: false)
                 .changeQuestionnaireSearch(value);
           });

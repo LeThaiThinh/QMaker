@@ -21,7 +21,7 @@ dependencies:
   scroll_snap_list: any
   carousel_slider: ^3.0.0
   flutter_riverpod: any
-  auto_size_text: any
+  auto_size_text: ^2.1.0
   state_notifier: any
   flutter_svg: ^0.21.0+1
   flutter_rating_bar: any

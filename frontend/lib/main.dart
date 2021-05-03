@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:frontend/localization/DemoLocalization.dart';
+import 'package:frontend/localization/LocalizationConstant.dart';
 import 'package:provider/provider.dart';
+import 'classes/language.dart';
 import 'constants/myColors.dart';
 import 'constants/sharedData.dart';
-import 'localization/DemoLocalization.dart';
-import 'localization/LocalizationConstant.dart';
 import 'routes/CustomRouter.dart';
 import 'routes/RouteName.dart';
 import 'package:http/http.dart' as http;
@@ -27,6 +28,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale _locale;
+
   void setLocale(Locale locale) {
     setState(() {
       _locale = locale;
@@ -34,12 +36,15 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     getLocale().then((locale) {
       setState(() {
         this._locale = locale;
       });
     });
+    Language language = Language(1, '🇺🇸', 'English', 'en');
+    Locale locale = await setLocale2(language.languageCode);
+    setLocale(locale);
     super.didChangeDependencies();
   }
 

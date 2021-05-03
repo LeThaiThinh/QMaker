@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/localization/LocalizationConstant.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -33,7 +34,7 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("New Questionaire", key: Key("titleCreateQuestionnaire")),
+        title: Text(getTranslated(context, "New Questionaire"), key: Key("titleCreateQuestionnaire")),
       ),
       body: GestureDetector(
         onTap: () {
@@ -66,10 +67,15 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
     return TextFormField(
       key: Key("nameCreateQuestionnaire"),
       controller: nameController,
-      decoration: InputDecoration(labelText: "Name"),
+      decoration: InputDecoration(labelText: getTranslated(context, "Name")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'Name cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Name cannot be blank')
+            : value.length >= 31
+                ? getTranslated(
+                    context, "Name input length must smaller than 30")
+                : null;
       },
     );
   }
@@ -78,10 +84,14 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
     return TextFormField(
       key: Key("topicCreateQuestionnaire"),
       controller: topicController,
-      decoration: InputDecoration(labelText: "Topic"),
+      decoration: InputDecoration(labelText: getTranslated(context, "Topic")),
       keyboardType: TextInputType.text,
       validator: (value) {
-        return value.isEmpty ? 'Topic cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Topic cannot be blank')
+            : value.length >= 12
+                ? getTranslated(context, "Topic input length must smaller than 10")
+                : null;
       },
     );
   }
@@ -90,10 +100,20 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
     return TextFormField(
       key: Key("timeLimitCreateQuestionnaire"),
       controller: timeLimitController,
-      decoration: InputDecoration(labelText: "Time Limit (mins)"),
+      decoration: InputDecoration(
+          labelText: getTranslated(context, "Time Limit") +
+              "(" +
+              getTranslated(context, "mins") +
+              ")"),
       keyboardType: TextInputType.number,
       validator: (value) {
-        return value.isEmpty ? 'Time limit cannot be blank' : null;
+        return value.isEmpty
+            ? getTranslated(context, 'Time limit cannot be blank')
+            : double.tryParse(value) == null
+                ? getTranslated(context, "Time input must be number")
+                : double.tryParse(value) > 10000
+                    ? getTranslated(context, "Time input must smaller 10000")
+                    : null;
       },
     );
   }
@@ -102,9 +122,16 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
     return TextFormField(
       key: Key("desCreateQuestionnaire"),
       controller: descController,
-      decoration: InputDecoration(labelText: "Description"),
+      decoration: InputDecoration(labelText: getTranslated(context, "Description")),
       keyboardType: TextInputType.multiline,
       maxLines: 3,
+      validator: (value) {
+        return value.isEmpty
+            ? getTranslated(context, 'Description cannot be blank')
+            : value.length >= 200
+                ? getTranslated(context, "Description input length must smaller than 200")
+                : null;
+      },
     );
   }
 
@@ -119,7 +146,7 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
         FocusScope.of(context).requestFocus(new FocusNode());
       },
       title: Text(
-        "Private",
+        getTranslated(context, "Private"),
         style: TextStyle(color: Colors.black54),
       ),
       controlAffinity: ListTileControlAffinity.leading,
@@ -163,7 +190,7 @@ class _CreateQuestionnairePageState extends State<CreateQuestionnairePage> {
         }
       },
       child: Text(
-        "Create",
+        getTranslated(context, "Create"),
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       color: primaryColor,

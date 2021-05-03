@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/localization/LocalizationConstant.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import '../../constants/myColors.dart';
@@ -27,7 +28,7 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Questionnaire"),
+        title: Text(getTranslated(context, "Edit Questionnaire")),
         leading: backButton(),
         actions: [deleteButton()],
       ),
@@ -101,7 +102,7 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
           );
         },
         child: Text(
-          "Add",
+          getTranslated(context, "Add"),
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
@@ -127,7 +128,7 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Name: " + this.widget.questionnaire.name,
+          getTranslated(context, "Name")+": " + this.widget.questionnaire.name,
           style: TextStyle(
             color: primaryColor,
             fontSize: 24,
@@ -136,7 +137,7 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
         ),
         SizedBox(height: 10.0),
         Text(
-          "Topic: " + this.widget.questionnaire.topic,
+          getTranslated(context, "Topic")+": " + this.widget.questionnaire.topic,
           style: TextStyle(
             color: Colors.black87,
             fontSize: 20,
@@ -145,9 +146,9 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
         ),
         SizedBox(height: 20.0),
         Text(
-          "Time Limit: " +
+          getTranslated(context, "Time Limit")+": " +
               this.widget.questionnaire.timeLimit.toString() +
-              " mins",
+              " "+getTranslated(context, "mins"),
           style: TextStyle(
             color: Colors.black54,
             fontSize: 18,
@@ -156,9 +157,9 @@ class _EditQuestionnairePageState extends State<EditQuestionnairePage> {
         ),
         SizedBox(height: 20.0),
         Text(
-          "Total: " +
+          getTranslated(context, "Total")+": " +
               this.widget.questionnaire.listQuestion.length.toString() +
-              " questions",
+              " "+getTranslated(context, "questions"),
           style: TextStyle(
             color: Colors.black45,
             fontSize: 16,
