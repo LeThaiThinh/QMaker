@@ -83,5 +83,11 @@
   "Correct Answer cannot be blank": "Câu trả lời đúng không được để trống",
   "Incorrect Answer 1 cannot be blank": "Câu trả lời sai 1 không được để trống",
   "Incorrect Answer 2 cannot be blank": "Câu trả lời sai 2 không được để trống",
-  "Incorrect answer 3 cannot be blank": "Câu trả lời sai 3 không được để trống"
+  "Incorrect answer 3 cannot be blank": "Câu trả lời sai 3 không được để trống",
+  "Password input length should not shorter than 6": "Mật khẩu không được ngắn quá 6 ký tự",
+  "Password input length should not longer than 30": "Độ dài mật khẩu không dài hơn 30 ký tự",
+  "Full name input length should not shorter than 3": "Tên không được ngắn quá 6 ký tự",
+  "Full name input length should not longer than 20": "Độ dài tên không dài hơn 20 ký tự ",
+  "Username input length should not shorter than 3": "Mật khẩu không được ngắn quá 6 ký tự",
+  "Username input length should not longer than 30": "Độ dài tên đăng nhập không dài hơn 30 ký tự"
 }

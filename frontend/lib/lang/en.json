@@ -83,10 +83,10 @@
   "Incorrect Answer 1 cannot be blank": "Incorrect Answer 1 cannot be blank",
   "Incorrect Answer 2 cannot be blank": "Incorrect Answer 1 cannot be blank",
   "Incorrect Answer 3 cannot be blank": "Incorrect Answer 1 cannot be blank",
-  "Create": "Tạo",
-  "Create": "Tạo",
-  "Create": "Tạo",
-  "Create": "Tạo",
-  "Create": "Tạo",
-  "Create": "Tạo"
+  "Password input length should not shorter than 6": "Password input length should not shorter than 6",
+  "Password input length should not longer than 30": "Password input length should not longer than 30",
+  "Full name input length should not shorter than 3": "Full name input length should not shorter than 3",
+  "Full name input length should not longer than 20": "Full name input length should not longer than 20",
+  "Username input length should not shorter than 3": "Username input length should not shorter than 3",
+  "Username input length should not longer than 30": "Username input length should not longer than 30"
 }

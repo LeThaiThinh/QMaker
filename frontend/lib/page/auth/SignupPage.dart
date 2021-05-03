@@ -92,7 +92,13 @@ class _SignupPageState extends State<SignupPage> {
       validator: (value) {
         return value.isEmpty
             ? getTranslated(context, 'Fullname cannot be blank')
-            : null;
+            : value.length < 3
+                ? getTranslated(
+                    context, 'Full name input length should not shorter than 3')
+                : value.length > 20
+                    ? getTranslated(context,
+                        'Full name input length should not longer than 20')
+                    : null;
       },
     );
   }
@@ -107,7 +113,13 @@ class _SignupPageState extends State<SignupPage> {
       validator: (value) {
         return value.isEmpty
             ? getTranslated(context, 'Username cannot be blank')
-            : null;
+            : value.length < 3
+                ? getTranslated(
+                    context, 'Username input length should not shorter than 3')
+                : value.length > 30
+                    ? getTranslated(context,
+                        'Username input length should not longer than 30')
+                    : null;
       },
     );
   }
@@ -124,8 +136,12 @@ class _SignupPageState extends State<SignupPage> {
         return value.isEmpty
             ? getTranslated(context, 'Password cannot be blank')
             : value.length < 6
-                ? getTranslated(context, 'Password input length too short')
-                : null;
+                ? getTranslated(
+                    context, 'Password input length should not shorter than 6')
+                : value.length > 30
+                    ? getTranslated(context,
+                        'Password input length should not longer than 30')
+                    : null;
       },
     );
   }
